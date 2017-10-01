@@ -12,6 +12,7 @@ import UIKit
 class TimesheetViewController: UIViewController {
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     var timesheetData: [[TimesheetLog]]?
+    var timesheetLoading = false
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -36,6 +37,14 @@ class TimesheetViewController: UIViewController {
         // setup contents
         setupCollectionView()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if timesheetData == nil {
+            refreshFromRemoteBackend()
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -45,6 +54,24 @@ class TimesheetViewController: UIViewController {
     func setupCollectionView() {
         timesheetCollectionView.delegate = self
         timesheetCollectionView.dataSource = self
+        
+        timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
+    }
+    
+    func refreshFromRemoteBackend() {
+        if timesheetLoading == true {
+            debugPrint("refreshFromRemoteBackend() called but timesheetLoading already == true")
+            return
+        }
+        
+        timesheetLoading = true
+        navigationItem.prompt = "Refreshing..."
+        
+        
+    }
+    
+    func refreshFromLocalBackend() {
+
     }
     
     // MARK: - actions
@@ -80,15 +107,15 @@ extension TimesheetViewController: UICollectionViewDelegateFlowLayout {
 // MARK: data source
 extension TimesheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if let data = timesheetData {
-            return data.count + 1
-        }
-        
         return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        if let data = timesheetData {
+            return data.count
+        }
+        
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

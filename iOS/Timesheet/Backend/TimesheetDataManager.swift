@@ -10,7 +10,8 @@ import UIKit
 import CoreData
 
 class TimesheetDataManager: NSObject {
-    func logsFromDatabase() -> [TimesheetLog]? {
+    // MARK: - local
+    func logsFromLocalDatabase() -> [TimesheetLog]? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
             debugPrint("logsFromDatabase() Unable to access application delegate")
             return nil
@@ -26,5 +27,10 @@ class TimesheetDataManager: NSObject {
             debugPrint("logsFromDatabase() Could not fetch \(error), \(error.userInfo)")
             return nil
         }
+    }
+    
+    // MARK: - remote
+    func logsFromRemoteDatabase() -> [TimesheetLog]? {
+        
     }
 }

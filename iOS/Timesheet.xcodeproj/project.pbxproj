@@ -18,6 +18,7 @@
 		231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A61F815A74009E8E78 /* TimesheetDataManager.swift */; };
 		231398A91F815AAF009E8E78 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A81F815AAF009E8E78 /* Convenience.swift */; };
 		231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AA1F815B21009E8E78 /* TimesheetLog.swift */; };
+		231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,7 @@
 		231398A61F815A74009E8E78 /* TimesheetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetDataManager.swift; sourceTree = "<group>"; };
 		231398A81F815AAF009E8E78 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		231398AA1F815B21009E8E78 /* TimesheetLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLog.swift; sourceTree = "<group>"; };
+		231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +110,7 @@
 				231398701F815694009E8E78 /* AppDelegate.swift */,
 				231398A21F815854009E8E78 /* NavigationController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
+				231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */,
 				231398AC1F815C6E009E8E78 /* Backend */,
 				231398A11F815722009E8E78 /* Resources */,
 			);
@@ -289,6 +292,7 @@
 				231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */,
 				231398A91F815AAF009E8E78 /* Convenience.swift in Sources */,
 				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
+				231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */,
 				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
 				231398A31F815854009E8E78 /* NavigationController.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
