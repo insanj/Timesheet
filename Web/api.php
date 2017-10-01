@@ -24,10 +24,10 @@ class TimesheetDatabase extends SQLite3 {
     }
 }
 
-function getLogsFromDatabase() {
+function getLogsFromDatabase($user_id) {
 	if ($database = new TimesheetDatabase()) { 
 		$result_array = array();
-		$result = $database->query("SELECT * FROM logs ORDER BY time_out DESC");
+		$result = $database->query("SELECT * FROM logs WHERE user_id = '$user_id' ORDER BY time_out DESC");
 		while ($row = $result->fetchArray()) {
 		    $result_array[] = $row;
 		}
@@ -42,7 +42,7 @@ function getLogsFromDatabase() {
 
 function addLog($user_id, $time_in, $time_out, $notes) {
 	if ($database = new TimesheetDatabase()) { 
-		$success = $db->exec("INSERT INTO logs (user_id, time_in, time_out, notes) VALUES ('$user_id', '$time_in', '$time_out', '$notes')");
+		$success = $database->exec("INSERT INTO logs (user_id, time_in, time_out, notes) VALUES ('$user_id', '$time_in', '$time_out', '$notes')");
 		$database->close();
 		unset($database);
 
@@ -75,19 +75,29 @@ if (!isset($_GET['req'])) {
 }
 
 $request_type = $_GET['req'];
-/*if (strcmp($request_type, 'add') == 0) {
-	if (!isset($_GET['']))) {
-		echo 'Missing required "" parameter';
+if (strcmp($request_type, 'add') == 0) {
+	if (!isset($_GET['user_id']) || !isset($_GET['time_in']) || !isset($_GET['time_out']) || !isset($_GET['notes'])) {
+		echo 'Missing required "user_id", "time_in", "time_out", or "notes"  parameter';
 		return;
 	}
 
-	$string = $_GET[''];
+	$user_id = $_GET['user_id'];
+	$time_in = $_GET['time_in'];
+	$time_out = $_GET['time_out'];
+	$notes = $_GET['notes'];
 
 	echo addLog($user_id, $time_in, $time_out, $notes);
-}*/
+}
 
-if (strcmp($request_type, 'history') == 0) {
-	echo getLogsFromDatabase();
+else if (strcmp($request_type, 'history') == 0) {
+    if (!isset($_GET['user_id'])) {
+		echo 'Missing required "user_id" parameter';
+		return;
+	}
+	
+	$user_id = $_GET['user_id'];
+
+	echo getLogsFromDatabase($user_id);
 }
 
 else {
