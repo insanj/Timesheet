@@ -14,6 +14,10 @@
 		2313987E1F815694009E8E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2313987C1F815694009E8E78 /* LaunchScreen.storyboard */; };
 		231398891F815694009E8E78 /* TimesheetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398881F815694009E8E78 /* TimesheetTests.swift */; };
 		231398941F815694009E8E78 /* TimesheetUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398931F815694009E8E78 /* TimesheetUITests.swift */; };
+		231398A31F815854009E8E78 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A21F815854009E8E78 /* NavigationController.swift */; };
+		231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A61F815A74009E8E78 /* TimesheetDataManager.swift */; };
+		231398A91F815AAF009E8E78 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A81F815AAF009E8E78 /* Convenience.swift */; };
+		231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AA1F815B21009E8E78 /* TimesheetLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +51,10 @@
 		2313988F1F815694009E8E78 /* TimesheetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimesheetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		231398931F815694009E8E78 /* TimesheetUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUITests.swift; sourceTree = "<group>"; };
 		231398951F815694009E8E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		231398A21F815854009E8E78 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		231398A61F815A74009E8E78 /* TimesheetDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetDataManager.swift; sourceTree = "<group>"; };
+		231398A81F815AAF009E8E78 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
+		231398AA1F815B21009E8E78 /* TimesheetLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +106,9 @@
 			isa = PBXGroup;
 			children = (
 				231398701F815694009E8E78 /* AppDelegate.swift */,
+				231398A21F815854009E8E78 /* NavigationController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
+				231398AC1F815C6E009E8E78 /* Backend */,
 				231398A11F815722009E8E78 /* Resources */,
 			);
 			path = Timesheet;
@@ -131,6 +141,16 @@
 				2313987A1F815694009E8E78 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		231398AC1F815C6E009E8E78 /* Backend */ = {
+			isa = PBXGroup;
+			children = (
+				231398A61F815A74009E8E78 /* TimesheetDataManager.swift */,
+				231398AA1F815B21009E8E78 /* TimesheetLog.swift */,
+				231398A81F815AAF009E8E78 /* Convenience.swift */,
+			);
+			path = Backend;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,6 +287,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */,
+				231398A91F815AAF009E8E78 /* Convenience.swift in Sources */,
+				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
+				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
+				231398A31F815854009E8E78 /* NavigationController.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
 			);
@@ -427,6 +451,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 24X8MVUSCN;
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
@@ -441,6 +466,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 24X8MVUSCN;
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
