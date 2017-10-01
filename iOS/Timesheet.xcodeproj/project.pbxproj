@@ -8,8 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		231398711F815694009E8E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398701F815694009E8E78 /* AppDelegate.swift */; };
-		231398731F815694009E8E78 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398721F815694009E8E78 /* ViewController.swift */; };
-		231398761F815694009E8E78 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 231398741F815694009E8E78 /* Main.storyboard */; };
+		231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398721F815694009E8E78 /* TimesheetViewController.swift */; };
 		231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 231398771F815694009E8E78 /* Timesheet.xcdatamodeld */; };
 		2313987B1F815694009E8E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2313987A1F815694009E8E78 /* Assets.xcassets */; };
 		2313987E1F815694009E8E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2313987C1F815694009E8E78 /* LaunchScreen.storyboard */; };
@@ -37,8 +36,7 @@
 /* Begin PBXFileReference section */
 		2313986D1F815694009E8E78 /* Timesheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timesheet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		231398701F815694009E8E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		231398721F815694009E8E78 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		231398751F815694009E8E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		231398721F815694009E8E78 /* TimesheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetViewController.swift; sourceTree = "<group>"; };
 		231398781F815694009E8E78 /* Timesheet.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timesheet.xcdatamodel; sourceTree = "<group>"; };
 		2313987A1F815694009E8E78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2313987D1F815694009E8E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -100,12 +98,8 @@
 			isa = PBXGroup;
 			children = (
 				231398701F815694009E8E78 /* AppDelegate.swift */,
-				231398721F815694009E8E78 /* ViewController.swift */,
-				231398741F815694009E8E78 /* Main.storyboard */,
-				2313987A1F815694009E8E78 /* Assets.xcassets */,
-				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,
-				2313987F1F815694009E8E78 /* Info.plist */,
-				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
+				231398721F815694009E8E78 /* TimesheetViewController.swift */,
+				231398A11F815722009E8E78 /* Resources */,
 			);
 			path = Timesheet;
 			sourceTree = "<group>";
@@ -126,6 +120,17 @@
 				231398951F815694009E8E78 /* Info.plist */,
 			);
 			path = TimesheetUITests;
+			sourceTree = "<group>";
+		};
+		231398A11F815722009E8E78 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
+				2313987F1F815694009E8E78 /* Info.plist */,
+				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,
+				2313987A1F815694009E8E78 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,7 +242,6 @@
 			files = (
 				2313987E1F815694009E8E78 /* LaunchScreen.storyboard in Resources */,
 				2313987B1F815694009E8E78 /* Assets.xcassets in Resources */,
-				231398761F815694009E8E78 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */,
-				231398731F815694009E8E78 /* ViewController.swift in Sources */,
+				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,14 +304,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		231398741F815694009E8E78 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				231398751F815694009E8E78 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2313987C1F815694009E8E78 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -431,9 +427,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Timesheet/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.Timesheet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -445,9 +441,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = Timesheet/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.Timesheet;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
