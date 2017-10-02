@@ -57,6 +57,16 @@ class TimesheetViewController: UIViewController {
         timesheetCollectionView.dataSource = self
         
         timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
+        
+        timesheetCollectionView.alwaysBounceVertical = true
+        
+        timesheetCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(timesheetCollectionView)
+        
+        timesheetCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        timesheetCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        timesheetCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        timesheetCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     func refreshFromRemoteBackend() {
@@ -111,9 +121,11 @@ class TimesheetViewController: UIViewController {
         timesheetSections = logMonths.flatMap { return String($0) }
         
         // finally done!
-        timesheetLoading = false
-        navigationItem.prompt = nil
-        timesheetCollectionView.reloadData()
+        DispatchQueue.main.sync {
+            self.timesheetLoading = false
+            self.navigationItem.prompt = nil
+            self.timesheetCollectionView.reloadData()
+        }
     }
     
     // MARK: - actions
