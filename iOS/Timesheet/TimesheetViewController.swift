@@ -10,6 +10,7 @@ import UIKit
 
 @objcMembers
 class TimesheetViewController: UIViewController {
+    let timesheetNavigationBarHeight: CGFloat = 64.0
     let timesheetNavigationBar = TimesheetNavigationBar()
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
@@ -45,13 +46,13 @@ class TimesheetViewController: UIViewController {
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
         
-        timesheetNavigationBar.heightAnchor.constraint(equalToConstant: 64.0).isActive = true
+        timesheetNavigationBar.heightAnchor.constraint(equalToConstant: timesheetNavigationBarHeight).isActive = true
         timesheetNavigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         timesheetNavigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         timesheetNavigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         
         // navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,7 +78,8 @@ class TimesheetViewController: UIViewController {
         
         timesheetCollectionView.alwaysBounceVertical = true
         
-        timesheetCollectionView.contentInset = UIEdgeInsets(top: 64.0, left: 0, bottom: 0, right: 0)
+        let topInset = timesheetNavigationBarHeight - UIApplication.shared.statusBarFrame.height
+        timesheetCollectionView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         
         timesheetCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetCollectionView)
@@ -95,7 +97,6 @@ class TimesheetViewController: UIViewController {
         }
         
         timesheetLoading = true
-        navigationItem.prompt = "Refreshing..."
         
         let dataManager = TimesheetDataManager()
         dataManager.logsFromRemoteDatabase { (logs) in
@@ -274,16 +275,6 @@ extension TimesheetViewController: UICollectionViewDelegate {
             return
         }
         
-        /*let scaleBetween:((CGFloat) -> CGFloat) = { given in
-            let unscaledNum = given
-            let minAllowed:CGFloat = 0.0
-            let maxAllowed:CGFloat = 100.0
-            let min:CGFloat = 0.0
-            let max:CGFloat = 1.0
-            
-            return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed
-        }*/
-        
         let scrollView = timesheetCollectionView
         let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
 
@@ -303,6 +294,13 @@ extension TimesheetViewController: UICollectionViewDelegate {
             // nothing
             timesheetNavigationBar.detailLabel.alpha = 0.0
             timesheetNavigationBar.detailLabel.text = nil
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
+        if scrollViewOffset < -100.0 {
+            refreshFromRemoteBackend()
         }
     }
 }

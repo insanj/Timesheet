@@ -32,6 +32,18 @@ class TimesheetNavigationBar: UIView {
         backgroundView.rightAnchor.constraint(equalTo: rightAnchor, constant: 1.0).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
+        // setup title label
+        titleLabel.textColor = UIColor.black
+        titleLabel.textAlignment = .center
+        titleLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
+        titleLabel.numberOfLines = 1
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(titleLabel)
+        
+        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        
         // setup detail label
         detailLabel.textColor = UIColor(white:0.0, alpha: 0.6)
         detailLabel.textAlignment = .center
@@ -42,21 +54,9 @@ class TimesheetNavigationBar: UIView {
         detailLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(detailLabel)
         
-        detailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
+        detailLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor).isActive = true
         detailLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
-
-        // setup title label
-        titleLabel.textColor = UIColor.black
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .medium)
-        titleLabel.numberOfLines = 1
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(titleLabel)
-        
-        titleLabel.bottomAnchor.constraint(equalTo: detailLabel.topAnchor).isActive = true
-        titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
-        titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
