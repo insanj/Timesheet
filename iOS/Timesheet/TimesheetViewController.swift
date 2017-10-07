@@ -10,10 +10,11 @@ import UIKit
 
 @objcMembers
 class TimesheetViewController: UIViewController {
+    let timesheetNavigationBar = TimesheetNavigationBar()
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     var timesheetLoading = false
     
-    var timesheetSections: [String]?
+    var timesheetSections: [Date]?
     var timesheetLogs: [[TimesheetLog]]?
     var timesheetLogColors = [IndexPath: TimesheetColor]()
     
@@ -28,17 +29,24 @@ class TimesheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // setup navigation controller
-        title = "Timesheet"
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
-
         // setup view
         view.backgroundColor = UIColor.white
         
         // setup contents
         setupCollectionView()
+        
+        // setup navigation bar
+        timesheetNavigationBar.titleLabel.text = "Timesheet"
+        timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(timesheetNavigationBar)
+        
+        timesheetNavigationBar.heightAnchor.constraint(equalToConstant: 64.0).isActive = true
+        timesheetNavigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        timesheetNavigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        timesheetNavigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        
+        // navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(refreshButtonTapped))
+        // navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -63,6 +71,8 @@ class TimesheetViewController: UIViewController {
         timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
         
         timesheetCollectionView.alwaysBounceVertical = true
+        
+        timesheetCollectionView.contentInset = UIEdgeInsets(top: 64.0, left: 0, bottom: 0, right: 0)
         
         timesheetCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetCollectionView)
@@ -96,18 +106,24 @@ class TimesheetViewController: UIViewController {
     
     func sortLogs(_ logs: [TimesheetLog]) {
         let sortedLogs = logs.sorted {
-            assert($0.created != nil && $1.created != nil, "Cannot properly sort log entries of some do not have valid dates")
-            return $0.created!.compare($1.created!) == .orderedAscending
+            assert($0.timeIn != nil && $1.timeIn != nil, "Cannot properly sort log entries of some do not have valid dates")
+            return $0.timeIn!.compare($1.timeIn!) == .orderedAscending
         }
         
         var logsByMonth = [[TimesheetLog]]()
-        var logMonths = [Int]()
+        var logDates = [Date]()
+        
         var currentMonth: Int = -1
+        var currentYear: Int = -1
+        
         let calendar = Calendar.current
         
         for log in sortedLogs {
-            let logMonth = calendar.component(.month, from: log.created!)
-            if logMonth == currentMonth {
+            let logDate = log.timeIn!
+            let logMonth = calendar.component(.month, from: logDate)
+            let logYear = calendar.component(.year, from: logDate)
+            
+            if logMonth == currentMonth && logYear == currentYear {
                 if var existingLogs = logsByMonth.last {
                     existingLogs.append(log)
                     logsByMonth[logsByMonth.count-1] = existingLogs
@@ -116,14 +132,15 @@ class TimesheetViewController: UIViewController {
                 }
             } else {
                 currentMonth = logMonth
-                logMonths.append(logMonth)
+                currentYear = logYear
                 
+                logDates.append(logDate)
                 logsByMonth.append([log])
             }
         }
         
         timesheetLogs = logsByMonth
-        timesheetSections = logMonths.flatMap { return String($0) }
+        timesheetSections = logDates
         
         timesheetLogColors = [IndexPath: TimesheetColor]()
         
@@ -195,13 +212,10 @@ extension TimesheetViewController: UICollectionViewDataSource {
             }
             
             if let sections = timesheetSections {
-                let month = sections[indexPath.section]
+                let date = sections[indexPath.section]
                 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "MM"
-                let date = dateFormatter.date(from: "\(month)")!
-                
-                dateFormatter.dateFormat = "MMMM"
+                dateFormatter.dateFormat = "MMMM yyyy"
                 headerView.titleLabel.text = dateFormatter.string(from: date)
             } else {
                 headerView.titleLabel.text = "Loading..."

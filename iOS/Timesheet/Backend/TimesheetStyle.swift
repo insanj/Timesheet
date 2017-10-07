@@ -35,8 +35,8 @@ let timesheetColors: [TimesheetColor] = [
     TimesheetColor("Red", UIColor(red: 0.992, green: 0.267, blue: 0.243, alpha: 1), UIColor(red: 0.49, green: 0.0314, blue: 0.0314, alpha: 1)),
     TimesheetColor("Maroon", UIColor(red: 0.514, green: 0.0941, blue: 0.294, alpha: 1), UIColor(red: 0.918, green: 0.486, blue: 0.69, alpha: 1)),
     TimesheetColor("Fuchsia", UIColor(red: 0.933, green: 0.145, blue: 0.737, alpha: 1), UIColor(red: 0.392, green: 0.0471, blue: 0.306, alpha: 1)),
-    TimesheetColor("Purple", UIColor(red: 0.686, green: 0.133, blue: 0.776, alpha: 1), UIColor(red: 0.933, green: 0.671, blue: 0.973, alpha: 1)),
-    TimesheetColor("Black", UIColor(red: 0.0667, green: 0.0667, blue: 0.0667, alpha: 1), UIColor(red: 0.867, green: 0.867, blue: 0.867, alpha: 1))
+    TimesheetColor("Purple", UIColor(red: 0.686, green: 0.133, blue: 0.776, alpha: 1), UIColor(red: 0.933, green: 0.671, blue: 0.973, alpha: 1))
+    // TimesheetColor("Black", UIColor(red: 0.0667, green: 0.0667, blue: 0.0667, alpha: 1), UIColor(red: 0.867, green: 0.867, blue: 0.867, alpha: 1))
 ]
 
 func timesheetRandomColor() -> TimesheetColor {

@@ -33,10 +33,11 @@ class TimesheetLogCell: UICollectionViewCell {
     var timesheetColor: TimesheetColor? {
         didSet {
             if let color = timesheetColor {
-                contentBackgroundView.backgroundColor = color.backgroundColor
+                dateBackgroundView.backgroundColor = color.foregroundColor
+                dayLabel.textColor = color.backgroundColor
+                dateLabel.textColor = color.backgroundColor
                 
-                dayLabel.textColor = color.foregroundColor
-                dateLabel.textColor = color.foregroundColor
+                contentBackgroundView.backgroundColor = color.backgroundColor
                 timeInTitleLabel.textColor = color.foregroundColor
                 timeInLabel.textColor = color.foregroundColor
                 timeOutTitleLabel.textColor = color.foregroundColor
@@ -46,9 +47,10 @@ class TimesheetLogCell: UICollectionViewCell {
     }
     
     internal let contentBackgroundView = UIView()
+    internal let dateBackgroundView = UIView()
 
-    internal let dayLabel = UILabel() // Wed
-    internal let dateLabel = UILabel() // 12
+    internal let dayLabel = UILabel()
+    internal let dateLabel = UILabel()
     
     internal let timeInTitleLabel = UILabel()
     internal let timeInLabel = UILabel()
@@ -71,7 +73,6 @@ class TimesheetLogCell: UICollectionViewCell {
         contentBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
         // setup day & date label
-        let dateBackgroundView = UIView()
         dateBackgroundView.backgroundColor = UIColor.white
         dateBackgroundView.layer.masksToBounds = true
         dateBackgroundView.layer.cornerRadius = 8.0
@@ -82,21 +83,21 @@ class TimesheetLogCell: UICollectionViewCell {
         dateBackgroundView.leftAnchor.constraint(equalTo: contentBackgroundView.leftAnchor, constant: 5.0).isActive = true
         dateBackgroundView.widthAnchor.constraint(equalTo: dateBackgroundView.heightAnchor).isActive = true
         dateBackgroundView.bottomAnchor.constraint(equalTo: contentBackgroundView.bottomAnchor, constant: -5.0).isActive = true
-
-        dayLabel.textColor = UIColor.white
-        dayLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
-        dayLabel.numberOfLines = 1
-        dayLabel.textAlignment = .center
-        dayLabel.translatesAutoresizingMaskIntoConstraints = false
-        dateBackgroundView.addSubview(dayLabel)
         
         dateLabel.textColor = UIColor.white
-        dateLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+        dateLabel.font = UIFont.systemFont(ofSize: 24, weight: .medium)
         dateLabel.numberOfLines = 1
         dateLabel.textAlignment = .center
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateBackgroundView.addSubview(dateLabel)
 
+        dayLabel.textColor = UIColor.white
+        dayLabel.font = UIFont.systemFont(ofSize: 22, weight: .regular)
+        dayLabel.numberOfLines = 1
+        dayLabel.textAlignment = .center
+        dayLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateBackgroundView.addSubview(dayLabel)
+        
         dateLabel.centerXAnchor.constraint(equalTo: dateBackgroundView.centerXAnchor).isActive = true
         dateLabel.bottomAnchor.constraint(equalTo: dateBackgroundView.centerYAnchor).isActive = true
         

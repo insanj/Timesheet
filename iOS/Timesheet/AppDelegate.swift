@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         timesheetViewController = TimesheetViewController()
         
-        window?.rootViewController = NavigationController(rootViewController: timesheetViewController!)
+        window?.rootViewController = TimesheetNavigationController(rootViewController: timesheetViewController!)
         window?.makeKeyAndVisible()
         
         return true
