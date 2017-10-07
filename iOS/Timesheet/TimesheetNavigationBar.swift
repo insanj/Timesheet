@@ -12,7 +12,8 @@ class TimesheetNavigationBar: UIView {
     
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let titleLabel = UILabel()
-    
+    let detailLabel = UILabel()
+
     init() {
         super.init(frame: CGRect.zero)
         
@@ -31,6 +32,20 @@ class TimesheetNavigationBar: UIView {
         backgroundView.rightAnchor.constraint(equalTo: rightAnchor, constant: 1.0).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
 
+        // setup detail label
+        detailLabel.textColor = UIColor(white:0.0, alpha: 0.6)
+        detailLabel.textAlignment = .center
+        detailLabel.font = UIFont.systemFont(ofSize: 12.0, weight: .regular)
+        detailLabel.numberOfLines = 1
+        detailLabel.setContentHuggingPriority(.required, for: .vertical)
+        detailLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        detailLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(detailLabel)
+        
+        detailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
+        detailLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
+        detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+
         // setup title label
         titleLabel.textColor = UIColor.black
         titleLabel.textAlignment = .center
@@ -39,7 +54,7 @@ class TimesheetNavigationBar: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10.0).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: detailLabel.topAnchor).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
     }

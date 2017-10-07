@@ -12,7 +12,12 @@ import UIKit
 class TimesheetViewController: UIViewController {
     let timesheetNavigationBar = TimesheetNavigationBar()
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
-    var timesheetLoading = false
+    
+    var timesheetLoading = false {
+        didSet {
+            refreshNavigationBarDetailLabel()
+        }
+    }
     
     var timesheetSections: [Date]?
     var timesheetLogs: [[TimesheetLog]]?
@@ -256,5 +261,48 @@ extension TimesheetViewController: UICollectionViewDataSource {
 extension TimesheetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        refreshNavigationBarDetailLabel()
+    }
+
+    func refreshNavigationBarDetailLabel() {
+        guard !timesheetLoading else {
+            timesheetNavigationBar.detailLabel.alpha = 1.0
+            timesheetNavigationBar.detailLabel.text = "Refreshing..."
+            return
+        }
+        
+        /*let scaleBetween:((CGFloat) -> CGFloat) = { given in
+            let unscaledNum = given
+            let minAllowed:CGFloat = 0.0
+            let maxAllowed:CGFloat = 100.0
+            let min:CGFloat = 0.0
+            let max:CGFloat = 1.0
+            
+            return (maxAllowed - minAllowed) * (unscaledNum - min) / (max - min) + minAllowed
+        }*/
+        
+        let scrollView = timesheetCollectionView
+        let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
+
+        if scrollViewOffset < 0 {
+            let offset = abs(scrollViewOffset)
+            
+            if offset > 100 {
+                // done
+                timesheetNavigationBar.detailLabel.alpha = 1.0
+                timesheetNavigationBar.detailLabel.text = "Release to refresh"
+            } else {
+                // progress
+                timesheetNavigationBar.detailLabel.alpha = offset / 100.0
+                timesheetNavigationBar.detailLabel.text = "Pull to refresh"
+            }
+        } else {
+            // nothing
+            timesheetNavigationBar.detailLabel.alpha = 0.0
+            timesheetNavigationBar.detailLabel.text = nil
+        }
     }
 }
