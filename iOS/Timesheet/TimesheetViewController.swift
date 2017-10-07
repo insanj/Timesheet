@@ -78,7 +78,7 @@ class TimesheetViewController: UIViewController {
         
         timesheetCollectionView.alwaysBounceVertical = true
         
-        let topInset = timesheetNavigationBarHeight - UIApplication.shared.statusBarFrame.height
+        let topInset = (timesheetNavigationBarHeight - UIApplication.shared.statusBarFrame.height) + 5.0
         timesheetCollectionView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         
         timesheetCollectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -244,12 +244,15 @@ extension TimesheetViewController: UICollectionViewDataSource {
             fatalError()
         }
         
-        cell.timesheetLog = logs[indexPath.section][indexPath.row]
+        let log = logs[indexPath.section][indexPath.row]
+        cell.timesheetLog = log
         
         if let existingColor = timesheetLogColors[indexPath] {
             cell.timesheetColor = existingColor
         } else {
-            let color = timesheetRandomColor()
+            let day = Calendar.current.component(.day, from: log.timeIn!)
+            let color = timesheetColor(day: day)
+            
             cell.timesheetColor = color
             timesheetLogColors[indexPath] = color
         }
@@ -277,7 +280,8 @@ extension TimesheetViewController: UICollectionViewDelegate {
         
         let scrollView = timesheetCollectionView
         let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
-
+        // print("offset = \(scrollViewOffset)")
+        
         if scrollViewOffset < 0 {
             let offset = abs(scrollViewOffset)
             

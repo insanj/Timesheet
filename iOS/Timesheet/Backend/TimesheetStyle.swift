@@ -44,3 +44,7 @@ func timesheetRandomColor() -> TimesheetColor {
     return timesheetColors[random]
 }
 
+func timesheetColor(day: Int) -> TimesheetColor {
+    let count: Int = timesheetColors.count
+    return timesheetColors[day % count]
+}
