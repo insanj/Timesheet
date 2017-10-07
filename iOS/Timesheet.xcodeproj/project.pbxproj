@@ -19,6 +19,8 @@
 		231398A91F815AAF009E8E78 /* Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398A81F815AAF009E8E78 /* Convenience.swift */; };
 		231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AA1F815B21009E8E78 /* TimesheetLog.swift */; };
 		231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */; };
+		23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */; };
+		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +59,8 @@
 		231398A81F815AAF009E8E78 /* Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Convenience.swift; sourceTree = "<group>"; };
 		231398AA1F815B21009E8E78 /* TimesheetLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLog.swift; sourceTree = "<group>"; };
 		231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogCell.swift; sourceTree = "<group>"; };
+		23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetHeaderView.swift; sourceTree = "<group>"; };
+		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,7 @@
 				231398A21F815854009E8E78 /* NavigationController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
 				231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */,
+				23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */,
 				231398AC1F815C6E009E8E78 /* Backend */,
 				231398A11F815722009E8E78 /* Resources */,
 			);
@@ -149,9 +154,10 @@
 		231398AC1F815C6E009E8E78 /* Backend */ = {
 			isa = PBXGroup;
 			children = (
+				231398A81F815AAF009E8E78 /* Convenience.swift */,
 				231398A61F815A74009E8E78 /* TimesheetDataManager.swift */,
 				231398AA1F815B21009E8E78 /* TimesheetLog.swift */,
-				231398A81F815AAF009E8E78 /* Convenience.swift */,
+				23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */,
 			);
 			path = Backend;
 			sourceTree = "<group>";
@@ -289,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */,
 				231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */,
 				231398A91F815AAF009E8E78 /* Convenience.swift in Sources */,
 				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
@@ -296,6 +303,7 @@
 				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
 				231398A31F815854009E8E78 /* NavigationController.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
+				23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */,
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

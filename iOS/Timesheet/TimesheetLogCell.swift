@@ -30,6 +30,23 @@ class TimesheetLogCell: UICollectionViewCell {
         }
     }
     
+    var timesheetColor: TimesheetColor? {
+        didSet {
+            if let color = timesheetColor {
+                contentBackgroundView.backgroundColor = color.backgroundColor
+                
+                dayLabel.textColor = color.foregroundColor
+                dateLabel.textColor = color.foregroundColor
+                timeInTitleLabel.textColor = color.foregroundColor
+                timeInLabel.textColor = color.foregroundColor
+                timeOutTitleLabel.textColor = color.foregroundColor
+                timeOutLabel.textColor = color.foregroundColor
+            }
+        }
+    }
+    
+    internal let contentBackgroundView = UIView()
+
     internal let dayLabel = UILabel() // Wed
     internal let dateLabel = UILabel() // 12
     
@@ -42,30 +59,29 @@ class TimesheetLogCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        let backgroundView = UIView()
-        backgroundView.backgroundColor = UIColor(white: 1.0, alpha: 0.1)
-        backgroundView.layer.masksToBounds = true
-        backgroundView.layer.cornerRadius = 8.0
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(backgroundView)
+        contentBackgroundView.backgroundColor = UIColor(white: 1.0, alpha: 0.1)
+        contentBackgroundView.layer.masksToBounds = true
+        contentBackgroundView.layer.cornerRadius = 8.0
+        contentBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(contentBackgroundView)
         
-        backgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5.0).isActive = true
-        backgroundView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5.0).isActive = true
-        backgroundView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5.0).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5.0).isActive = true
+        contentBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+        contentBackgroundView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 5.0).isActive = true
+        contentBackgroundView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -5.0).isActive = true
+        contentBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
 
         // setup day & date label
         let dateBackgroundView = UIView()
-        dateBackgroundView.backgroundColor = UIColor.black
+        dateBackgroundView.backgroundColor = UIColor.white
         dateBackgroundView.layer.masksToBounds = true
         dateBackgroundView.layer.cornerRadius = 8.0
         dateBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.addSubview(dateBackgroundView)
+        contentBackgroundView.addSubview(dateBackgroundView)
         
-        dateBackgroundView.topAnchor.constraint(equalTo: backgroundView.topAnchor, constant: 5.0).isActive = true
-        dateBackgroundView.leftAnchor.constraint(equalTo: backgroundView.leftAnchor, constant: 5.0).isActive = true
+        dateBackgroundView.topAnchor.constraint(equalTo: contentBackgroundView.topAnchor, constant: 5.0).isActive = true
+        dateBackgroundView.leftAnchor.constraint(equalTo: contentBackgroundView.leftAnchor, constant: 5.0).isActive = true
         dateBackgroundView.widthAnchor.constraint(equalTo: dateBackgroundView.heightAnchor).isActive = true
-        dateBackgroundView.bottomAnchor.constraint(equalTo: backgroundView.bottomAnchor, constant: -5.0).isActive = true
+        dateBackgroundView.bottomAnchor.constraint(equalTo: contentBackgroundView.bottomAnchor, constant: -5.0).isActive = true
 
         dayLabel.textColor = UIColor.white
         dayLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -96,7 +112,7 @@ class TimesheetLogCell: UICollectionViewCell {
         timeInTitleLabel.setContentHuggingPriority(.required, for: .horizontal)
         timeInTitleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         timeInTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.addSubview(timeInTitleLabel)
+        contentBackgroundView.addSubview(timeInTitleLabel)
         
         timeInLabel.textColor = UIColor.white
         timeInLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -104,7 +120,7 @@ class TimesheetLogCell: UICollectionViewCell {
         timeInLabel.numberOfLines = 1
         timeInLabel.textAlignment = .right
         timeInLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.addSubview(timeInLabel)
+        contentBackgroundView.addSubview(timeInLabel)
         
         timeOutTitleLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium)
         timeOutTitleLabel.textColor = UIColor.white
@@ -114,7 +130,7 @@ class TimesheetLogCell: UICollectionViewCell {
         timeOutTitleLabel.setContentHuggingPriority(.required, for: .horizontal)
         timeOutTitleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         timeOutTitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.addSubview(timeOutTitleLabel)
+        contentBackgroundView.addSubview(timeOutTitleLabel)
         
         timeOutLabel.textColor = UIColor.white
         timeOutLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -122,21 +138,21 @@ class TimesheetLogCell: UICollectionViewCell {
         timeOutLabel.numberOfLines = 1
         timeOutLabel.textAlignment = .right
         timeOutLabel.translatesAutoresizingMaskIntoConstraints = false
-        backgroundView.addSubview(timeOutLabel)
+        contentBackgroundView.addSubview(timeOutLabel)
         
         timeInTitleLabel.leftAnchor.constraint(equalTo: dateBackgroundView.rightAnchor, constant: 10.0).isActive = true
         timeInTitleLabel.bottomAnchor.constraint(equalTo: dateBackgroundView.centerYAnchor).isActive = true
 
         timeInLabel.leftAnchor.constraint(equalTo: timeInTitleLabel.rightAnchor, constant: 10.0).isActive = true
         timeInLabel.centerYAnchor.constraint(equalTo: timeInTitleLabel.centerYAnchor).isActive = true
-        timeInLabel.rightAnchor.constraint(equalTo: backgroundView.rightAnchor, constant: -10.0).isActive = true
+        timeInLabel.rightAnchor.constraint(equalTo: contentBackgroundView.rightAnchor, constant: -10.0).isActive = true
 
         timeOutTitleLabel.leftAnchor.constraint(equalTo: dateBackgroundView.rightAnchor, constant: 10.0).isActive = true
         timeOutTitleLabel.topAnchor.constraint(equalTo: dateBackgroundView.centerYAnchor).isActive = true
 
         timeOutLabel.leftAnchor.constraint(equalTo: timeOutTitleLabel.rightAnchor, constant: 10.0).isActive = true
         timeOutLabel.centerYAnchor.constraint(equalTo: timeOutTitleLabel.centerYAnchor).isActive = true
-        timeOutLabel.rightAnchor.constraint(equalTo: backgroundView.rightAnchor, constant: -10.0).isActive = true
+        timeOutLabel.rightAnchor.constraint(equalTo: contentBackgroundView.rightAnchor, constant: -10.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

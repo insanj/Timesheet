@@ -12,8 +12,10 @@ import UIKit
 class TimesheetViewController: UIViewController {
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     var timesheetLoading = false
+    
     var timesheetSections: [String]?
     var timesheetLogs: [[TimesheetLog]]?
+    var timesheetLogColors = [IndexPath: TimesheetColor]()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -33,7 +35,7 @@ class TimesheetViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
 
         // setup view
-        view.backgroundColor = UIColor(red:0.161, green:0.169, blue:0.212, alpha:1.00)
+        view.backgroundColor = UIColor.white
         
         // setup contents
         setupCollectionView()
@@ -53,9 +55,11 @@ class TimesheetViewController: UIViewController {
     
     // MARK: - setup
     func setupCollectionView() {
+        timesheetCollectionView.backgroundColor = UIColor.clear
         timesheetCollectionView.delegate = self
         timesheetCollectionView.dataSource = self
         
+        timesheetCollectionView.register(TimesheetHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TimesheetHeaderView.reuseIdentifier)
         timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
         
         timesheetCollectionView.alwaysBounceVertical = true
@@ -106,6 +110,7 @@ class TimesheetViewController: UIViewController {
             if logMonth == currentMonth {
                 if var existingLogs = logsByMonth.last {
                     existingLogs.append(log)
+                    logsByMonth[logsByMonth.count-1] = existingLogs
                 } else {
                     logsByMonth.append([log])
                 }
@@ -119,6 +124,8 @@ class TimesheetViewController: UIViewController {
         
         timesheetLogs = logsByMonth
         timesheetSections = logMonths.flatMap { return String($0) }
+        
+        timesheetLogColors = [IndexPath: TimesheetColor]()
         
         // finally done!
         DispatchQueue.main.sync {
@@ -142,7 +149,12 @@ class TimesheetViewController: UIViewController {
 // MARK: layout
 extension TimesheetViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.size.width, height: 100.0)
+        let width = min(view.frame.size.width, collectionView.frame.size.width - 10.0) // the item width must be less than the width of the UICollectionView minus the section insets left and right values, minus the content insets left and right values
+        return CGSize(width: width, height: 100.0)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 30.0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -154,7 +166,7 @@ extension TimesheetViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0)
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
 }
 
@@ -176,6 +188,31 @@ extension TimesheetViewController: UICollectionViewDataSource {
         return 0
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionElementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TimesheetHeaderView.reuseIdentifier, for: indexPath) as? TimesheetHeaderView else {
+                fatalError()
+            }
+            
+            if let sections = timesheetSections {
+                let month = sections[indexPath.section]
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "MM"
+                let date = dateFormatter.date(from: "\(month)")!
+                
+                dateFormatter.dateFormat = "MMMM"
+                headerView.titleLabel.text = dateFormatter.string(from: date)
+            } else {
+                headerView.titleLabel.text = "Loading..."
+            }
+            
+            return headerView
+        }
+        
+        fatalError()
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLogCell.reuseIdentifier, for: indexPath) as? TimesheetLogCell else {
             debugPrint("cellForItemAt unable to dequeueReusableCell as TimesheetLogCell")
@@ -188,6 +225,15 @@ extension TimesheetViewController: UICollectionViewDataSource {
         }
         
         cell.timesheetLog = logs[indexPath.section][indexPath.row]
+        
+        if let existingColor = timesheetLogColors[indexPath] {
+            cell.timesheetColor = existingColor
+        } else {
+            let color = timesheetRandomColor()
+            cell.timesheetColor = color
+            timesheetLogColors[indexPath] = color
+        }
+        
         return cell
     }
 }
