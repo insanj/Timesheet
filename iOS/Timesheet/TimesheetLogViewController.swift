@@ -23,7 +23,7 @@ class TimesheetLogViewController: UIViewController {
     let timeControl = TenClock()
     
     init(_ log: TimesheetLog, _ color: TimesheetColor) {
-        self.log = log
+        self.log = log.copy() as! TimesheetLog
         self.color = color
         
         super.init(nibName: nil, bundle: nil)
@@ -105,6 +105,9 @@ class TimesheetLogViewController: UIViewController {
         timeControl.tailText = "OUT"
         timeControl.startDate = log.timeIn!
         timeControl.endDate = log.timeOut!
+        timeControl.centerTextColor = color.foregroundColor
+        timeControl.tintColor = color.backgroundColor
+        timeControl.majorTicksColor = UIColor.white
         timeControl.delegate = self
         timeControl.translatesAutoresizingMaskIntoConstraints = false
         controlsView.addSubview(timeControl)
@@ -125,9 +128,9 @@ class TimesheetLogViewController: UIViewController {
 }
 
 extension TimesheetLogViewController: TenClockDelegate {
-    
     func timesUpdated(_ clock: TenClock, startDate: Date, endDate: Date) {
-        
+        log.timeIn = startDate
+        log.timeOut = endDate
+        originalCell.timesheetLog = log
     }
-    
 }

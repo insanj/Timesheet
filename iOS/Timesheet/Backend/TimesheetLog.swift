@@ -8,7 +8,8 @@
 
 import Foundation
 
-class TimesheetLog: NSObject {
+class TimesheetLog: NSObject, NSCopying {
+    var json: [AnyHashable: Any]
     var logId: Int?
     var userId: Int?
     var timeIn: Date?
@@ -17,6 +18,8 @@ class TimesheetLog: NSObject {
     var created: Date?
     
     init(json: [AnyHashable: Any]) {
+        self.json = json
+        
         if let validId = json["id"] as? Int {
             logId = validId
         }
@@ -42,5 +45,9 @@ class TimesheetLog: NSObject {
         }
         
         super.init()
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        return TimesheetLog(json: self.json)
     }
 }
