@@ -139,7 +139,7 @@ class TimesheetLogViewController: UIViewController {
     }
     
     func cellTapped() {
-        let dialog = DatePickerDialog()
+        let dialog = DatePickerDialog(textColor: UIColor.black, buttonColor: color.foregroundColor, font: UIFont.systemFont(ofSize: 20.0, weight: .medium), locale: Locale.current, showCancelButton: true)
         dialog.show("Change Date", doneButtonTitle: "Done", cancelButtonTitle: "Cancel", defaultDate: log.timeIn!, minimumDate: nil, maximumDate: nil, datePickerMode: .date, callback: { (date) in
             if let validDate = date {
                 let newYearComponent = Calendar.current.component(.year, from: validDate)
