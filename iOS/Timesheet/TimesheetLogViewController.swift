@@ -15,6 +15,7 @@ class TimesheetLogViewController: UIViewController {
     var log: TimesheetLog
     var color: TimesheetColor
     
+    let scrollView = UIScrollView()
     let containerView = UIView()
     let cancelButton = UIButton()
     let saveButton = UIButton()
@@ -46,6 +47,7 @@ class TimesheetLogViewController: UIViewController {
         
         view.backgroundColor = UIColor.clear
         
+        // setup background view
         let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(backgroundView)
@@ -55,35 +57,64 @@ class TimesheetLogViewController: UIViewController {
         backgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
-        containerView.backgroundColor = UIColor.clear
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(containerView)
+        // setup navigation bar buttons (save & cancel)
+        let navigationBarHeight:CGFloat = 44.0
+        let totalTopInset = navigationBarHeight + UIApplication.shared.statusBarFrame.height
+        let navigationBar = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+        navigationBar.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(navigationBar)
         
-        containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        containerView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        containerView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -200.0).isActive = true
-        
+        navigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        navigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        navigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        navigationBar.heightAnchor.constraint(equalToConstant: totalTopInset).isActive = true
+
         saveButton.setTitleColor(UIColor.black, for: .normal)
         saveButton.setTitle("Save", for: .normal)
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(saveButton)
+        navigationBar.contentView.addSubview(saveButton)
         
-        saveButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -5.0).isActive = true
-        saveButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -15).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -5.0).isActive = true
+        saveButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -15).isActive = true
 
         cancelButton.setTitleColor(UIColor.black, for: .normal)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(cancelButton)
+        navigationBar.contentView.addSubview(cancelButton)
         
-        cancelButton.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -5.0).isActive = true
-        cancelButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 15).isActive = true
+        cancelButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -5.0).isActive = true
+        cancelButton.leftAnchor.constraint(equalTo: navigationBar.leftAnchor, constant: 15).isActive = true
         
+        // setup scroll view (with container inside of it)
+        scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
+        scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
+        scrollView.alwaysBounceVertical = true
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(scrollView, belowSubview: navigationBar)
+        
+        scrollView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        scrollView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        scrollView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        containerView.backgroundColor = UIColor.clear
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(containerView)
+        
+        containerView.topAnchor.constraint(equalTo: scrollView.topAnchor).isActive = true
+        containerView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
+        containerView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
+        containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+        containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        containerView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+        
+        // -- everything will now be inside of containerView --
+        // setup original cell (with tap button)
         originalCell.timesheetLog = log
         originalCell.timesheetColor = color
         originalCell.translatesAutoresizingMaskIntoConstraints = false
@@ -103,6 +134,7 @@ class TimesheetLogViewController: UIViewController {
         cellButton.topAnchor.constraint(equalTo: originalCell.topAnchor).isActive = true
         cellButton.bottomAnchor.constraint(equalTo: originalCell.bottomAnchor).isActive = true
 
+        // setup controls view, clock
         controlsView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
@@ -128,8 +160,14 @@ class TimesheetLogViewController: UIViewController {
         present(loadingAlert, animated: true, completion: nil)
         
         let dataManager = TimesheetDataManager()
-        dataManager.editLogInRemoteDatabase(log: log) { (logs) in
+        dataManager.editLogInRemoteDatabase(log: log) { logs, error in
             loadingAlert.dismiss(animated: true, completion: nil)
+            
+            if let validError = error {
+                showError(validError, from: self)
+                return
+            }
+            
             self.saveCallback?(logs)
         }
     }

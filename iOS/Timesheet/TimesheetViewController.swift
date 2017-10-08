@@ -16,7 +16,9 @@ class TimesheetViewController: UIViewController {
     
     var timesheetLoading = false {
         didSet {
-            refreshNavigationBarDetailLabel()
+            OperationQueue.main.addOperation {
+                self.refreshNavigationBarDetailLabel()
+            }
         }
     }
     
@@ -114,7 +116,12 @@ class TimesheetViewController: UIViewController {
         timesheetLoading = true
         
         let dataManager = TimesheetDataManager()
-        dataManager.logsFromRemoteDatabase { (logs) in
+        dataManager.logsFromRemoteDatabase { logs, error in
+            if let validError = error {
+                showError(validError, from: self)
+                return
+            }
+            
             guard let validLogs = logs else {
                 debugPrint("refreshFromRemoteBackend() received nil response from dataManager logsFromRemoteDatabase")
                 self.timesheetLoading = false
@@ -192,7 +199,12 @@ class TimesheetViewController: UIViewController {
         let defaultTimeOut = defaultTimeInComponents.date ?? Date()
 
         let dataManager = TimesheetDataManager()
-        dataManager.addLogToRemoteDatabase(timeIn: defaultTimeIn, timeOut: defaultTimeOut) { (logs) in
+        dataManager.addLogToRemoteDatabase(timeIn: defaultTimeIn, timeOut: defaultTimeOut) { logs, error in
+            if let validError = error {
+                showError(validError, from: self)
+                return
+            }
+            
             guard let validLogs = logs else {
                 debugPrint("addTimesheetLog() received nil response from dataManager logsFromRemoteDatabase")
                 self.timesheetAdding = false
