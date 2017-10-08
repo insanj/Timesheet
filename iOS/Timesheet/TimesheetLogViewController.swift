@@ -93,6 +93,7 @@ class TimesheetLogViewController: UIViewController {
         scrollView.contentInset = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
         scrollView.scrollIndicatorInsets = UIEdgeInsets(top: navigationBarHeight, left: 0, bottom: 0, right: 0)
         scrollView.alwaysBounceVertical = true
+        scrollView.delegate = self
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(scrollView, belowSubview: navigationBar)
         
@@ -228,6 +229,34 @@ class TimesheetLogViewController: UIViewController {
         timeControl.rightAnchor.constraint(equalTo: controlsView.rightAnchor).isActive = true
         timeControl.topAnchor.constraint(equalTo: controlsView.topAnchor).isActive = true
         timeControl.bottomAnchor.constraint(equalTo: controlsView.bottomAnchor).isActive = true
+    }
+    
+    // UIScrollViewDelegate extension
+    var dismissWaiting = false
+}
+
+extension TimesheetLogViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
+        
+        if scrollViewOffset < 0 {
+            let offset = abs(scrollViewOffset)
+            
+            if offset >= 90 { // 10 extra because animating to 0.1, not 0.0 alpha
+                view.alpha = 0.1 // done
+            } else {
+                view.alpha = 1.0 - (offset / 100.0) // progress
+            }
+        } else {
+            view.alpha = 1.0 // nothing
+        }
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        let scrollViewOffset = scrollView.contentOffset.y + scrollView.contentInset.top + UIApplication.shared.statusBarFrame.height
+        if scrollViewOffset < -100.0 {
+            dismiss(animated: false, completion: nil)
+        }
     }
 }
 
