@@ -46,7 +46,7 @@ function addLog($user_id, $time_in, $time_out, $notes) {
 		$database->close();
 		unset($database);
 
-		return $success;
+		return getLogsFromDatabase($user_id);
 	}
 
 	else {

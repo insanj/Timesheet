@@ -105,8 +105,8 @@ class TimesheetViewController: UIViewController {
     }
     
     func refreshFromRemoteBackend() {
-        if timesheetLoading == true {
-            debugPrint("refreshFromRemoteBackend() called but timesheetLoading already == true")
+        guard !timesheetLoading && !timesheetAdding else {
+            debugPrint("refreshFromRemoteBackend() called but timesheetLoading or timesheetAdding == true")
             return
         }
         
@@ -127,7 +127,7 @@ class TimesheetViewController: UIViewController {
     func sortLogs(_ logs: [TimesheetLog]) {
         let sortedLogs = logs.sorted {
             assert($0.timeIn != nil && $1.timeIn != nil, "Cannot properly sort log entries of some do not have valid dates")
-            return $0.timeIn!.compare($1.timeIn!) == .orderedAscending
+            return $0.timeIn!.compare($1.timeIn!) == .orderedDescending
         }
         
         var logsByMonth = [[TimesheetLog]]()
@@ -178,15 +178,16 @@ class TimesheetViewController: UIViewController {
             return
         }
         
-        timesheetLoading = true
         timesheetAdding = true
         
         var defaultTimeInComponents = Calendar.current.dateComponents(in: TimeZone.current, from: Date())
         
         defaultTimeInComponents.hour = 9 // TODO: default time valies
+        defaultTimeInComponents.minute = 0
         let defaultTimeIn = defaultTimeInComponents.date ?? Date()
         
         defaultTimeInComponents.hour = 5
+        defaultTimeInComponents.minute = 0
         let defaultTimeOut = defaultTimeInComponents.date ?? Date()
 
         let dataManager = TimesheetDataManager()
@@ -194,7 +195,6 @@ class TimesheetViewController: UIViewController {
             guard let validLogs = logs else {
                 debugPrint("addTimesheetLog() received nil response from dataManager logsFromRemoteDatabase")
                 self.timesheetAdding = false
-                self.timesheetLoading = false
                 return
             }
             
