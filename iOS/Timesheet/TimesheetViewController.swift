@@ -342,6 +342,10 @@ extension TimesheetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             addTimesheetLog()
+        } else if let logs = timesheetLogs {
+            let log = logs[indexPath.section-1][indexPath.row]
+            let color = timesheetLogColors[indexPath]!
+            present(TimesheetLogViewController(log, color), animated: true, completion: nil)
         }
     }
     
