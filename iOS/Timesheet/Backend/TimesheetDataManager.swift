@@ -70,6 +70,17 @@ class TimesheetDataManager: NSObject {
         return url?.url
     }
     
+    func buildDeleteLogURL(log: TimesheetLog) -> URL? {
+        let logIdString = String(log.logId!)
+        
+        var url = URLComponents(string: "http://insanj.com/timesheet/api.php")
+        url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
+                           URLQueryItem(name: "req", value: "delete"),
+                           URLQueryItem(name: "user_id", value: String(timesheetUserId)),
+                           URLQueryItem(name: "log_id", value: logIdString)]
+        return url?.url
+    }
+    
     typealias LogsCompletionBlock = (([TimesheetLog]?, Error?) -> Void)
     func remoteTask(with url: URL, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
@@ -108,36 +119,51 @@ class TimesheetDataManager: NSObject {
         return task
     }
     
-    func logsFromRemoteDatabase(_ completion: @escaping LogsCompletionBlock) {
+    func logsFromRemoteDatabase(_ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
         guard let url = buildLogsURL() else {
             debugPrint("logsFromRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
-            return
+            return nil
         }
         
         let task = remoteTask(with: url, completion)
         task.resume()
+        return task
     }
     
-    func addLogToRemoteDatabase(timeIn: Date, timeOut: Date, _ completion: @escaping LogsCompletionBlock) {
+    func addLogToRemoteDatabase(timeIn: Date, timeOut: Date, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
         guard let url = buildAddLogURL(timeIn: timeIn, timeOut: timeOut) else {
             debugPrint("addLogsToRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
-            return
+            return nil
         }
         
         let task = remoteTask(with: url, completion)
         task.resume()
+        return task
     }
     
-    func editLogInRemoteDatabase(log: TimesheetLog, _ completion: @escaping LogsCompletionBlock) {
+    func editLogInRemoteDatabase(log: TimesheetLog, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
         guard let url = buildEditLogURL(log: log) else {
             debugPrint("editLogInRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
-            return
+            return nil
         }
         
         let task = remoteTask(with: url, completion)
         task.resume()
+        return task
+    }
+    
+    func deleteLogInRemoteDatabase(log: TimesheetLog, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
+        guard let url = buildDeleteLogURL(log: log) else {
+            debugPrint("deleteLogInRemoteDatabase() unable to build logs URL; cannot load from remote!")
+            completion(nil, timesheetError(.invalidURL))
+            return nil
+        }
+        
+        let task = remoteTask(with: url, completion)
+        task.resume()
+        return task
     }
 }

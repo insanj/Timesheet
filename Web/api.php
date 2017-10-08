@@ -68,6 +68,20 @@ function editLog($user_id, $log_id, $time_in, $time_out, $notes) {
 	}
 }
 
+function deleteLog($user_id, $log_id) {
+	if ($database = new TimesheetDatabase()) { 
+		$success = $database->exec("DELETE FROM logs WHERE id=$log_id");
+		$database->close();
+		unset($database);
+
+		return getLogsFromDatabase($user_id);
+	}
+
+	else {
+		return "Failed to delete timesheet log in database";
+	}
+}
+
 // ---
 // api
 // ---
@@ -127,6 +141,18 @@ else if (strcmp($request_type, 'edit') == 0) {
 	$notes = $_GET['notes'];
 
 	echo editLog($user_id, $log_id, $time_in, $time_out, $notes);
+}
+
+else if (strcmp($request_type, 'delete') == 0) {
+	if (!isset($_GET['user_id']) || !isset($_GET['log_id'])) {
+		echo 'Missing required "user_id" or "log_id"  parameter';
+		return;
+	}
+
+	$user_id = $_GET['user_id'];
+	$log_id = $_GET['log_id'];
+
+	echo deleteLog($user_id, $log_id);
 }
 
 else {

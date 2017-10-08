@@ -48,3 +48,13 @@ func timesheetColor(day: Int) -> TimesheetColor {
     let count: Int = timesheetColors.count
     return timesheetColors[day % count]
 }
+
+func timesheetColor(name: String) -> TimesheetColor {
+    for color in timesheetColors {
+        if color.name == name {
+            return color
+        }
+    }
+    
+    return timesheetColors.first! // fallback
+}

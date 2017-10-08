@@ -25,8 +25,10 @@ class TimesheetLogViewController: UIViewController {
     let controlsView = UIView()
     var timeControl = TenClock()
     
-    var saveCallback: (([TimesheetLog]?) -> Void)?
-    var saveTask: URLSessionTask?
+    let deleteButton = UIButton()
+    var currentTask: URLSessionTask?
+
+    var dismissCallback: (([TimesheetLog]?) -> Void)?
     
     init(_ log: TimesheetLog, _ color: TimesheetColor) {
         self.log = log.copy() as! TimesheetLog
@@ -136,7 +138,7 @@ class TimesheetLogViewController: UIViewController {
         cellButton.bottomAnchor.constraint(equalTo: originalCell.bottomAnchor).isActive = true
 
         // setup controls view, clock
-        controlsView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
+        controlsView.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
         controlsView.clipsToBounds = true
@@ -149,32 +151,80 @@ class TimesheetLogViewController: UIViewController {
         controlsView.heightAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         
         setupTimeControl()
+        
+        // setup delete button
+        deleteButton.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        deleteButton.setTitleColor(timesheetColor(name: "Red").backgroundColor, for: .normal)
+        deleteButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
+        deleteButton.setTitle("Delete", for: .normal)
+        deleteButton.layer.cornerRadius = 8.0
+        deleteButton.layer.masksToBounds = true
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(deleteButton)
+        
+        deleteButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        deleteButton.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5.0).isActive = true
+        deleteButton.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -5.0).isActive = true
+        deleteButton.topAnchor.constraint(equalTo: controlsView.bottomAnchor, constant: 5.0).isActive = true
     }
     
     func saveButtonTapped() {
-        let loadingAlert = UIAlertController(title: "Saving...", message: nil, preferredStyle: .alert)
-        
-        loadingAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
-            self.saveTask?.cancel()
-        }))
-        
-        present(loadingAlert, animated: true, completion: nil)
+        saveButton.isEnabled = false
+        saveButton.isUserInteractionEnabled = false
+        UIView.animate(withDuration: 0.2) {
+            self.saveButton.alpha = 0.1
+        }
         
         let dataManager = TimesheetDataManager()
-        dataManager.editLogInRemoteDatabase(log: log) { logs, error in
-            loadingAlert.dismiss(animated: true, completion: nil)
-            
+        currentTask = dataManager.editLogInRemoteDatabase(log: log) { logs, error in
             if let validError = error {
                 showError(validError, from: self)
+                
+                OperationQueue.main.addOperation {
+                    self.saveButton.isEnabled = true
+                    self.saveButton.isUserInteractionEnabled = true
+                    self.saveButton.alpha = 1.0
+                }
+                
                 return
             }
             
-            self.saveCallback?(logs)
+            self.dismissCallback?(logs)
         }
     }
     
     func cancelButtonTapped() {
+        currentTask?.cancel()
         dismiss(animated: true, completion: nil)
+    }
+    
+    func deleteButtonTapped() {
+        deleteButton.isEnabled = false
+        saveButton.isEnabled = false
+        
+        UIView.animate(withDuration: 0.2) {
+            self.deleteButton.alpha = 0.1
+            self.saveButton.alpha = 0.1
+        }
+        
+        let dataManager = TimesheetDataManager()
+        currentTask = dataManager.deleteLogInRemoteDatabase(log: log) { logs, error in
+            if let validError = error {
+                showError(validError, from: self)
+                
+                self.deleteButton.isEnabled = true
+                self.saveButton.isEnabled = true
+                OperationQueue.main.addOperation {
+                    self.deleteButton.alpha = 1.0
+                    self.saveButton.alpha = 1.0
+                }
+                
+                return
+            }
+            
+            self.dismissCallback?(logs)
+        }
     }
     
     func cellTapped() {
@@ -229,6 +279,10 @@ class TimesheetLogViewController: UIViewController {
         timeControl.rightAnchor.constraint(equalTo: controlsView.rightAnchor).isActive = true
         timeControl.topAnchor.constraint(equalTo: controlsView.topAnchor).isActive = true
         timeControl.bottomAnchor.constraint(equalTo: controlsView.bottomAnchor).isActive = true
+        
+        timeControl.gestureRecognizers?.forEach({ recognizer in
+            recognizer.require(toFail: scrollView.panGestureRecognizer)
+        })
     }
     
     // UIScrollViewDelegate extension
