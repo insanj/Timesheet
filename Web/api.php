@@ -54,6 +54,20 @@ function addLog($user_id, $time_in, $time_out, $notes) {
 	}
 }
 
+function editLog($user_id, $log_id, $time_in, $time_out, $notes) {
+	if ($database = new TimesheetDatabase()) { 
+		$success = $database->exec("UPDATE logs SET time_in='$time_in', time_out='$time_out', notes='$notes' WHERE id=$log_id");
+		$database->close();
+		unset($database);
+
+		return getLogsFromDatabase($user_id);
+	}
+
+	else {
+		return "Failed to edit timesheet log in database";
+	}
+}
+
 // ---
 // api
 // ---
@@ -98,6 +112,21 @@ else if (strcmp($request_type, 'history') == 0) {
 	$user_id = $_GET['user_id'];
 
 	echo getLogsFromDatabase($user_id);
+}
+
+else if (strcmp($request_type, 'edit') == 0) {
+	if (!isset($_GET['user_id']) || !isset($_GET['log_id']) || !isset($_GET['time_in']) || !isset($_GET['time_out']) || !isset($_GET['notes'])) {
+		echo 'Missing required "user_id", "log_id", "time_in", "time_out", or "notes"  parameter';
+		return;
+	}
+
+	$user_id = $_GET['user_id'];
+	$log_id = $_GET['log_id'];
+	$time_in = $_GET['time_in'];
+	$time_out = $_GET['time_out'];
+	$notes = $_GET['notes'];
+
+	echo editLog($user_id, $log_id, $time_in, $time_out, $notes);
 }
 
 else {

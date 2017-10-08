@@ -22,6 +22,9 @@ class TimesheetLogViewController: UIViewController {
     let controlsView = UIView()
     let timeControl = TenClock()
     
+    var saveCallback: (([TimesheetLog]?) -> Void)?
+    var saveTask: URLSessionTask?
+    
     init(_ log: TimesheetLog, _ color: TimesheetColor) {
         self.log = log.copy() as! TimesheetLog
         self.color = color
@@ -119,7 +122,19 @@ class TimesheetLogViewController: UIViewController {
     }
     
     func saveButtonTapped() {
-        dismiss(animated: true, completion: nil)
+        let loadingAlert = UIAlertController(title: "Saving...", message: nil, preferredStyle: .alert)
+        
+        loadingAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (_) in
+            self.saveTask?.cancel()
+        }))
+        
+        present(loadingAlert, animated: true, completion: nil)
+        
+        let dataManager = TimesheetDataManager()
+        dataManager.editLogInRemoteDatabase(log: log) { (logs) in
+            loadingAlert.dismiss(animated: true, completion: nil)
+            self.saveCallback?(logs)
+        }
     }
     
     func cancelButtonTapped() {

@@ -345,7 +345,15 @@ extension TimesheetViewController: UICollectionViewDelegate {
         } else if let logs = timesheetLogs {
             let log = logs[indexPath.section-1][indexPath.row]
             let color = timesheetLogColors[indexPath]!
-            present(TimesheetLogViewController(log, color), animated: true, completion: nil)
+            let logViewController = TimesheetLogViewController(log, color)
+            logViewController.saveCallback = { logs in
+                logViewController.dismiss(animated: true, completion: nil)
+                if let validLogs = logs {
+                    self.sortLogs(validLogs)
+                }
+            }
+            
+            present(logViewController, animated: true, completion: nil)
         }
     }
     
