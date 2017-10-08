@@ -13,7 +13,7 @@ import DatePickerDialog
 @objcMembers
 class TimesheetLogViewController: UIViewController {
     var log: TimesheetLog
-    let color: TimesheetColor
+    var color: TimesheetColor
     
     let containerView = UIView()
     let cancelButton = UIButton()
@@ -22,7 +22,7 @@ class TimesheetLogViewController: UIViewController {
     let originalCell = TimesheetLogCell(frame: CGRect.zero)
     
     let controlsView = UIView()
-    let timeControl = TenClock()
+    var timeControl = TenClock()
     
     var saveCallback: (([TimesheetLog]?) -> Void)?
     var saveTask: URLSessionTask?
@@ -115,21 +115,7 @@ class TimesheetLogViewController: UIViewController {
         controlsView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -5.0).isActive = true
         controlsView.heightAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
         
-        timeControl.headText = "IN"
-        timeControl.tailText = "OUT"
-        timeControl.startDate = log.timeIn!
-        timeControl.endDate = log.timeOut!
-        timeControl.centerTextColor = color.foregroundColor
-        timeControl.tintColor = color.backgroundColor
-        timeControl.majorTicksColor = UIColor.white
-        timeControl.delegate = self
-        timeControl.translatesAutoresizingMaskIntoConstraints = false
-        controlsView.addSubview(timeControl)
-        
-        timeControl.leftAnchor.constraint(equalTo: controlsView.leftAnchor).isActive = true
-        timeControl.rightAnchor.constraint(equalTo: controlsView.rightAnchor).isActive = true
-        timeControl.topAnchor.constraint(equalTo: controlsView.topAnchor).isActive = true
-        timeControl.bottomAnchor.constraint(equalTo: controlsView.bottomAnchor).isActive = true
+        setupTimeControl()
     }
     
     func saveButtonTapped() {
@@ -175,26 +161,57 @@ class TimesheetLogViewController: UIViewController {
                 self.log.timeOut = newTimeOut
                 
                 let newColor = timesheetColor(day: newTimeInComponents.day!)
+                self.color = newColor
                 
                 self.originalCell.timesheetColor = newColor
                 self.originalCell.timesheetLog = self.log
-                self.timeControl.startDate = newTimeIn!
-                self.timeControl.startDate = newTimeOut!
-                self.timeControl.centerTextColor = newColor.foregroundColor
-                self.timeControl.tintColor = newColor.backgroundColor
+                
+                // manually force timeControl to change because it fails to update properly on its own
+                self.timeControl.removeFromSuperview()
+                self.timeControl = TenClock()
+                self.setupTimeControl()
             }
         }
+    }
+    
+    func setupTimeControl() {
+        timeControl.headText = "IN"
+        timeControl.tailText = "OUT"
+        timeControl.startDate = log.timeIn!
+        timeControl.endDate = log.timeOut!
+        timeControl.centerTextColor = color.foregroundColor
+        timeControl.tintColor = color.backgroundColor
+        timeControl.majorTicksColor = UIColor.white
+        timeControl.delegate = self
+        timeControl.translatesAutoresizingMaskIntoConstraints = false
+        controlsView.addSubview(timeControl)
+        
+        timeControl.leftAnchor.constraint(equalTo: controlsView.leftAnchor).isActive = true
+        timeControl.rightAnchor.constraint(equalTo: controlsView.rightAnchor).isActive = true
+        timeControl.topAnchor.constraint(equalTo: controlsView.topAnchor).isActive = true
+        timeControl.bottomAnchor.constraint(equalTo: controlsView.bottomAnchor).isActive = true
     }
 }
 
 extension TimesheetLogViewController: TenClockDelegate {
     func timesUpdated(_ clock: TenClock, startDate: Date, endDate: Date) {
-        log.timeIn = startDate
-        log.timeOut = endDate
+        let newInHourComponent = Calendar.current.component(.hour, from: startDate)
+        let newInMinuteComponent = Calendar.current.component(.minute, from: startDate)
+        var newTimeInComponent = Calendar.current.dateComponents(in: TimeZone.current, from: log.timeIn!)
+        newTimeInComponent.hour = newInHourComponent
+        newTimeInComponent.minute = newInMinuteComponent
+        log.timeIn = newTimeInComponent.date!
         
-        var newComponents = Calendar.current.dateComponents(in: TimeZone.current, from: startDate)
-        let newColor = timesheetColor(day: newComponents.day!)
-
+        let newOutHourComponent = Calendar.current.component(.hour, from: endDate)
+        let newOutMinuteComponent = Calendar.current.component(.minute, from: endDate)
+        var newTimeOutComponent = Calendar.current.dateComponents(in: TimeZone.current, from: log.timeOut!)
+        newTimeOutComponent.hour = newOutHourComponent
+        newTimeOutComponent.minute = newOutMinuteComponent
+        log.timeOut = newTimeOutComponent.date!
+        
+        let newColor = timesheetColor(day: newTimeInComponent.day!)
+        color = newColor
+        
         originalCell.timesheetColor = newColor
         originalCell.timesheetLog = log
         clock.centerTextColor = newColor.foregroundColor
