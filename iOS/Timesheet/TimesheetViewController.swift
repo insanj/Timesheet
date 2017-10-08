@@ -74,6 +74,7 @@ class TimesheetViewController: UIViewController {
         timesheetCollectionView.dataSource = self
         
         timesheetCollectionView.register(TimesheetHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TimesheetHeaderView.reuseIdentifier)
+        timesheetCollectionView.register(TimesheetAddLogCell.self, forCellWithReuseIdentifier: TimesheetAddLogCell.reuseIdentifier)
         timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
         
         timesheetCollectionView.alwaysBounceVertical = true
@@ -197,15 +198,17 @@ extension TimesheetViewController: UICollectionViewDelegateFlowLayout {
 extension TimesheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if let sections = timesheetSections {
-            return sections.count
+            return 1 + sections.count
         }
         
-        return 0
+        return 1 // add new item
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let logsByMonth = timesheetLogs {
-            return logsByMonth[section].count
+        if section == 0 {
+            return 1
+        } else if let logsByMonth = timesheetLogs {
+            return logsByMonth[section-1].count
         }
         
         return 0
@@ -217,8 +220,22 @@ extension TimesheetViewController: UICollectionViewDataSource {
                 fatalError()
             }
             
-            if let sections = timesheetSections {
-                let date = sections[indexPath.section]
+            if indexPath.section == 0 {
+                let currentHour = Calendar.current.component(.hour, from: Date())
+                var friendlyString = "Day" // TODO: localize
+                if currentHour < 12 {
+                    friendlyString = "Morning"
+                } else if currentHour < 5 {
+                    friendlyString = "Afternoon"
+                } else {
+                    friendlyString = "Evening"
+                }
+                
+                let userString = "Julian" // TODO: user accounts
+                
+                headerView.titleLabel.text = "Good \(friendlyString), \(userString)."
+            } else if let sections = timesheetSections {
+                let date = sections[indexPath.section-1]
                 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "MMMM yyyy"
@@ -234,6 +251,11 @@ extension TimesheetViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.section > 0 else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetAddLogCell.reuseIdentifier, for: indexPath)
+            return cell
+        }
+        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLogCell.reuseIdentifier, for: indexPath) as? TimesheetLogCell else {
             debugPrint("cellForItemAt unable to dequeueReusableCell as TimesheetLogCell")
             fatalError()
@@ -244,7 +266,7 @@ extension TimesheetViewController: UICollectionViewDataSource {
             fatalError()
         }
         
-        let log = logs[indexPath.section][indexPath.row]
+        let log = logs[indexPath.section-1][indexPath.row]
         cell.timesheetLog = log
         
         if let existingColor = timesheetLogColors[indexPath] {

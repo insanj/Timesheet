@@ -22,6 +22,7 @@
 		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
 		23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */; };
 		23E3D2171F894EDB00BB02F4 /* TimesheetNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */; };
+		23E3D21C1F89A35E00BB02F4 /* TimesheetAddLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D21B1F89A35E00BB02F4 /* TimesheetAddLogCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
 		23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetNavigationController.swift; sourceTree = "<group>"; };
 		23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetNavigationBar.swift; sourceTree = "<group>"; };
+		23E3D21B1F89A35E00BB02F4 /* TimesheetAddLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetAddLogCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
 				23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */,
 				231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */,
+				23E3D21B1F89A35E00BB02F4 /* TimesheetAddLogCell.swift */,
 				23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */,
 				231398AC1F815C6E009E8E78 /* Backend */,
 				231398A11F815722009E8E78 /* Resources */,
@@ -305,6 +308,7 @@
 				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
 				231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */,
 				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
+				23E3D21C1F89A35E00BB02F4 /* TimesheetAddLogCell.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
 				23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */,
 				23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */,
