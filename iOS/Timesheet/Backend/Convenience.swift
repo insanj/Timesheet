@@ -47,10 +47,12 @@ func timesheetError(_ type: TimesheetErrorType) -> Error {
 
 func showError(_ error: Error, from: UIViewController) {
     let errorAlert = UIAlertController(title: "Uh-oh!", message: error.localizedDescription, preferredStyle: .alert)
-    errorAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-    from.present(errorAlert, animated: true) {
+    errorAlert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+    from.present(errorAlert, animated: true)/* {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + .seconds(3), execute: {
             from.dismiss(animated: true, completion: nil)
         })
-    }
+    }*/
 }
+
+let timesheetDateComponents:Set<Calendar.Component> = [.calendar, .timeZone, .year, .month, .day, .weekday, .hour, .minute]

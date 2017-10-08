@@ -188,7 +188,7 @@ class TimesheetViewController: UIViewController {
         
         timesheetAdding = true
         
-        var defaultTimeInComponents = Calendar.current.dateComponents(in: TimeZone.current, from: Date())
+        var defaultTimeInComponents = Calendar.current.dateComponents(timesheetDateComponents, from: Date())
         
         defaultTimeInComponents.hour = 9 // TODO: default time valies
         defaultTimeInComponents.minute = 0

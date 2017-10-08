@@ -235,14 +235,14 @@ class TimesheetLogViewController: UIViewController {
                 let newMonthComponent = Calendar.current.component(.month, from: validDate)
                 let newDayComponent = Calendar.current.component(.day, from: validDate)
                 
-                var newTimeInComponents = Calendar.current.dateComponents(in: TimeZone.current, from: self.log.timeIn!)
+                var newTimeInComponents = Calendar.current.dateComponents(timesheetDateComponents, from: self.log.timeIn!)
                 newTimeInComponents.year = newYearComponent
                 newTimeInComponents.month = newMonthComponent
                 newTimeInComponents.day = newDayComponent
                 let newTimeIn = newTimeInComponents.date
                 self.log.timeIn = newTimeIn
                 
-                var newTimeOutComponents = Calendar.current.dateComponents(in: TimeZone.current, from: self.log.timeOut!)
+                var newTimeOutComponents = Calendar.current.dateComponents(timesheetDateComponents, from: self.log.timeOut!)
                 newTimeOutComponents.year = newYearComponent
                 newTimeOutComponents.month = newMonthComponent
                 newTimeOutComponents.day = newDayComponent
@@ -318,14 +318,14 @@ extension TimesheetLogViewController: TenClockDelegate {
     func timesUpdated(_ clock: TenClock, startDate: Date, endDate: Date) {
         let newInHourComponent = Calendar.current.component(.hour, from: startDate)
         let newInMinuteComponent = Calendar.current.component(.minute, from: startDate)
-        var newTimeInComponent = Calendar.current.dateComponents(in: TimeZone.current, from: log.timeIn!)
+        var newTimeInComponent = Calendar.current.dateComponents(timesheetDateComponents, from: log.timeIn!)
         newTimeInComponent.hour = newInHourComponent
         newTimeInComponent.minute = newInMinuteComponent
         log.timeIn = newTimeInComponent.date!
         
         let newOutHourComponent = Calendar.current.component(.hour, from: endDate)
         let newOutMinuteComponent = Calendar.current.component(.minute, from: endDate)
-        var newTimeOutComponent = Calendar.current.dateComponents(in: TimeZone.current, from: log.timeOut!)
+        var newTimeOutComponent = Calendar.current.dateComponents(timesheetDateComponents, from: log.timeOut!)
         newTimeOutComponent.hour = newOutHourComponent
         newTimeOutComponent.minute = newOutMinuteComponent
         log.timeOut = newTimeOutComponent.date!
