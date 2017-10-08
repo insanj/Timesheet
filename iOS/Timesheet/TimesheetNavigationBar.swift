@@ -10,9 +10,11 @@ import UIKit
 
 class TimesheetNavigationBar: UIView {
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    let vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: UIBlurEffect(style: .light)))
+    
     let titleLabel = UILabel()
     let detailLabel = UILabel()
-    let handleView = UIView()
+    let handleView = TimesheetHandleView()
     
     let handleHeight: CGFloat = 8.0
     let navigationBarHeight: CGFloat = 70.0 // 62.0 + 8.0 (handleHeight)
@@ -48,6 +50,14 @@ class TimesheetNavigationBar: UIView {
         backgroundView.leftAnchor.constraint(equalTo: leftAnchor, constant: -1.0).isActive = true
         backgroundView.rightAnchor.constraint(equalTo: rightAnchor, constant: 1.0).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        
+        vibrancyView.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.contentView.addSubview(vibrancyView)
+        
+        vibrancyView.leftAnchor.constraint(equalTo: backgroundView.contentView.leftAnchor).isActive = true
+        vibrancyView.rightAnchor.constraint(equalTo: backgroundView.contentView.rightAnchor).isActive = true
+        vibrancyView.topAnchor.constraint(equalTo: backgroundView.contentView.topAnchor).isActive = true
+        vibrancyView.bottomAnchor.constraint(equalTo: backgroundView.contentView.bottomAnchor).isActive = true
 
         // setup title label
         titleLabel.textColor = UIColor.black
@@ -78,11 +88,11 @@ class TimesheetNavigationBar: UIView {
         detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         
         // setup handle view
-        handleView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        handleView.backgroundColor = handleView.tintColor
         handleView.layer.masksToBounds = true
-        handleView.layer.cornerRadius = 1.0
+        handleView.layer.cornerRadius = 1.5
         handleView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(handleView)
+        vibrancyView.contentView.addSubview(handleView)
         
         handleView.widthAnchor.constraint(equalToConstant: 70.0).isActive = true
         handleView.heightAnchor.constraint(equalToConstant: 3.0).isActive = true
@@ -95,18 +105,28 @@ class TimesheetNavigationBar: UIView {
     }
     
     func updateHandle(_ showing: Bool) {
+        self.layoutIfNeeded()
+        
         if showing {
             heightConstraint?.constant = navigationBarHeight
             titleBottomConstraint?.constant = -10.0
         } else {
-            heightConstraint?.constant = navigationBarHeight - handleHeight
+            heightConstraint?.constant = navigationBarHeight - (handleHeight + 10.0)
             titleBottomConstraint?.constant = -5.0
         }
         
         let alpha: CGFloat = showing ? 1.0 : 0.0
-        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0, options: [], animations: {
             self.handleView.alpha = alpha
-            self.layoutIfNeeded()
+            self.superview?.layoutIfNeeded()
         }, completion: nil)
+    }
+}
+
+class TimesheetHandleView: UIView {
+    override func tintColorDidChange() {
+        super.tintColorDidChange()
+        
+        backgroundColor = tintColor
     }
 }

@@ -402,7 +402,7 @@ extension TimesheetViewController: UICollectionViewDelegate {
             timesheetNavigationBar.detailLabel.alpha = 0.0
             timesheetNavigationBar.detailLabel.text = nil
             
-            if scrollViewOffset > 100.0 {
+            if scrollViewOffset > view.frame.size.height { // arbitrary, but a whole "page" length
                 timesheetNavigationBar.showingHandle = false
             } else {
                 timesheetNavigationBar.showingHandle = true
