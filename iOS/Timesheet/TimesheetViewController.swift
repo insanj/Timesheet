@@ -20,6 +20,18 @@ class TimesheetViewController: UIViewController {
         }
     }
     
+    var timesheetAdding = false {
+        willSet {
+            if newValue != timesheetAdding {
+                let indexPath = IndexPath(item: 0, section: 0)
+
+                OperationQueue.main.addOperation {
+                    self.timesheetCollectionView.reloadItems(at: [indexPath])
+                }
+            }
+        }
+    }
+    
     var timesheetSections: [Date]?
     var timesheetLogs: [[TimesheetLog]]?
     var timesheetLogColors = [IndexPath: TimesheetColor]()
@@ -75,6 +87,7 @@ class TimesheetViewController: UIViewController {
         
         timesheetCollectionView.register(TimesheetHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: TimesheetHeaderView.reuseIdentifier)
         timesheetCollectionView.register(TimesheetAddLogCell.self, forCellWithReuseIdentifier: TimesheetAddLogCell.reuseIdentifier)
+        timesheetCollectionView.register(TimesheetLoadingCell.self, forCellWithReuseIdentifier: TimesheetLoadingCell.reuseIdentifier)
         timesheetCollectionView.register(TimesheetLogCell.self, forCellWithReuseIdentifier: TimesheetLogCell.reuseIdentifier)
         
         timesheetCollectionView.alwaysBounceVertical = true
@@ -154,8 +167,38 @@ class TimesheetViewController: UIViewController {
         // finally done!
         DispatchQueue.main.sync {
             self.timesheetLoading = false
-            self.navigationItem.prompt = nil
+            self.timesheetAdding = false
             self.timesheetCollectionView.reloadData()
+        }
+    }
+    
+    func addTimesheetLog() {
+        guard !timesheetAdding && !timesheetLoading else {
+            print("addTimesheetLog() timesheetAdding == true, doing nothing...")
+            return
+        }
+        
+        timesheetLoading = true
+        timesheetAdding = true
+        
+        var defaultTimeInComponents = Calendar.current.dateComponents(in: TimeZone.current, from: Date())
+        
+        defaultTimeInComponents.hour = 9 // TODO: default time valies
+        let defaultTimeIn = defaultTimeInComponents.date ?? Date()
+        
+        defaultTimeInComponents.hour = 5
+        let defaultTimeOut = defaultTimeInComponents.date ?? Date()
+
+        let dataManager = TimesheetDataManager()
+        dataManager.addLogToRemoteDatabase(timeIn: defaultTimeIn, timeOut: defaultTimeOut) { (logs) in
+            guard let validLogs = logs else {
+                debugPrint("addTimesheetLog() received nil response from dataManager logsFromRemoteDatabase")
+                self.timesheetAdding = false
+                self.timesheetLoading = false
+                return
+            }
+            
+            self.sortLogs(validLogs)
         }
     }
     
@@ -198,10 +241,10 @@ extension TimesheetViewController: UICollectionViewDelegateFlowLayout {
 extension TimesheetViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         if let sections = timesheetSections {
-            return 1 + sections.count
+            return 1 + sections.count  // add new item
         }
         
-        return 1 // add new item
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -252,8 +295,19 @@ extension TimesheetViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard indexPath.section > 0 else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetAddLogCell.reuseIdentifier, for: indexPath)
-            return cell
+            if !timesheetAdding {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetAddLogCell.reuseIdentifier, for: indexPath)
+                return cell
+            } else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLoadingCell.reuseIdentifier, for: indexPath) as? TimesheetLoadingCell else {
+                    fatalError()
+                }
+                
+                cell.indicatorView.startAnimating()
+                cell.detailLabel.text = "Adding..."
+                
+                return cell
+            }
         }
         
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLogCell.reuseIdentifier, for: indexPath) as? TimesheetLogCell else {
@@ -286,7 +340,9 @@ extension TimesheetViewController: UICollectionViewDataSource {
 // MARK: delegate
 extension TimesheetViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        if indexPath.section == 0 {
+            addTimesheetLog()
+        }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
