@@ -8,6 +8,7 @@
 
 import UIKit
 import TenClock
+import DatePickerDialog
 
 @objcMembers
 class TimesheetLogViewController: UIViewController {
@@ -17,6 +18,7 @@ class TimesheetLogViewController: UIViewController {
     let containerView = UIView()
     let cancelButton = UIButton()
     let saveButton = UIButton()
+    let cellButton = UIButton()
     let originalCell = TimesheetLogCell(frame: CGRect.zero)
     
     let controlsView = UIView()
@@ -92,6 +94,15 @@ class TimesheetLogViewController: UIViewController {
         originalCell.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
         originalCell.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
         
+        cellButton.translatesAutoresizingMaskIntoConstraints = false
+        cellButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
+        containerView.addSubview(cellButton)
+        
+        cellButton.leftAnchor.constraint(equalTo: originalCell.leftAnchor).isActive = true
+        cellButton.rightAnchor.constraint(equalTo: originalCell.rightAnchor).isActive = true
+        cellButton.topAnchor.constraint(equalTo: originalCell.topAnchor).isActive = true
+        cellButton.bottomAnchor.constraint(equalTo: originalCell.bottomAnchor).isActive = true
+
         controlsView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
@@ -140,12 +151,53 @@ class TimesheetLogViewController: UIViewController {
     func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
+    
+    func cellTapped() {
+        let dialog = DatePickerDialog()
+        dialog.show("Change Date") { (date) in
+            if let validDate = date {
+                let newYearComponent = Calendar.current.component(.year, from: validDate)
+                let newMonthComponent = Calendar.current.component(.month, from: validDate)
+                let newDayComponent = Calendar.current.component(.day, from: validDate)
+                
+                var newTimeInComponents = Calendar.current.dateComponents(in: TimeZone.current, from: self.log.timeIn!)
+                newTimeInComponents.year = newYearComponent
+                newTimeInComponents.month = newMonthComponent
+                newTimeInComponents.day = newDayComponent
+                let newTimeIn = newTimeInComponents.date
+                self.log.timeIn = newTimeIn
+                
+                var newTimeOutComponents = Calendar.current.dateComponents(in: TimeZone.current, from: self.log.timeOut!)
+                newTimeOutComponents.year = newYearComponent
+                newTimeOutComponents.month = newMonthComponent
+                newTimeOutComponents.day = newDayComponent
+                let newTimeOut = newTimeOutComponents.date
+                self.log.timeOut = newTimeOut
+                
+                let newColor = timesheetColor(day: newTimeInComponents.day!)
+                
+                self.originalCell.timesheetColor = newColor
+                self.originalCell.timesheetLog = self.log
+                self.timeControl.startDate = newTimeIn!
+                self.timeControl.startDate = newTimeOut!
+                self.timeControl.centerTextColor = newColor.foregroundColor
+                self.timeControl.tintColor = newColor.backgroundColor
+            }
+        }
+    }
 }
 
 extension TimesheetLogViewController: TenClockDelegate {
     func timesUpdated(_ clock: TenClock, startDate: Date, endDate: Date) {
         log.timeIn = startDate
         log.timeOut = endDate
+        
+        var newComponents = Calendar.current.dateComponents(in: TimeZone.current, from: startDate)
+        let newColor = timesheetColor(day: newComponents.day!)
+
+        originalCell.timesheetColor = newColor
         originalCell.timesheetLog = log
+        clock.centerTextColor = newColor.foregroundColor
+        clock.tintColor = newColor.backgroundColor
     }
 }
