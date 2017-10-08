@@ -16,4 +16,8 @@ class TimesheetNavigationController: UINavigationController {
         isNavigationBarHidden = true
     }
     
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
 }
