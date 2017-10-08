@@ -94,6 +94,7 @@ class TimesheetViewController: UIViewController {
         
         let topInset = (timesheetNavigationBarHeight - UIApplication.shared.statusBarFrame.height) + 5.0
         timesheetCollectionView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
+        timesheetCollectionView.scrollIndicatorInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         
         timesheetCollectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetCollectionView)
