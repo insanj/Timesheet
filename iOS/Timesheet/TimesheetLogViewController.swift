@@ -140,7 +140,7 @@ class TimesheetLogViewController: UIViewController {
     
     func cellTapped() {
         let dialog = DatePickerDialog()
-        dialog.show("Change Date") { (date) in
+        dialog.show("Change Date", doneButtonTitle: "Done", cancelButtonTitle: "Cancel", defaultDate: log.timeIn!, minimumDate: nil, maximumDate: nil, datePickerMode: .date, callback: { (date) in
             if let validDate = date {
                 let newYearComponent = Calendar.current.component(.year, from: validDate)
                 let newMonthComponent = Calendar.current.component(.month, from: validDate)
@@ -171,7 +171,7 @@ class TimesheetLogViewController: UIViewController {
                 self.timeControl = TenClock()
                 self.setupTimeControl()
             }
-        }
+        })
     }
     
     func setupTimeControl() {
