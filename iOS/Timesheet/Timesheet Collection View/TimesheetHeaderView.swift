@@ -17,7 +17,7 @@ class TimesheetHeaderView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.white
+        backgroundColor = UIColor.clear
         
         titleLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
         titleLabel.textColor = UIColor(white: 0.0, alpha: 0.6)
