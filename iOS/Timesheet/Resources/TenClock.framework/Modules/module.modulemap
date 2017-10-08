@@ -1,0 +1,11 @@
+framework module TenClock {
+  umbrella header "TenClock.h"
+
+  export *
+  module * { export * }
+}
+
+module TenClock.Swift {
+    header "TenClock-Swift.h"
+    requires objc
+}

@@ -186,7 +186,7 @@ class TimesheetViewController: UIViewController {
         defaultTimeInComponents.minute = 0
         let defaultTimeIn = defaultTimeInComponents.date ?? Date()
         
-        defaultTimeInComponents.hour = 5
+        defaultTimeInComponents.hour = 17
         defaultTimeInComponents.minute = 0
         let defaultTimeOut = defaultTimeInComponents.date ?? Date()
 

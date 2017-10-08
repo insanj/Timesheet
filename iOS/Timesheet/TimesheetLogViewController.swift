@@ -7,17 +7,20 @@
 //
 
 import UIKit
+import TenClock
 
 @objcMembers
 class TimesheetLogViewController: UIViewController {
-    let log: TimesheetLog
+    var log: TimesheetLog
     let color: TimesheetColor
     
     let containerView = UIView()
     let cancelButton = UIButton()
     let saveButton = UIButton()
     let originalCell = TimesheetLogCell(frame: CGRect.zero)
+    
     let controlsView = UIView()
+    let timeControl = TenClock()
     
     init(_ log: TimesheetLog, _ color: TimesheetColor) {
         self.log = log
@@ -89,13 +92,27 @@ class TimesheetLogViewController: UIViewController {
         controlsView.backgroundColor = UIColor(white: 0.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
+        controlsView.clipsToBounds = true
         controlsView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(controlsView)
         
         controlsView.topAnchor.constraint(equalTo: originalCell.bottomAnchor, constant: 5.0).isActive = true
         controlsView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5.0).isActive = true
         controlsView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -5.0).isActive = true
-        controlsView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor).isActive = true
+        controlsView.heightAnchor.constraint(equalTo: containerView.widthAnchor).isActive = true
+        
+        timeControl.headText = "IN"
+        timeControl.tailText = "OUT"
+        timeControl.startDate = log.timeIn!
+        timeControl.endDate = log.timeOut!
+        timeControl.delegate = self
+        timeControl.translatesAutoresizingMaskIntoConstraints = false
+        controlsView.addSubview(timeControl)
+        
+        timeControl.leftAnchor.constraint(equalTo: controlsView.leftAnchor).isActive = true
+        timeControl.rightAnchor.constraint(equalTo: controlsView.rightAnchor).isActive = true
+        timeControl.topAnchor.constraint(equalTo: controlsView.topAnchor).isActive = true
+        timeControl.bottomAnchor.constraint(equalTo: controlsView.bottomAnchor).isActive = true
     }
     
     func saveButtonTapped() {
@@ -105,4 +122,12 @@ class TimesheetLogViewController: UIViewController {
     func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
+}
+
+extension TimesheetLogViewController: TenClockDelegate {
+    
+    func timesUpdated(_ clock: TenClock, startDate: Date, endDate: Date) {
+        
+    }
+    
 }

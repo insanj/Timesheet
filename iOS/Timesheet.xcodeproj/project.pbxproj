@@ -20,6 +20,8 @@
 		231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */; };
 		232A71921F89A8D000264BAF /* TimesheetLoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232A71911F89A8D000264BAF /* TimesheetLoadingCell.swift */; };
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
+		235C86E81F89B4F90068EBA9 /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 235C86E71F89B4E50068EBA9 /* TenClock.framework */; };
+		235C86E91F89B4F90068EBA9 /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 235C86E71F89B4E50068EBA9 /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */; };
 		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
 		23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */; };
@@ -44,6 +46,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		235C86EA1F89B4F90068EBA9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				235C86E91F89B4F90068EBA9 /* TenClock.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2313986D1F815694009E8E78 /* Timesheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timesheet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		231398701F815694009E8E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,6 +80,7 @@
 		231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogCell.swift; sourceTree = "<group>"; };
 		232A71911F89A8D000264BAF /* TimesheetLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLoadingCell.swift; sourceTree = "<group>"; };
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
+		235C86E71F89B4E50068EBA9 /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
 		23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetHeaderView.swift; sourceTree = "<group>"; };
 		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
 		23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetNavigationController.swift; sourceTree = "<group>"; };
@@ -76,6 +93,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				235C86E81F89B4F90068EBA9 /* TenClock.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,6 +170,7 @@
 		231398A11F815722009E8E78 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				235C86E71F89B4E50068EBA9 /* TenClock.framework */,
 				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
 				2313987F1F815694009E8E78 /* Info.plist */,
 				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,
@@ -192,6 +211,7 @@
 				231398691F815694009E8E78 /* Sources */,
 				2313986A1F815694009E8E78 /* Frameworks */,
 				2313986B1F815694009E8E78 /* Resources */,
+				235C86EA1F89B4F90068EBA9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -488,6 +508,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 24X8MVUSCN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Timesheet/Resources",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -504,6 +528,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 24X8MVUSCN;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Timesheet/Resources",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
