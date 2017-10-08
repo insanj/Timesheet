@@ -10,8 +10,8 @@ import UIKit
 
 @objcMembers
 class TimesheetViewController: UIViewController {
-    let timesheetNavigationBarHeight: CGFloat = 64.0
     let timesheetNavigationBar = TimesheetNavigationBar()
+
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     var timesheetLoading = false {
@@ -38,6 +38,7 @@ class TimesheetViewController: UIViewController {
     var timesheetLogs: [[TimesheetLog]]?
     var timesheetLogColors = [IndexPath: TimesheetColor]()
     
+    
     init() {
         super.init(nibName: nil, bundle: nil)
     }
@@ -59,8 +60,7 @@ class TimesheetViewController: UIViewController {
         timesheetNavigationBar.titleLabel.text = "Timesheet"
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
-        
-        timesheetNavigationBar.heightAnchor.constraint(equalToConstant: timesheetNavigationBarHeight).isActive = true
+    
         timesheetNavigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         timesheetNavigationBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         timesheetNavigationBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -94,7 +94,7 @@ class TimesheetViewController: UIViewController {
         
         timesheetCollectionView.alwaysBounceVertical = true
         
-        let topInset = (timesheetNavigationBarHeight - UIApplication.shared.statusBarFrame.height) + 5.0
+        let topInset = (timesheetNavigationBar.navigationBarHeight - UIApplication.shared.statusBarFrame.height) + 5.0
         timesheetCollectionView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         timesheetCollectionView.scrollIndicatorInsets = UIEdgeInsets(top: topInset, left: 0, bottom: 0, right: 0)
         
@@ -401,6 +401,12 @@ extension TimesheetViewController: UICollectionViewDelegate {
             // nothing
             timesheetNavigationBar.detailLabel.alpha = 0.0
             timesheetNavigationBar.detailLabel.text = nil
+            
+            if scrollViewOffset > 100.0 {
+                timesheetNavigationBar.showingHandle = false
+            } else {
+                timesheetNavigationBar.showingHandle = true
+            }
         }
     }
     

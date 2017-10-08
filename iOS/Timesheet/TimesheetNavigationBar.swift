@@ -9,15 +9,32 @@
 import UIKit
 
 class TimesheetNavigationBar: UIView {
-    
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let titleLabel = UILabel()
     let detailLabel = UILabel()
+    let handleView = UIView()
+    
+    let handleHeight: CGFloat = 8.0
+    let navigationBarHeight: CGFloat = 70.0 // 62.0 + 8.0 (handleHeight)
+    
+    var heightConstraint: NSLayoutConstraint?
+    var titleBottomConstraint: NSLayoutConstraint?
+    
+    var showingHandle = true {
+        willSet {
+            if newValue != showingHandle {
+                updateHandle(newValue)
+            }
+        }
+    }
 
     init() {
         super.init(frame: CGRect.zero)
         
         backgroundColor = UIColor.clear
+        
+        heightConstraint = heightAnchor.constraint(equalToConstant: navigationBarHeight)
+        heightConstraint?.isActive = true
         
         // setup background view
         backgroundView.layer.masksToBounds = true
@@ -40,7 +57,9 @@ class TimesheetNavigationBar: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         
-        titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
+        titleBottomConstraint = titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10.0)
+        titleBottomConstraint?.isActive = true
+        
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         titleLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         
@@ -57,9 +76,37 @@ class TimesheetNavigationBar: UIView {
         detailLabel.bottomAnchor.constraint(equalTo: titleLabel.topAnchor).isActive = true
         detailLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        
+        // setup handle view
+        handleView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        handleView.layer.masksToBounds = true
+        handleView.layer.cornerRadius = 1.0
+        handleView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(handleView)
+        
+        handleView.widthAnchor.constraint(equalToConstant: 70.0).isActive = true
+        handleView.heightAnchor.constraint(equalToConstant: 3.0).isActive = true
+        handleView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        handleView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError()
+    }
+    
+    func updateHandle(_ showing: Bool) {
+        if showing {
+            heightConstraint?.constant = navigationBarHeight
+            titleBottomConstraint?.constant = -10.0
+        } else {
+            heightConstraint?.constant = navigationBarHeight - handleHeight
+            titleBottomConstraint?.constant = -5.0
+        }
+        
+        let alpha: CGFloat = showing ? 1.0 : 0.0
+        UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseOut, animations: {
+            self.handleView.alpha = alpha
+            self.layoutIfNeeded()
+        }, completion: nil)
     }
 }
