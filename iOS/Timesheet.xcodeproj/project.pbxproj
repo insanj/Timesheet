@@ -19,11 +19,11 @@
 		231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AA1F815B21009E8E78 /* TimesheetLog.swift */; };
 		231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */; };
 		232A71921F89A8D000264BAF /* TimesheetLoadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232A71911F89A8D000264BAF /* TimesheetLoadingCell.swift */; };
+		232F9BE81F8B380000D0E2CB /* DatePickerDialog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */; };
+		232F9BE91F8B380000D0E2CB /* DatePickerDialog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		232F9BEB1F8B385D00D0E2CB /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BEA1F8B385600D0E2CB /* TenClock.framework */; };
+		232F9BEC1F8B385D00D0E2CB /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BEA1F8B385600D0E2CB /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
-		239894641F8A98450001B441 /* DatePickerDialog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239894601F8A983C0001B441 /* DatePickerDialog.framework */; };
-		239894651F8A98450001B441 /* DatePickerDialog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239894601F8A983C0001B441 /* DatePickerDialog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		239894671F8A98BB0001B441 /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 239894661F8A98B80001B441 /* TenClock.framework */; };
-		239894681F8A98BB0001B441 /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 239894661F8A98B80001B441 /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */; };
 		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
 		23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */; };
@@ -55,8 +55,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				239894651F8A98450001B441 /* DatePickerDialog.framework in Embed Frameworks */,
-				239894681F8A98BB0001B441 /* TenClock.framework in Embed Frameworks */,
+				232F9BE91F8B380000D0E2CB /* DatePickerDialog.framework in Embed Frameworks */,
+				232F9BEC1F8B385D00D0E2CB /* TenClock.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,9 +82,9 @@
 		231398AA1F815B21009E8E78 /* TimesheetLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLog.swift; sourceTree = "<group>"; };
 		231398AD1F815DD3009E8E78 /* TimesheetLogCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogCell.swift; sourceTree = "<group>"; };
 		232A71911F89A8D000264BAF /* TimesheetLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLoadingCell.swift; sourceTree = "<group>"; };
+		232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DatePickerDialog.framework; sourceTree = "<group>"; };
+		232F9BEA1F8B385600D0E2CB /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
-		239894601F8A983C0001B441 /* DatePickerDialog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DatePickerDialog.framework; sourceTree = "<group>"; };
-		239894661F8A98B80001B441 /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
 		23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetHeaderView.swift; sourceTree = "<group>"; };
 		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
 		23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetNavigationController.swift; sourceTree = "<group>"; };
@@ -97,8 +97,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				239894641F8A98450001B441 /* DatePickerDialog.framework in Frameworks */,
-				239894671F8A98BB0001B441 /* TenClock.framework in Frameworks */,
+				232F9BE81F8B380000D0E2CB /* DatePickerDialog.framework in Frameworks */,
+				232F9BEB1F8B385D00D0E2CB /* TenClock.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,8 +175,8 @@
 		231398A11F815722009E8E78 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				239894661F8A98B80001B441 /* TenClock.framework */,
-				239894601F8A983C0001B441 /* DatePickerDialog.framework */,
+				232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */,
+				232F9BEA1F8B385600D0E2CB /* TenClock.framework */,
 				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
 				2313987F1F815694009E8E78 /* Info.plist */,
 				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,
@@ -524,7 +524,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -544,7 +544,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.insanj.timesheet;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
