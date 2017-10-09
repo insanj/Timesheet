@@ -7,6 +7,7 @@
 // SETUP:
 // - Upload file to remote directory where resources, assets, and scripts are (does not have to be cgi-bin)
 // - Set permissions to (at least) 0555; No one should have write access, everyone should have execute access.
+// - Watch for the timesheet.db file, this should also have permissions so only User can read (ex: 0600)
 // - Test by loading a query in a web browser, this should work without any other tool needed for GET requests.
 //
 // CURRENT VERSION:
@@ -20,10 +21,155 @@ class TimesheetDatabase extends SQLite3 {
     function __construct() {
         $this->open('timesheet.db');
         $this->busyTimeout(10000);
+
+    	$this->exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(250) DEFAULT "", email varchar(250), password varchar(250), salt TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
     	$this->exec('CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, time_in TIMESTAMP, time_out TIMESTAMP, notes TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
     }
 }
 
+// --
+// user functions
+// --
+
+function createAccount($user_email, $user_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$escapedEmail = $database->escapeString($user_email);
+
+		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
+		if ($result) {
+			$database->close();
+			return "User already found in database with that email";
+		}
+
+		$escapedPassword = $database->escapeString($user_password);
+
+		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+		$saltedPassword =  $escapedPassword . $salt;
+		$hashedPassword = hash('sha256', $saltedPassword);
+
+		$result = $database->query("INSERT INTO users (email, password, salt) VALUES ('$escapedEmail', '$hashedPassword', '$salt')");
+		$database->close();
+		unset($database);
+
+		return authenticate($user_email, $user_password);
+	} else {
+		return "Failed to get timesheet log entries from database";
+	}
+}
+
+
+function authenticate($user_email, $user_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$escapedEmail = $database->escapeString($user_email);
+
+		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
+		if (!$result) {
+			$database->close();
+			return "No user found in database with that email";
+		}
+
+		$salt = $result;
+
+		$escapedPassword = $database->escapeString($user_password);
+		$saltedPassword =  $escapedPassword . $salt;
+
+		$hashedPassword = hash('sha256', $saltedPassword);
+
+		$saltQuery = "select salt from user where name = '$escapedName';";
+
+		$result = $database->query("SELECT id,name,email,password,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
+		if (!$result) {
+			$database->close();
+			return "Incorrect password";
+		}
+
+		$result_array = array();
+		while ($row = $result->fetchArray()) {
+		    $result_array[] = $row;
+		}
+
+		$database->close();
+		unset($database);
+
+		return json_encode($result_array);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function authenticateForUserID($user_email, $user_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$escapedEmail = $database->escapeString($user_email);
+
+		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
+		if (!$result) {
+			$database->close();
+			return "No user found in database with that email";
+		}
+
+		$salt = $result;
+
+		$escapedPassword = $database->escapeString($user_password);
+		$saltedPassword =  $escapedPassword . $salt;
+
+		$hashedPassword = hash('sha256', $saltedPassword);
+
+		$result = $database->querySingle("SELECT id FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
+		if (!$result) {
+			$database->close();
+			return "Incorrect password";
+		}
+
+		$database->close();
+		unset($database);
+
+		return $result;
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function editUser($user_email, $user_password, $user_name, $user_new_email, $user_new_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$user_id = authenticateForUserID($user_email, $user_password);
+
+		$updated_email = $user_new_email ?: $user_email;
+
+		$valid_password = $user_new_password ?: $user_password;
+		$escapedPassword = $database->escapeString($valid_password);
+		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+		$saltedPassword =  $escapedPassword . $salt;
+		$hashedPassword = hash('sha256', $saltedPassword);
+
+		$name = $user_name ?: "";
+
+		$success = $database->exec("UPDATE users SET email='$updated_email', password='$hashedPassword', name='$name' WHERE id=$user_id");
+		$database->close();
+		unset($database);
+
+		return authenticate($updated_email, $valid_password);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function deleteUser($user_email, $user_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$user_id = authenticateForUserID($user_email, $user_password);
+
+		$success = $database->exec("DELETE FROM users WHERE id=$user_id");
+		$database->close();
+		unset($database);
+
+		return $success;
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+// --
+// log functions
+// --
 function getLogsFromDatabase($user_id) {
 	if ($database = new TimesheetDatabase()) { 
 		$result_array = array();
@@ -86,71 +232,96 @@ function deleteLog($user_id, $log_id) {
 // api
 // ---
 // check if version exists; this is the bare minimum security, making sure we're on the right version before accessing the API
-if (!isset($_GET['v'])) {
+if (!isset($_POST['v'])) {
 	echo 'Unauthorized API request';
 	return;
 }
 
-$app_version_string = $_GET['v'];
+$app_version_string = $_POST['v'];
 if (doubleval($app_version_string) != 0.1) {
 	echo 'Unsupported API version';
 	return;
 }
 
-if (!isset($_GET['req'])) {
+if (!isset($_POST['req'])) {
 	echo 'Missing required "req" request type parameter';
 	return;
 }
 
-$request_type = $_GET['req'];
+// TODO: replace with token system?
+if (!isset($_POST['email']) || !isset($_POST['password'])) {
+	echo 'Unauthenticated API request, "email" or "password" parameter not given';
+	return;
+}
+
+$user_email = $_POST['email'];
+$user_password = $_POST['password'];
+
+$request_type = $_POST['req'];
+
+if (strcmp($request_type, 'register') == 0) {
+	echo createAccount($user_email, $user_password);
+	return;
+}
+
+else if (strcmp($request_type, 'login') == 0) {
+	echo authenticate($user_email, $user_password);
+	return;
+}
+
+$authenticated_user = authenticateForUserID($user_email, $user_password);
+
+if (!$authenticated_user) {
+	echo "Unable to log in, try again with a different email and password combination";
+	return;
+}
+
+// $user_json = json_decode($authenticated_user);
+$user_id = $authenticated_user;
+if (!$user_id) {
+	echo "Logged in, but unable to perform actions for user";
+	return;
+}
+
+// from here on out, we can assume authenticated user...
 if (strcmp($request_type, 'add') == 0) {
-	if (!isset($_GET['user_id']) || !isset($_GET['time_in']) || !isset($_GET['time_out']) || !isset($_GET['notes'])) {
-		echo 'Missing required "user_id", "time_in", "time_out", or "notes"  parameter';
+	if (!isset($_POST['time_in']) || !isset($_POST['time_out']) || !isset($_POST['notes'])) {
+		echo 'Missing required "time_in", "time_out", or "notes"  parameter';
 		return;
 	}
 
-	$user_id = $_GET['user_id'];
-	$time_in = $_GET['time_in'];
-	$time_out = $_GET['time_out'];
-	$notes = $_GET['notes'];
+	$time_in = $_POST['time_in'];
+	$time_out = $_POST['time_out'];
+	$notes = $_POST['notes'];
 
 	echo addLog($user_id, $time_in, $time_out, $notes);
 }
 
 else if (strcmp($request_type, 'history') == 0) {
-    if (!isset($_GET['user_id'])) {
-		echo 'Missing required "user_id" parameter';
-		return;
-	}
-	
-	$user_id = $_GET['user_id'];
-
 	echo getLogsFromDatabase($user_id);
 }
 
 else if (strcmp($request_type, 'edit') == 0) {
-	if (!isset($_GET['user_id']) || !isset($_GET['log_id']) || !isset($_GET['time_in']) || !isset($_GET['time_out']) || !isset($_GET['notes'])) {
-		echo 'Missing required "user_id", "log_id", "time_in", "time_out", or "notes"  parameter';
+	if (!isset($_POST['log_id']) || !isset($_POST['time_in']) || !isset($_POST['time_out']) || !isset($_POST['notes'])) {
+		echo 'Missing required "log_id", "time_in", "time_out", or "notes"  parameter';
 		return;
 	}
 
-	$user_id = $_GET['user_id'];
-	$log_id = $_GET['log_id'];
-	$time_in = $_GET['time_in'];
-	$time_out = $_GET['time_out'];
-	$notes = $_GET['notes'];
+	$log_id = $_POST['log_id'];
+	$time_in = $_POST['time_in'];
+	$time_out = $_POST['time_out'];
+	$notes = $_POST['notes'];
 
 	echo editLog($user_id, $log_id, $time_in, $time_out, $notes);
 }
 
 else if (strcmp($request_type, 'delete') == 0) {
-	if (!isset($_GET['user_id']) || !isset($_GET['log_id'])) {
-		echo 'Missing required "user_id" or "log_id"  parameter';
+	if (!isset($_POST['log_id'])) {
+		echo 'Missing required "log_id"  parameter';
 		return;
 	}
 
-	$user_id = $_GET['user_id'];
-	$log_id = $_GET['log_id'];
+	$log_id = $_POST['log_id'];
 
 	echo deleteLog($user_id, $log_id);
 }
