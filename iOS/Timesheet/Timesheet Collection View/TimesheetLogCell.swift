@@ -58,7 +58,7 @@ class TimesheetLogCellView: UIView {
         didSet {
             if let log = timesheetLog {
                 heroID = String(log.logId!)
-                heroModifiers = [.timingFunction(.easeInOut)]
+                heroModifiers = [.spring(stiffness: 200, damping: 12)]
 
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "E"

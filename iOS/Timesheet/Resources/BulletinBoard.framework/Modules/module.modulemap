@@ -1,0 +1,4 @@
+framework module BulletinBoard {
+    header "BulletinBoard-Swift.h"
+    requires objc
+}

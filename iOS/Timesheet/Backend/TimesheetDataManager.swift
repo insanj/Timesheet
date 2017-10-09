@@ -10,8 +10,6 @@ import UIKit
 import CoreData
 
 class TimesheetDataManager: NSObject {
-    let timesheetUserId:Int = 1 // in the future, this should be dynamic...
-    
     /* MARK: - local
     func logsFromLocalDatabase() -> [TimesheetLog]? {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
@@ -30,62 +28,102 @@ class TimesheetDataManager: NSObject {
         }
     }*/
     
-    // MARK: - remote    
-    func buildAddLogURL(timeIn: Date, timeOut: Date, _ notes: String = "") -> URL? {
+    // MARK: - remote
+    func buildAddLogURLRequest(timeIn: Date, timeOut: Date, _ notes: String = "") -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetDataManager buildAddLogURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
         let timeInString = formattedDate(timeIn)
         let timeOutString = formattedDate(timeOut)
         
-        var url = URLComponents(string: "http://insanj.com/timesheet/api.php")
+        var url = URLComponents(string: timesheetBaseURLString)
         url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
                            URLQueryItem(name: "req", value: "add"),
-                           URLQueryItem(name: "user_id", value: String(timesheetUserId)),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
                            URLQueryItem(name: "time_in", value: timeInString),
                            URLQueryItem(name: "time_out", value: timeOutString),
                            URLQueryItem(name: "notes", value: notes)]
-        return url?.url
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
     }
     
-    func buildLogsURL() -> URL? {
-        var url = URLComponents(string: "http://insanj.com/timesheet/api.php")
+    func buildLogsURLRequest() -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetDataManager buildAddLogURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
+        var url = URLComponents(string: timesheetBaseURLString)
         url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
                            URLQueryItem(name: "req", value: "history"),
-                           URLQueryItem(name: "user_id", value: String(timesheetUserId))]
-        return url?.url
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password)]
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
     }
     
-    func buildEditLogURL(log: TimesheetLog) -> URL? {
+    func buildEditLogURLRequest(log: TimesheetLog) -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetDataManager buildAddLogURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
         let timeInString = formattedDate(log.timeIn!)
         let timeOutString = formattedDate(log.timeOut!)
         let notes = log.notes ?? ""
         let logIdString = String(log.logId!)
         
-        var url = URLComponents(string: "http://insanj.com/timesheet/api.php")
+        var url = URLComponents(string: timesheetBaseURLString)
         url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
                            URLQueryItem(name: "req", value: "edit"),
-                           URLQueryItem(name: "user_id", value: String(timesheetUserId)),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
                            URLQueryItem(name: "log_id", value: logIdString),
                            URLQueryItem(name: "time_in", value: timeInString),
                            URLQueryItem(name: "time_out", value: timeOutString),
                            URLQueryItem(name: "notes", value: notes)]
-        return url?.url
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
     }
     
-    func buildDeleteLogURL(log: TimesheetLog) -> URL? {
+    func buildDeleteLogURLRequest(log: TimesheetLog) -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetDataManager buildAddLogURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
         let logIdString = String(log.logId!)
         
-        var url = URLComponents(string: "http://insanj.com/timesheet/api.php")
+        var url = URLComponents(string: timesheetBaseURLString)
         url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
                            URLQueryItem(name: "req", value: "delete"),
-                           URLQueryItem(name: "user_id", value: String(timesheetUserId)),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
                            URLQueryItem(name: "log_id", value: logIdString)]
-        return url?.url
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
     }
     
     typealias LogsCompletionBlock = (([TimesheetLog]?, Error?) -> Void)
-    func remoteTask(with url: URL, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask {
+    func remoteTask(with urlRequest: URLRequest, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
-        let task = session.dataTask(with: url) { (data, response, error) in
+        let task = session.dataTask(with: urlRequest) { (data, response, error) in
             debugPrint("remoteTask() dataTask, data=\(data.debugDescription), response=\(response.debugDescription), error=\(error.debugDescription)")
             
             if let validError = error {
@@ -111,7 +149,11 @@ class TimesheetDataManager: NSObject {
                 
                 completion(parsed, nil)
             } catch {
-                completion(nil, timesheetError(.unableToParse))
+                if let string = String(data: validData, encoding: .utf8) {
+                    completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
+                } else {
+                    completion(nil, timesheetError(.unableToParse))
+                }
                 return
             }
         }
@@ -120,49 +162,49 @@ class TimesheetDataManager: NSObject {
     }
     
     func logsFromRemoteDatabase(_ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
-        guard let url = buildLogsURL() else {
+        guard let urlRequest = buildLogsURLRequest() else {
             debugPrint("logsFromRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }
         
-        let task = remoteTask(with: url, completion)
+        let task = remoteTask(with: urlRequest, completion)
         task.resume()
         return task
     }
     
     func addLogToRemoteDatabase(timeIn: Date, timeOut: Date, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
-        guard let url = buildAddLogURL(timeIn: timeIn, timeOut: timeOut) else {
+        guard let urlRequest = buildAddLogURLRequest(timeIn: timeIn, timeOut: timeOut) else {
             debugPrint("addLogsToRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }
         
-        let task = remoteTask(with: url, completion)
+        let task = remoteTask(with: urlRequest, completion)
         task.resume()
         return task
     }
     
     func editLogInRemoteDatabase(log: TimesheetLog, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
-        guard let url = buildEditLogURL(log: log) else {
+        guard let urlRequest = buildEditLogURLRequest(log: log) else {
             debugPrint("editLogInRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }
         
-        let task = remoteTask(with: url, completion)
+        let task = remoteTask(with: urlRequest, completion)
         task.resume()
         return task
     }
     
     func deleteLogInRemoteDatabase(log: TimesheetLog, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask? {
-        guard let url = buildDeleteLogURL(log: log) else {
+        guard let urlRequest = buildDeleteLogURLRequest(log: log) else {
             debugPrint("deleteLogInRemoteDatabase() unable to build logs URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }
         
-        let task = remoteTask(with: url, completion)
+        let task = remoteTask(with: urlRequest, completion)
         task.resume()
         return task
     }

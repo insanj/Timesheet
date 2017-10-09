@@ -8,6 +8,12 @@
 
 import UIKit
 
+let timesheetBaseURLString = "https://insanj.com/timesheet/api.php"
+let timesheetBaseURL = URL(string: "https://insanj.com/timesheet/api.php")!
+
+let keychainEmailDefaultsKey = "com.insanj.timesheet.email"
+let keychainNameDefaultsKey = "com.insanj.timesheet.name"
+
 func debugPrint(_ message: String) {
     print("[TIMESHEET] <DEBUG> (\(Date().debugDescription): \(message)")
 }
@@ -27,7 +33,7 @@ func dateFromFormattedString(_ string: String) -> Date? {
 }
 
 enum TimesheetErrorType: Int {
-    case unableToConnect = 1, unexpectedResponse, unableToParse, invalidURL
+    case unableToConnect = 1, unexpectedResponse, unableToParse, invalidURL, unableToSave, noResponse
 }
 
 func timesheetError(_ type: TimesheetErrorType) -> Error {
@@ -42,6 +48,10 @@ func timesheetError(_ type: TimesheetErrorType) -> Error {
         return NSError(domain: "com.insanj.timesheet", code: type.rawValue, userInfo: [NSLocalizedDescriptionKey : "Unusual response while downloading information from the internet."])
     case .invalidURL:
         return NSError(domain: "com.insanj.timesheet", code: type.rawValue, userInfo: [NSLocalizedDescriptionKey : "Trouble finding a way to connect to and download information from the internet."])
+    case .unableToSave:
+        return NSError(domain: "com.insanj.timesheet", code: type.rawValue, userInfo: [NSLocalizedDescriptionKey : "Trouble understanding and saving information downloaded from the internet."])
+    case .noResponse:
+        return NSError(domain: "com.insanj.timesheet", code: type.rawValue, userInfo: [NSLocalizedDescriptionKey : "Nothing was able to be downloaded from the internet."])
     }
 }
 
