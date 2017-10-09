@@ -132,26 +132,29 @@ class TimesheetNavigationBar: UIView {
     var panGestureRecognizedInitialLocation: CGPoint?
     func panGestureRecognized(_ gestureRecognizer: UIPanGestureRecognizer) {
         let location = gestureRecognizer.location(in: gestureRecognizer.view!)
+        let velocity = gestureRecognizer.velocity(in: gestureRecognizer.view!).y
         
         switch gestureRecognizer.state { // .recognized is catch-all
         case .began:
             panGestureRecognizedInitialLocation = location
-            updatePullDown(0, true)
+            updatePullDown(0, true, velocity)
         case .possible, .changed:
             let initialLocation = panGestureRecognizedInitialLocation ?? location
             let offset = location.y - initialLocation.y
-            updatePullDown(offset)
+            updatePullDown(offset, false, velocity)
         case .ended, .cancelled, .failed:
-            updatePullDown(0, true)
+            updatePullDown(0, true, velocity)
         }
     }
     
-    func updatePullDown(_ offset: CGFloat, _ animated: Bool = false) {
+    func updatePullDown(_ offset: CGFloat, _ animated: Bool, _ velocity: CGFloat) {
         let baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
         heightConstraint?.constant = baseOffset + offset
         
+        let reasonableVelocity = min(abs(velocity), 8.0)
+        
         if animated {
-            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0, options: [], animations: {
+            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: reasonableVelocity, options: [], animations: {
                 self.superview?.layoutIfNeeded()
             }, completion: nil)
         } else {
