@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Hero
 
 class TimesheetLogCell: UICollectionViewCell {
     static let reuseIdentifier: String = "TimesheetLogCellIdentifier"
@@ -56,6 +57,9 @@ class TimesheetLogCellView: UIView {
     var timesheetLog: TimesheetLog? {
         didSet {
             if let log = timesheetLog {
+                heroID = String(log.logId!)
+                heroModifiers = [.timingFunction(.easeInOut)]
+
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "E"
                 dayLabel.text = dateFormatter.string(from: log.timeIn!)

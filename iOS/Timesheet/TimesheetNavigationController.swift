@@ -13,6 +13,7 @@ class TimesheetNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        isHeroEnabled = true
         isNavigationBarHidden = true
     }
     

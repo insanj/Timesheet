@@ -15,6 +15,7 @@ class TimesheetLogViewController: UIViewController {
     var log: TimesheetLog
     var color: TimesheetColor
     
+    let blurBackgroundView = UIVisualEffectView()
     let scrollView = UIScrollView()
     let containerView = UIView()
     let cancelButton = UIButton()
@@ -36,6 +37,7 @@ class TimesheetLogViewController: UIViewController {
         
         super.init(nibName: nil, bundle: nil)
         
+        isHeroEnabled = true
         modalTransitionStyle = .crossDissolve
         modalPresentationStyle = .overCurrentContext
     }
@@ -50,14 +52,13 @@ class TimesheetLogViewController: UIViewController {
         view.backgroundColor = UIColor.clear
         
         // setup background view
-        let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        backgroundView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(backgroundView)
+        blurBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(blurBackgroundView)
         
-        backgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        backgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        backgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        backgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        blurBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        blurBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        blurBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        blurBackgroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         // setup navigation bar buttons (save & cancel)
         let navigationBarHeight:CGFloat = 44.0
@@ -169,6 +170,17 @@ class TimesheetLogViewController: UIViewController {
         deleteButton.topAnchor.constraint(equalTo: controlsView.bottomAnchor, constant: 5.0).isActive = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if blurBackgroundView.effect == nil {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.blurBackgroundView.effect = UIBlurEffect(style: .light)
+            })
+        }
+    }
+    
+    // MARK: - actions
     func saveButtonTapped() {
         saveButton.isEnabled = false
         saveButton.isUserInteractionEnabled = false

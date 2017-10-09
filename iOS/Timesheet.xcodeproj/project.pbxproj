@@ -23,6 +23,8 @@
 		232F9BE91F8B380000D0E2CB /* DatePickerDialog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		232F9BEB1F8B385D00D0E2CB /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BEA1F8B385600D0E2CB /* TenClock.framework */; };
 		232F9BEC1F8B385D00D0E2CB /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BEA1F8B385600D0E2CB /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		232F9BEE1F8B415300D0E2CB /* Hero.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BED1F8B414F00D0E2CB /* Hero.framework */; };
+		232F9BEF1F8B415300D0E2CB /* Hero.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 232F9BED1F8B414F00D0E2CB /* Hero.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
 		23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */; };
 		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
@@ -57,6 +59,7 @@
 			files = (
 				232F9BE91F8B380000D0E2CB /* DatePickerDialog.framework in Embed Frameworks */,
 				232F9BEC1F8B385D00D0E2CB /* TenClock.framework in Embed Frameworks */,
+				232F9BEF1F8B415300D0E2CB /* Hero.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +87,7 @@
 		232A71911F89A8D000264BAF /* TimesheetLoadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLoadingCell.swift; sourceTree = "<group>"; };
 		232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DatePickerDialog.framework; sourceTree = "<group>"; };
 		232F9BEA1F8B385600D0E2CB /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
+		232F9BED1F8B414F00D0E2CB /* Hero.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hero.framework; sourceTree = "<group>"; };
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
 		23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetHeaderView.swift; sourceTree = "<group>"; };
 		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
@@ -99,6 +103,7 @@
 			files = (
 				232F9BE81F8B380000D0E2CB /* DatePickerDialog.framework in Frameworks */,
 				232F9BEB1F8B385D00D0E2CB /* TenClock.framework in Frameworks */,
+				232F9BEE1F8B415300D0E2CB /* Hero.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,6 +182,7 @@
 			children = (
 				232F9BE71F8B37FD00D0E2CB /* DatePickerDialog.framework */,
 				232F9BEA1F8B385600D0E2CB /* TenClock.framework */,
+				232F9BED1F8B414F00D0E2CB /* Hero.framework */,
 				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
 				2313987F1F815694009E8E78 /* Info.plist */,
 				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,

@@ -50,6 +50,8 @@ class TimesheetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        isHeroEnabled = true
+
         // setup view
         view.backgroundColor = UIColor.white
         
