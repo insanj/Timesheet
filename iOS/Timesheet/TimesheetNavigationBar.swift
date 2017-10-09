@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 class TimesheetNavigationBar: UIView {
     let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let vibrancyView = UIVisualEffectView(effect: UIVibrancyEffect(blurEffect: UIBlurEffect(style: .light)))
@@ -21,6 +22,8 @@ class TimesheetNavigationBar: UIView {
     
     var heightConstraint: NSLayoutConstraint?
     var titleBottomConstraint: NSLayoutConstraint?
+    
+    var panGestureRecognizer: UIPanGestureRecognizer?
     
     var showingHandle = true {
         willSet {
@@ -98,6 +101,10 @@ class TimesheetNavigationBar: UIView {
         handleView.heightAnchor.constraint(equalToConstant: 3.0).isActive = true
         handleView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         handleView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5.0).isActive = true
+        
+        // setup gesture recognizer
+        panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognized(_:)))
+        addGestureRecognizer(panGestureRecognizer!)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -120,6 +127,36 @@ class TimesheetNavigationBar: UIView {
             self.handleView.alpha = alpha
             self.superview?.layoutIfNeeded()
         }, completion: nil)
+    }
+    
+    var panGestureRecognizedInitialLocation: CGPoint?
+    func panGestureRecognized(_ gestureRecognizer: UIPanGestureRecognizer) {
+        let location = gestureRecognizer.location(in: gestureRecognizer.view!)
+        
+        switch gestureRecognizer.state { // .recognized is catch-all
+        case .began:
+            panGestureRecognizedInitialLocation = location
+            updatePullDown(0, true)
+        case .possible, .changed:
+            let initialLocation = panGestureRecognizedInitialLocation ?? location
+            let offset = location.y - initialLocation.y
+            updatePullDown(offset)
+        case .ended, .cancelled, .failed:
+            updatePullDown(0, true)
+        }
+    }
+    
+    func updatePullDown(_ offset: CGFloat, _ animated: Bool = false) {
+        let baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
+        heightConstraint?.constant = baseOffset + offset
+        
+        if animated {
+            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.0, options: [], animations: {
+                self.superview?.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            self.superview?.layoutIfNeeded()
+        }
     }
 }
 
