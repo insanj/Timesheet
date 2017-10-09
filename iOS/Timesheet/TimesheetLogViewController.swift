@@ -20,7 +20,7 @@ class TimesheetLogViewController: UIViewController {
     let cancelButton = UIButton()
     let saveButton = UIButton()
     let cellButton = UIButton()
-    let originalCell = TimesheetLogCell(frame: CGRect.zero)
+    let originalCell = TimesheetLogCellView(frame: CGRect.zero)
     
     let controlsView = UIView()
     var timeControl = TenClock()
@@ -112,9 +112,9 @@ class TimesheetLogViewController: UIViewController {
         containerView.leftAnchor.constraint(equalTo: scrollView.leftAnchor).isActive = true
         containerView.rightAnchor.constraint(equalTo: scrollView.rightAnchor).isActive = true
         containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
-        containerView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
+        // containerView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor).isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, constant:-totalTopInset).isActive = true
         
         // -- everything will now be inside of containerView --
         // setup original cell (with tap button)
@@ -123,9 +123,9 @@ class TimesheetLogViewController: UIViewController {
         originalCell.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(originalCell)
         
-        originalCell.topAnchor.constraint(equalTo: containerView.topAnchor).isActive = true
-        originalCell.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
-        originalCell.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        originalCell.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5.0).isActive = true
+        originalCell.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 5.0).isActive = true
+        originalCell.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -5.0).isActive = true
         originalCell.heightAnchor.constraint(equalToConstant: 100.0).isActive = true
         
         cellButton.translatesAutoresizingMaskIntoConstraints = false
