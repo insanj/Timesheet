@@ -7,21 +7,16 @@
 //
 
 import UIKit
-import BulletinBoard
 
 class TimesheetPulldownView: UIView {
-    let signOutButton = UIButton()
+    let signOutButton: TimesheetButton
     
     init() {
+        signOutButton = TimesheetButton(timesheetColor(name: "Aqua"))
+        
         super.init(frame: CGRect.zero)
         
-        let color = timesheetColor(name: "Aqua")
         signOutButton.setTitle("Sign Out", for: .normal)
-        signOutButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
-        signOutButton.backgroundColor = color.backgroundColor
-        signOutButton.setTitleColor(color.foregroundColor, for: .normal)
-        signOutButton.layer.masksToBounds = true
-        signOutButton.layer.cornerRadius = 8.0
         signOutButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(signOutButton)
         
