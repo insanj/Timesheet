@@ -9,6 +9,7 @@
 import UIKit
 
 class TimesheetPulldownView: UIView {
+    let iTunesArtworkView = UIImageView(image: UIImage(named: "iTunesArtwork"))
     let changeNameButton: TimesheetButton
     let signOutButton: TimesheetButton
     
@@ -37,6 +38,17 @@ class TimesheetPulldownView: UIView {
         changeNameButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         changeNameButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         changeNameButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        
+        // setup itunesArtworkView
+        iTunesArtworkView.layer.cornerRadius = 8.0
+        iTunesArtworkView.layer.masksToBounds = true
+        iTunesArtworkView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(iTunesArtworkView)
+        
+        iTunesArtworkView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        iTunesArtworkView.bottomAnchor.constraint(equalTo: changeNameButton.topAnchor, constant: -30.0).isActive = true
+        iTunesArtworkView.widthAnchor.constraint(equalTo: iTunesArtworkView.heightAnchor).isActive = true
+        iTunesArtworkView.topAnchor.constraint(equalTo: topAnchor, constant: 30.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

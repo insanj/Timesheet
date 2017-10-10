@@ -11,13 +11,11 @@ import BulletinBoard
 
 @objcMembers
 class TimesheetViewController: UIViewController {
-    var timesheetUser: TimesheetUser?
-    
     var lazyTimesheetNavigationBar: TimesheetNavigationBar?
     var timesheetNavigationBar: TimesheetNavigationBar {
         get {
             if lazyTimesheetNavigationBar == nil{
-                lazyTimesheetNavigationBar = TimesheetNavigationBar(140.0) // self.view.frame.size.height / 2.0
+                lazyTimesheetNavigationBar = TimesheetNavigationBar(200.0)
             }
             
             return lazyTimesheetNavigationBar!
@@ -129,8 +127,7 @@ class TimesheetViewController: UIViewController {
     func authenticateFromRemoteBackend() {
         let userManager = TimesheetUserManager()
         userManager.keychainAuthenticate(self) { (user) in
-            if let validUser = user {
-                self.timesheetUser = validUser
+            if user != nil {
                 self.refreshFromRemoteBackend()
             } else {
                 self.showAuthenticationBulletinBoard()
@@ -176,11 +173,13 @@ class TimesheetViewController: UIViewController {
             self.showAccountAlertController(signInMode: false)
         }
         
-        let bulletin = BulletinManager(rootItem: authenticationWelcomeBulletinItem)
-        bulletin.prepare()
-        bulletin.presentBulletin(above: self)
+        OperationQueue.main.addOperation {
+            let bulletin = BulletinManager(rootItem: self.authenticationWelcomeBulletinItem)
+            bulletin.prepare()
+            bulletin.presentBulletin(above: self)
 
-        authenticationBulletinManager = bulletin
+            self.authenticationBulletinManager = bulletin
+        }
     }
     
     func showLoginBulletinBoard(_ requiresSetup: Bool, _ error: Error? = nil) {
@@ -244,8 +243,6 @@ class TimesheetViewController: UIViewController {
                         self.authenticationBulletinManager?.dismissBulletin()
                         
                         if let validUser = user {
-                            self.timesheetUser = validUser
-                            
                             TimesheetUser.currentEmail = email
                             TimesheetUser.currentPassword = password
                             TimesheetUser.currentName = validUser.name
@@ -299,8 +296,6 @@ class TimesheetViewController: UIViewController {
                         self.authenticationBulletinManager?.dismissBulletin()
                         
                         if let validUser = user {
-                            self.timesheetUser = validUser
-                            
                             TimesheetUser.currentEmail = email
                             TimesheetUser.currentPassword = password
                             TimesheetUser.currentName = validUser.name
@@ -330,7 +325,7 @@ class TimesheetViewController: UIViewController {
     }
     
     func refreshFromRemoteBackend() {
-        guard timesheetUser != nil else {
+        guard let _ = TimesheetUser.currentEmail, let _ = TimesheetUser.currentPassword else {
             authenticateFromRemoteBackend()
             return
         }
@@ -479,13 +474,11 @@ class TimesheetViewController: UIViewController {
                 self.showLoadingBulletinBoard()
                 
                 let userManager = TimesheetUserManager()
-                let _ = userManager.editAccountInRemoteDatabase(newName: name, newEmail: nil, newPassword: nil, { (user, error) in
+                let _ = userManager.editUserNameInRemoteDatabase(name: name, { (user, error) in
                     OperationQueue.main.addOperation {
                         self.authenticationBulletinManager?.dismissBulletin()
                         
                         if let validUser = user {
-                            self.timesheetUser = validUser
-                            
                             TimesheetUser.currentName = validUser.name
                             
                             self.refreshFromRemoteBackend()
