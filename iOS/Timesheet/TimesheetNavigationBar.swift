@@ -24,6 +24,8 @@ class TimesheetNavigationBar: UIView {
     var titleBottomConstraint: NSLayoutConstraint?
     
     var panGestureRecognizer: UIPanGestureRecognizer?
+    let pulldownView = TimesheetPulldownView()
+    var pulldownHeight: CGFloat
     
     var showingHandle = true {
         willSet {
@@ -33,7 +35,8 @@ class TimesheetNavigationBar: UIView {
         }
     }
 
-    init() {
+    init(_ pulldownHeight: CGFloat = 500.0) { // default value should hopefully never be used
+        self.pulldownHeight = pulldownHeight
         super.init(frame: CGRect.zero)
         
         backgroundColor = UIColor.clear
@@ -105,6 +108,15 @@ class TimesheetNavigationBar: UIView {
         // setup gesture recognizer
         panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panGestureRecognized(_:)))
         addGestureRecognizer(panGestureRecognizer!)
+        
+        // setup pulldown view
+        pulldownView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(pulldownView)
+        
+        pulldownView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        pulldownView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        pulldownView.heightAnchor.constraint(equalToConstant: pulldownHeight).isActive = true
+        pulldownView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -navigationBarHeight).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -129,27 +141,52 @@ class TimesheetNavigationBar: UIView {
         }, completion: nil)
     }
     
+    var pulldownShowing = false
     var panGestureRecognizedInitialLocation: CGPoint?
     func panGestureRecognized(_ gestureRecognizer: UIPanGestureRecognizer) {
         let location = gestureRecognizer.location(in: gestureRecognizer.view!)
         let velocity = gestureRecognizer.velocity(in: gestureRecognizer.view!).y
+        
+        let initialLocation = panGestureRecognizedInitialLocation ?? location
+        let offset = location.y - initialLocation.y
         
         switch gestureRecognizer.state { // .recognized is catch-all
         case .began:
             panGestureRecognizedInitialLocation = location
             updatePullDown(0, true, velocity)
         case .possible, .changed:
-            let initialLocation = panGestureRecognizedInitialLocation ?? location
-            let offset = location.y - initialLocation.y
             updatePullDown(offset, false, velocity)
         case .ended, .cancelled, .failed:
-            updatePullDown(0, true, velocity)
+            if offset >= pulldownHeight {
+                showPulldown(true, velocity)
+            } else {
+                updatePullDown(0, true, velocity)
+            }
         }
     }
     
     func updatePullDown(_ offset: CGFloat, _ animated: Bool, _ velocity: CGFloat) {
+        if pulldownShowing {
+            return
+        }
+        
         let baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
         heightConstraint?.constant = baseOffset + offset
+        
+        let reasonableVelocity = min(abs(velocity), 8.0)
+        
+        if animated {
+            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: reasonableVelocity, options: [], animations: {
+                self.superview?.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    
+    func showPulldown(_ animated: Bool, _ velocity: CGFloat) {
+        pulldownShowing = true
+        heightConstraint?.constant = pulldownHeight + navigationBarHeight
         
         let reasonableVelocity = min(abs(velocity), 8.0)
         

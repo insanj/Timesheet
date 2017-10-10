@@ -66,7 +66,7 @@ class TimesheetUserManager: NSObject {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
-            debugPrint("remoteUserTask() dataTask, data=\(data.debugDescription), response=\(response.debugDescription), error=\(error.debugDescription)")
+            // debugPrint("remoteUserTask() dataTask, data=\(data.debugDescription), response=\(response.debugDescription), error=\(error.debugDescription)")
             
             if let validError = error {
                 completion(nil, validError)

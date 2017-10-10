@@ -13,8 +13,17 @@ import BulletinBoard
 class TimesheetViewController: UIViewController {
     var timesheetUser: TimesheetUser?
     
-    let timesheetNavigationBar = TimesheetNavigationBar()
-
+    var lazyTimesheetNavigationBar: TimesheetNavigationBar?
+    var timesheetNavigationBar: TimesheetNavigationBar {
+        get {
+            if lazyTimesheetNavigationBar == nil{
+                lazyTimesheetNavigationBar = TimesheetNavigationBar(self.view.frame.size.height / 2.0)
+            }
+            
+            return lazyTimesheetNavigationBar!
+        }
+    }
+    
     let timesheetCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
     var timesheetLoading = false {
@@ -40,7 +49,6 @@ class TimesheetViewController: UIViewController {
     var timesheetSections: [Date]?
     var timesheetLogs: [[TimesheetLog]]?
     var timesheetLogColors = [IndexPath: TimesheetColor]()
-    
     
     init() {
         super.init(nibName: nil, bundle: nil)
