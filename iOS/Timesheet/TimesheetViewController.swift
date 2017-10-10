@@ -159,77 +159,108 @@ class TimesheetViewController: UIViewController {
         // setup handlers
         // -- 1st
         authenticationWelcomeBulletinItem.actionHandler = { item in
-            self.authenticationBulletinManager!.push(item: self.authenticationLoginBulletinItem)
+            self.showLoginBulletinBoard(false)
         }
         
         authenticationWelcomeBulletinItem.alternativeHandler = { item in
             
         }
         
-        let bulletin = BulletinManager(rootItem: authenticationWelcomeBulletinItem)
-
         // -- 2nd
         authenticationLoginBulletinItem.actionHandler = { item in
-            bulletin.dismissBulletin(animated: true, completion: {
-                let authenticationPopup = UIAlertController(title: "Sign In", message: nil, preferredStyle: .alert)
-                authenticationPopup.addTextField(configurationHandler: { textField in
-                    textField.placeholder = "email"
-                    textField.keyboardType = .emailAddress
-                })
-                
-                authenticationPopup.addTextField(configurationHandler: { textField in
-                    textField.placeholder = "password"
-                    textField.isSecureTextEntry = true
-                })
-                
-                authenticationPopup.addAction(UIAlertAction(title: "Done", style: .default, handler: { _ in
-                    let email = authenticationPopup.textFields![0].text!
-                    let password = authenticationPopup.textFields![1].text!
-                    authenticationPopup.dismiss(animated: true, completion: nil)
+            self.authenticationBulletinManager?.dismissBulletin()
+            
+            let authenticationPopup = UIAlertController(title: "Sign In", message: nil, preferredStyle: .alert)
+            authenticationPopup.addTextField(configurationHandler: { textField in
+                textField.placeholder = "email"
+                textField.keyboardType = .emailAddress
+                textField.returnKeyType = .next
+            })
+            
+            authenticationPopup.addTextField(configurationHandler: { textField in
+                textField.placeholder = "password"
+                textField.isSecureTextEntry = true
+                textField.returnKeyType = .go
+            })
+            
+            authenticationPopup.addAction(UIAlertAction(title: "Go", style: .default, handler: { _ in
+                let email = authenticationPopup.textFields![0].text!
+                let password = authenticationPopup.textFields![1].text!
+                authenticationPopup.dismiss(animated: true, completion: nil)
 
-                    OperationQueue.main.addOperation {
-                        let loadingBulletin = BulletinManager(rootItem: PageBulletinItem(title: ""))
-                        loadingBulletin.prepare()
-                        loadingBulletin.presentBulletin(above: self)
-                        loadingBulletin.displayActivityIndicator()
-                        
-                        let userManager = TimesheetUserManager()
-                        _ = userManager.loginInRemoteDatabase(email: email, password: password) { (user, error) in
-                            OperationQueue.main.addOperation {
-                                loadingBulletin.dismissBulletin()
+                OperationQueue.main.addOperation {
+                    self.showLoadingBulletinBoard()
+
+                    let userManager = TimesheetUserManager()
+                    _ = userManager.loginInRemoteDatabase(email: email, password: password) { (user, error) in
+                        OperationQueue.main.addOperation {
+                            self.authenticationBulletinManager?.dismissBulletin()
+                            
+                            if let validUser = user {
+                                self.timesheetUser = validUser
                                 
-                                if let validUser = user {
-                                    self.timesheetUser = validUser
-                                    
-                                    TimesheetUser.currentEmail = email
-                                    TimesheetUser.currentPassword = password
-                                    TimesheetUser.currentName = validUser.name
-                                    
-                                    self.refreshFromRemoteBackend()
-                                } else if let validError = error {
-                                    showError(validError, from: self)
-                                } else {
-                                    showError(timesheetError(.noResponse), from: self)
-                                }
+                                TimesheetUser.currentEmail = email
+                                TimesheetUser.currentPassword = password
+                                TimesheetUser.currentName = validUser.name
+                                
+                                self.refreshFromRemoteBackend()
+                            } else if let validError = error {
+                                self.showLoginBulletinBoard(true, validError)
+                            } else {
+                                self.showLoginBulletinBoard(true, timesheetError(.noResponse))
                             }
                         }
                     }
-                }))
-                
-                authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                
-                self.present(authenticationPopup, animated: true, completion: nil)
-            })
+                }
+            }))
+            
+            authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+                self.showLoginBulletinBoard(true)
+            }))
+            
+            self.present(authenticationPopup, animated: true, completion: nil)
         }
         
         authenticationLoginBulletinItem.alternativeHandler = { item in
             
         }
         
+        let bulletin = BulletinManager(rootItem: authenticationWelcomeBulletinItem)
         bulletin.prepare()
         bulletin.presentBulletin(above: self)
 
         authenticationBulletinManager = bulletin
+    }
+    
+    func showLoginBulletinBoard(_ requiresSetup: Bool, _ error: Error? = nil) {
+        if requiresSetup {
+            let bulletin = BulletinManager(rootItem: self.authenticationLoginBulletinItem)
+            self.authenticationLoginBulletinItem.descriptionText = error?.localizedDescription
+
+            OperationQueue.main.addOperation {
+                bulletin.prepare()
+                bulletin.presentBulletin(above: self)
+            }
+            
+            self.authenticationBulletinManager = bulletin
+
+        } else {
+            OperationQueue.main.addOperation {
+                self.authenticationLoginBulletinItem.descriptionText = error?.localizedDescription
+                self.authenticationBulletinManager?.push(item: self.authenticationLoginBulletinItem)
+            }
+        }
+    }
+    
+    func showLoadingBulletinBoard(_ requiresSetup: Bool = true) {
+        OperationQueue.main.addOperation {
+            let bulletin = BulletinManager(rootItem: PageBulletinItem(title: ""))
+            bulletin.prepare()
+            bulletin.presentBulletin(above: self)
+            bulletin.displayActivityIndicator()
+            
+            self.authenticationBulletinManager = bulletin
+        }
     }
     
     func refreshFromRemoteBackend() {
