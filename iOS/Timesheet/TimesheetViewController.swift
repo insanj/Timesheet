@@ -17,7 +17,7 @@ class TimesheetViewController: UIViewController {
     var timesheetNavigationBar: TimesheetNavigationBar {
         get {
             if lazyTimesheetNavigationBar == nil{
-                lazyTimesheetNavigationBar = TimesheetNavigationBar(self.view.frame.size.height / 2.0)
+                lazyTimesheetNavigationBar = TimesheetNavigationBar(100.0) // self.view.frame.size.height / 2.0
             }
             
             return lazyTimesheetNavigationBar!
@@ -75,6 +75,7 @@ class TimesheetViewController: UIViewController {
         
         // setup navigation bar
         timesheetNavigationBar.titleLabel.text = "Timesheet"
+        timesheetNavigationBar.pulldownView.signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
     
@@ -303,6 +304,7 @@ class TimesheetViewController: UIViewController {
         
         // finally done!
         DispatchQueue.main.sync {
+            self.timesheetNavigationBar.enabled = true // only enable after the first time this works
             self.timesheetLoading = false
             self.timesheetAdding = false
             self.timesheetCollectionView.reloadData()
@@ -345,12 +347,21 @@ class TimesheetViewController: UIViewController {
     }
     
     // MARK: - actions
-    func refreshButtonTapped() {
-        refreshFromRemoteBackend()
-    }
-    
-    func addButtonTapped() {
+    func signOutButtonTapped() {
+        timesheetNavigationBar.hidePulldown(true, 0.0)
         
+        TimesheetUser.currentEmail = nil
+        
+        timesheetLogs = nil
+        timesheetSections = nil
+        timesheetLogColors = [IndexPath: TimesheetColor]()
+        
+        self.timesheetNavigationBar.enabled = false
+        self.timesheetLoading = false
+        self.timesheetAdding = false
+        self.timesheetCollectionView.reloadData()
+        
+        showAuthenticationBulletinBoard()
     }
 }
 

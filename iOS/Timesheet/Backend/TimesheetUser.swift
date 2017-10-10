@@ -43,7 +43,11 @@ extension TimesheetUser {
         }
         
         set {
-            UserDefaults.standard.set(newValue, forKey: keychainEmailDefaultsKey)
+            if newValue == nil {
+                UserDefaults.standard.removeObject(forKey: keychainEmailDefaultsKey)
+            } else {
+                UserDefaults.standard.set(newValue, forKey: keychainEmailDefaultsKey)
+            }
         }
     }
     
@@ -53,7 +57,11 @@ extension TimesheetUser {
         }
         
         set {
-            UserDefaults.standard.set(newValue, forKey: keychainNameDefaultsKey)
+            if newValue == nil {
+                UserDefaults.standard.removeObject(forKey: keychainNameDefaultsKey)
+            } else {
+                UserDefaults.standard.set(newValue, forKey: keychainNameDefaultsKey)
+            }
         }
     }
     

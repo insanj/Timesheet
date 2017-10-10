@@ -35,6 +35,8 @@ class TimesheetNavigationBar: UIView {
         }
     }
 
+    var enabled: Bool = false // pulldown enabled
+    
     init(_ pulldownHeight: CGFloat = 500.0) { // default value should hopefully never be used
         self.pulldownHeight = pulldownHeight
         super.init(frame: CGRect.zero)
@@ -144,12 +146,17 @@ class TimesheetNavigationBar: UIView {
     var pulldownShowing = false
     var panGestureRecognizedInitialLocation: CGPoint?
     func panGestureRecognized(_ gestureRecognizer: UIPanGestureRecognizer) {
+        if !enabled {
+            return
+        }
+        
         let location = gestureRecognizer.location(in: gestureRecognizer.view!)
         let velocity = gestureRecognizer.velocity(in: gestureRecognizer.view!).y
         
         let initialLocation = panGestureRecognizedInitialLocation ?? location
         let offset = location.y - initialLocation.y
-        
+        let revealedHeight = pulldownShowing ? offset + pulldownHeight : offset
+                
         switch gestureRecognizer.state { // .recognized is catch-all
         case .began:
             panGestureRecognizedInitialLocation = location
@@ -157,20 +164,24 @@ class TimesheetNavigationBar: UIView {
         case .possible, .changed:
             updatePullDown(offset, false, velocity)
         case .ended, .cancelled, .failed:
-            if offset >= pulldownHeight {
+            if revealedHeight >= pulldownHeight {
                 showPulldown(true, velocity)
             } else {
+                pulldownShowing = false
                 updatePullDown(0, true, velocity)
             }
         }
     }
     
     func updatePullDown(_ offset: CGFloat, _ animated: Bool, _ velocity: CGFloat) {
+        var baseOffset: CGFloat
+
         if pulldownShowing {
-            return
+            baseOffset = pulldownHeight + navigationBarHeight
+        } else {
+            baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
         }
         
-        let baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
         heightConstraint?.constant = baseOffset + offset
         
         let reasonableVelocity = min(abs(velocity), 8.0)
@@ -187,6 +198,21 @@ class TimesheetNavigationBar: UIView {
     func showPulldown(_ animated: Bool, _ velocity: CGFloat) {
         pulldownShowing = true
         heightConstraint?.constant = pulldownHeight + navigationBarHeight
+        
+        let reasonableVelocity = min(abs(velocity), 8.0)
+        
+        if animated {
+            UIView.animate(withDuration: 1.0, delay: 0.0, usingSpringWithDamping: 0.8, initialSpringVelocity: reasonableVelocity, options: [], animations: {
+                self.superview?.layoutIfNeeded()
+            }, completion: nil)
+        } else {
+            self.superview?.layoutIfNeeded()
+        }
+    }
+    
+    func hidePulldown(_ animated: Bool, _ velocity: CGFloat) {
+        pulldownShowing = false
+        heightConstraint?.constant = navigationBarHeight
         
         let reasonableVelocity = min(abs(velocity), 8.0)
         
