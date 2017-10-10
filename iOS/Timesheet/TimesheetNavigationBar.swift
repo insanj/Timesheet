@@ -37,7 +37,7 @@ class TimesheetNavigationBar: UIView {
 
     var enabled: Bool = false // pulldown enabled
     
-    init(_ pulldownHeight: CGFloat = 500.0) { // default value should hopefully never be used
+    init(_ pulldownHeight: CGFloat) { // default value should hopefully never be used
         self.pulldownHeight = pulldownHeight
         super.init(frame: CGRect.zero)
         

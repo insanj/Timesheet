@@ -17,7 +17,7 @@ class TimesheetViewController: UIViewController {
     var timesheetNavigationBar: TimesheetNavigationBar {
         get {
             if lazyTimesheetNavigationBar == nil{
-                lazyTimesheetNavigationBar = TimesheetNavigationBar(100.0) // self.view.frame.size.height / 2.0
+                lazyTimesheetNavigationBar = TimesheetNavigationBar(140.0) // self.view.frame.size.height / 2.0
             }
             
             return lazyTimesheetNavigationBar!
@@ -76,6 +76,7 @@ class TimesheetViewController: UIViewController {
         // setup navigation bar
         timesheetNavigationBar.titleLabel.text = "Timesheet"
         timesheetNavigationBar.pulldownView.signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
+        timesheetNavigationBar.pulldownView.changeNameButton.addTarget(self, action: #selector(changeNameButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
     
@@ -270,7 +271,8 @@ class TimesheetViewController: UIViewController {
     func showAccountAlertController(signInMode: Bool = true) {
         self.authenticationBulletinManager?.dismissBulletin()
         
-        let authenticationPopup = UIAlertController(title: "Register", message: nil, preferredStyle: .alert)
+        let popupTitle = signInMode ? "Sign In" : "Create Account"
+        let authenticationPopup = UIAlertController(title: popupTitle, message: nil, preferredStyle: .alert)
         authenticationPopup.addTextField(configurationHandler: { textField in
             textField.placeholder = "email"
             textField.keyboardType = .emailAddress
@@ -458,6 +460,49 @@ class TimesheetViewController: UIViewController {
         
         showAuthenticationBulletinBoard()
     }
+    
+    func changeNameButtonTapped() {
+        timesheetNavigationBar.hidePulldown(true, 0.0)
+        
+        let authenticationPopup = UIAlertController(title: "Change Name", message: nil, preferredStyle: .alert)
+        authenticationPopup.addTextField(configurationHandler: { textField in
+            textField.text = TimesheetUser.currentName
+            textField.placeholder = "name"
+            textField.returnKeyType = .go
+        })
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Go", style: .default, handler: { _ in
+            let name = authenticationPopup.textFields![0].text!
+            authenticationPopup.dismiss(animated: true, completion: nil)
+            
+            OperationQueue.main.addOperation {
+                self.showLoadingBulletinBoard()
+                
+                let userManager = TimesheetUserManager()
+                let _ = userManager.editAccountInRemoteDatabase(newName: name, newEmail: nil, newPassword: nil, { (user, error) in
+                    OperationQueue.main.addOperation {
+                        self.authenticationBulletinManager?.dismissBulletin()
+                        
+                        if let validUser = user {
+                            self.timesheetUser = validUser
+                            
+                            TimesheetUser.currentName = validUser.name
+                            
+                            self.refreshFromRemoteBackend()
+                        } else if let validError = error {
+                            showError(validError, from: self)
+                        } else {
+                            showError(timesheetError(.noResponse), from: self)
+                        }
+                    }
+                })
+            }
+        }))
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(authenticationPopup, animated: true, completion: nil)
+    }
 }
 
 // MARK: - collection view
@@ -522,9 +567,8 @@ extension TimesheetViewController: UICollectionViewDataSource {
                     friendlyString = "Evening"
                 }
                 
-                let userString = "Julian" // TODO: user accounts
-                
-                headerView.titleLabel.text = "Good \(friendlyString), \(userString)."
+                let userString = TimesheetUser.currentName != nil ? ", \(TimesheetUser.currentName!)" : ""
+                headerView.titleLabel.text = "Good \(friendlyString)\(userString)."
             } else if let sections = timesheetSections {
                 let date = sections[indexPath.section-1]
                 

@@ -61,6 +61,27 @@ class TimesheetUserManager: NSObject {
         return request
     }
     
+    func buildEditAccountURLRequest(newName: String?, newEmail: String?, newPassword: String?) -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetUserManager buildEditAccountURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
+        var url = URLComponents(string: timesheetBaseURLString)
+        url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
+                           URLQueryItem(name: "req", value: "editUser"),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
+                           URLQueryItem(name: "user_name", value: newName),
+                           URLQueryItem(name: "user_new_email", value: newEmail),
+                           URLQueryItem(name: "user_new_password", value: newPassword)]
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
+    }
+    
     typealias UserCompletionBlock = ((TimesheetUser?, Error?) -> Void)
     func remoteUserTask(with urlRequest: URLRequest, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
@@ -118,6 +139,18 @@ class TimesheetUserManager: NSObject {
     
     func createAccountInRemoteDatabase(email: String, password: String, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
         guard let urlRequest = buildCreateAccountURLRequest(email: email, password: password) else {
+            debugPrint("createAccountInRemoteDatabase() unable to build URL; cannot load from remote!")
+            completion(nil, timesheetError(.invalidURL))
+            return nil
+        }
+        
+        let task = remoteUserTask(with: urlRequest, completion)
+        task.resume()
+        return task
+    }
+    
+    func editAccountInRemoteDatabase(newName: String, newEmail: String?, newPassword: String?, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
+        guard let urlRequest = buildEditAccountURLRequest(newName: newName, newEmail: newEmail, newPassword: newPassword) else {
             debugPrint("createAccountInRemoteDatabase() unable to build URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
