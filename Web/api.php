@@ -22,7 +22,7 @@ class TimesheetDatabase extends SQLite3 {
         $this->open('timesheet.db');
         $this->busyTimeout(10000);
 
-    	$this->exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(250) DEFAULT "", email varchar(250), password varchar(250), salt TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
+    	$this->exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(250), email varchar(250), password varchar(250), salt TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
     	$this->exec('CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, time_in TIMESTAMP, time_out TIMESTAMP, notes TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
     }
 }
@@ -75,9 +75,7 @@ function authenticate($user_email, $user_password) {
 
 		$hashedPassword = hash('sha256', $saltedPassword);
 
-		$saltQuery = "select salt from user where name = '$escapedName';";
-
-		$result = $database->query("SELECT id,name,email,password,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
+		$result = $database->query("SELECT id,name,email,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
 		if (!$result) {
 			$database->close();
 			return "Incorrect password";
@@ -129,25 +127,63 @@ function authenticateForUserID($user_email, $user_password) {
 	}
 }
 
-function editUser($user_email, $user_password, $user_name, $user_new_email, $user_new_password) {
+function userForEmail($user_email) {
 	if ($database = new TimesheetDatabase()) { 
-		$user_id = authenticateForUserID($user_email, $user_password);
+		$result = $database->query("SELECT id,name,email,created FROM users WHERE email='$user_email'");
+		$result_array = array();
+		while ($row = $result->fetchArray()) {
+		    $result_array[] = $row;
+		}
 
-		$updated_email = $user_new_email ?: $user_email;
-
-		$valid_password = $user_new_password ?: $user_password;
-		$escapedPassword = $database->escapeString($valid_password);
-		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-		$saltedPassword =  $escapedPassword . $salt;
-		$hashedPassword = hash('sha256', $saltedPassword);
-
-		$name = $user_name ?: "";
-
-		$success = $database->exec("UPDATE users SET email='$updated_email', password='$hashedPassword', name='$name' WHERE id=$user_id");
 		$database->close();
 		unset($database);
 
-		return authenticate($updated_email, $valid_password);
+		return json_encode($result_array);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function editUserName($user_email, $user_name) {
+	if ($database = new TimesheetDatabase()) { 
+		$escapedName = $database->escapeString($user_name);
+		$database->exec("UPDATE users SET name='$escapedName' WHERE email='$user_email'");
+		$database->close();
+		unset($database);
+
+		return userForEmail($user_email);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function editUserEmail($user_email, $user_password, $user_new_email) {
+	if ($database = new TimesheetDatabase()) { 
+		$user_id = authenticateForUserID($user_email, $user_password);
+		$success = $database->exec("UPDATE users SET email='$user_new_email' WHERE id=$user_id");
+		$database->close();
+		unset($database);
+
+		return authenticate($user_new_email, $user_password);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
+function editUserPassword($user_email, $user_password, $user_new_password) {
+	if ($database = new TimesheetDatabase()) { 
+		$user_id = authenticateForUserID($user_email, $user_password);
+
+		$escapedPassword = $database->escapeString($user_new_password);
+		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+		$saltedPassword = $escapedPassword . $salt;
+		$hashedPassword = hash('sha256', $saltedPassword);
+
+		$success = $database->exec("UPDATE users SET password='$hashedPassword',salt='$salt' WHERE id=$user_id");
+		$database->close();
+		unset($database);
+
+		return authenticate($user_email, $user_new_password);
 	} else {
 		return "Unable to connect to database";
 	}
@@ -324,6 +360,17 @@ else if (strcmp($request_type, 'delete') == 0) {
 	$log_id = $_POST['log_id'];
 
 	echo deleteLog($user_id, $log_id);
+}
+
+else if (strcmp($request_type, 'editUserName') == 0) {
+	if (!isset($_POST['user_name'])) {
+		echo 'Missing required "user_name" parameter';
+		return;
+	}
+
+	$user_name = $_POST['user_name'];
+
+	echo editUserName($user_email, $user_name);
 }
 
 else {
