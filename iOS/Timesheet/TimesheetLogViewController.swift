@@ -35,7 +35,7 @@ class TimesheetLogViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
         
         isHeroEnabled = true
-        // modalTransitionStyle = .crossDissolve
+        modalTransitionStyle = .crossDissolve
         modalPresentationStyle = .overCurrentContext
     }
     
@@ -46,7 +46,8 @@ class TimesheetLogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(white: 1.0, alpha: 0.5)
+        view.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
+        view.heroModifiers = [.fade]
         
         // setup navigation bar buttons (save & cancel)
         let navigationBarHeight:CGFloat = 44.0
@@ -87,10 +88,10 @@ class TimesheetLogViewController: UIViewController {
         originalCell.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(originalCell)
         
-        originalCell.topAnchor.constraint(equalTo: view.topAnchor, constant: 100.0).isActive = true
+        originalCell.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 5.0).isActive = true
         originalCell.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5.0).isActive = true
         originalCell.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5.0).isActive = true
-        originalCell.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100.0).isActive = true
+        originalCell.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5.0).isActive = true
         
         cellButton.translatesAutoresizingMaskIntoConstraints = false
         cellButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
@@ -102,6 +103,7 @@ class TimesheetLogViewController: UIViewController {
         cellButton.bottomAnchor.constraint(equalTo: originalCell.cellBackgroundView.bottomAnchor).isActive = true
         
         // setup delete button
+        deleteButton.heroModifiers = [.useGlobalCoordinateSpace, .fade]
         deleteButton.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         deleteButton.setTitleColor(timesheetColor(name: "Red").backgroundColor, for: .normal)
@@ -118,6 +120,7 @@ class TimesheetLogViewController: UIViewController {
         deleteButton.bottomAnchor.constraint(equalTo: originalCell.bottomAnchor, constant: -5.0).isActive = true
         
         // setup controls view, clock
+        controlsView.heroModifiers = [.useGlobalCoordinateSpace, .fade]
         controlsView.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
@@ -126,8 +129,8 @@ class TimesheetLogViewController: UIViewController {
         originalCell.addSubview(controlsView)
         
         controlsView.topAnchor.constraint(equalTo: originalCell.cellBackgroundView.bottomAnchor, constant: 5.0).isActive = true
-        controlsView.leftAnchor.constraint(equalTo: originalCell.leftAnchor, constant: 10.0).isActive = true
-        controlsView.rightAnchor.constraint(equalTo: originalCell.rightAnchor, constant: -10.0).isActive = true
+        controlsView.leftAnchor.constraint(equalTo: originalCell.cellBackgroundView.leftAnchor, constant: 5.0).isActive = true
+        controlsView.rightAnchor.constraint(equalTo: originalCell.cellBackgroundView.rightAnchor, constant: -5.0).isActive = true
         controlsView.bottomAnchor.constraint(equalTo: deleteButton.topAnchor, constant: -5.0).isActive = true
         
         setupTimeControl()
@@ -233,8 +236,8 @@ class TimesheetLogViewController: UIViewController {
         timeControl.tailText = "OUT"
         timeControl.startDate = log.timeIn!
         timeControl.endDate = log.timeOut!
-        timeControl.centerTextColor = color.foregroundColor
         timeControl.tintColor = color.backgroundColor
+        timeControl.titleColor = color.foregroundColor
         timeControl.majorTicksColor = UIColor.white
         timeControl.delegate = self
         timeControl.translatesAutoresizingMaskIntoConstraints = false
@@ -242,8 +245,8 @@ class TimesheetLogViewController: UIViewController {
         
         timeControl.centerYAnchor.constraint(equalTo: controlsView.centerYAnchor).isActive = true
         timeControl.centerXAnchor.constraint(equalTo: controlsView.centerXAnchor).isActive = true
-        timeControl.widthAnchor.constraint(equalTo: controlsView.widthAnchor, constant: -20.0).isActive = true
-        timeControl.heightAnchor.constraint(equalTo: timeControl.widthAnchor, constant: -20.0).isActive = true
+        timeControl.widthAnchor.constraint(equalTo: controlsView.widthAnchor, constant: -10.0).isActive = true
+        timeControl.heightAnchor.constraint(equalTo: timeControl.widthAnchor, constant: -10.0).isActive = true
     }
 }
 
@@ -293,7 +296,7 @@ extension TimesheetLogViewController: TenClockDelegate {
         
         originalCell.timesheetColor = newColor
         originalCell.timesheetLog = log
-        clock.centerTextColor = newColor.foregroundColor
         clock.tintColor = newColor.backgroundColor
+        clock.titleColor = newColor.foregroundColor
     }
 }

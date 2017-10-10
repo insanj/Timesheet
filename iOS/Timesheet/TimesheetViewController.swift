@@ -643,6 +643,10 @@ extension TimesheetViewController: UICollectionViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if timesheetNavigationBar.showingPulldown {
+            timesheetNavigationBar.hidePulldown(true, 0.0)
+        }
+        
         refreshNavigationBarDetailLabel()
     }
 

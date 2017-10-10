@@ -143,7 +143,7 @@ class TimesheetNavigationBar: UIView {
         }, completion: nil)
     }
     
-    var pulldownShowing = false
+    var showingPulldown = false
     var panGestureRecognizedInitialLocation: CGPoint?
     func panGestureRecognized(_ gestureRecognizer: UIPanGestureRecognizer) {
         if !enabled {
@@ -155,7 +155,7 @@ class TimesheetNavigationBar: UIView {
         
         let initialLocation = panGestureRecognizedInitialLocation ?? location
         let offset = location.y - initialLocation.y
-        let revealedHeight = pulldownShowing ? offset + pulldownHeight : offset
+        let revealedHeight = showingPulldown ? offset + pulldownHeight : offset
                 
         switch gestureRecognizer.state { // .recognized is catch-all
         case .began:
@@ -167,7 +167,7 @@ class TimesheetNavigationBar: UIView {
             if revealedHeight >= pulldownHeight {
                 showPulldown(true, velocity)
             } else {
-                pulldownShowing = false
+                showingPulldown = false
                 updatePullDown(0, true, velocity)
             }
         }
@@ -176,7 +176,7 @@ class TimesheetNavigationBar: UIView {
     func updatePullDown(_ offset: CGFloat, _ animated: Bool, _ velocity: CGFloat) {
         var baseOffset: CGFloat
 
-        if pulldownShowing {
+        if showingPulldown {
             baseOffset = pulldownHeight + navigationBarHeight
         } else {
             baseOffset = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
@@ -196,7 +196,7 @@ class TimesheetNavigationBar: UIView {
     }
     
     func showPulldown(_ animated: Bool, _ velocity: CGFloat) {
-        pulldownShowing = true
+        showingPulldown = true
         heightConstraint?.constant = pulldownHeight + navigationBarHeight
         
         let reasonableVelocity = min(abs(velocity), 8.0)
@@ -211,7 +211,7 @@ class TimesheetNavigationBar: UIView {
     }
     
     func hidePulldown(_ animated: Bool, _ velocity: CGFloat) {
-        pulldownShowing = false
+        showingPulldown = false
         heightConstraint?.constant = navigationBarHeight
         
         let reasonableVelocity = min(abs(velocity), 8.0)
