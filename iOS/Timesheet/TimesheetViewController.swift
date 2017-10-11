@@ -15,7 +15,7 @@ class TimesheetViewController: UIViewController {
     var timesheetNavigationBar: TimesheetNavigationBar {
         get {
             if lazyTimesheetNavigationBar == nil{
-                lazyTimesheetNavigationBar = TimesheetNavigationBar(200.0)
+                lazyTimesheetNavigationBar = TimesheetNavigationBar(300.0)
             }
             
             return lazyTimesheetNavigationBar!
@@ -519,7 +519,7 @@ class TimesheetViewController: UIViewController {
                     OperationQueue.main.addOperation {
                         self.authenticationBulletinManager?.dismissBulletin()
                         
-                        if let validUser = user {
+                        if let _ = user {
                             TimesheetUser.currentPassword = password
                             
                             self.refreshFromRemoteBackend()

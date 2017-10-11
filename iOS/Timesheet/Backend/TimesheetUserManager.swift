@@ -80,7 +80,7 @@ class TimesheetUserManager: NSObject {
         return request
     }
     
-    func buildEditPasswordURLRequest(password: String) -> URLRequest? {
+    func buildEditPasswordURLRequest(password newPassword: String) -> URLRequest? {
         guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
             debugPrint("TimesheetUserManager buildEditPasswordURLRequest not authenticated")
             return nil
@@ -94,7 +94,7 @@ class TimesheetUserManager: NSObject {
                            URLQueryItem(name: "req", value: "editPassword"),
                            URLQueryItem(name: "email", value: email),
                            URLQueryItem(name: "password", value: password),
-                           URLQueryItem(name: "new_password", value: name)]
+                           URLQueryItem(name: "new_password", value: newPassword)]
         request.httpBody = url?.query?.data(using: .utf8)
         return request
     }
@@ -127,9 +127,13 @@ class TimesheetUserManager: NSObject {
                     let user = TimesheetUser(json: userArray)
                     completion(user, nil)
                 } else {
-                    let dataString = String(data: validData, encoding: .utf8) ?? "NOTHING"
-                    debugPrint("TimesheetUserManager something that isn't a user returned (dataString =\(dataString)); \(array.debugDescription)")
-                    completion(nil, timesheetError(.unableToSave))
+                    let dataString = String(data: validData, encoding: .utf8)
+                    if dataString != nil {
+                        debugPrint("TimesheetUserManager something that isn't a user returned (dataString =\(dataString!)); \(array.debugDescription)")
+                        completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: dataString!]))
+                    } else {
+                        completion(nil, timesheetError(.unableToSave))
+                    }
                 }
             } catch {
                 if let string = String(data: validData, encoding: .utf8) {

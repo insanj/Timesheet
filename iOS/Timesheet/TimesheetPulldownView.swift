@@ -58,7 +58,7 @@ class TimesheetPulldownView: UIView {
         addSubview(iTunesArtworkView)
         
         iTunesArtworkView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        iTunesArtworkView.bottomAnchor.constraint(equalTo: changeNameButton.topAnchor, constant: -30.0).isActive = true
+        iTunesArtworkView.bottomAnchor.constraint(equalTo: changePasswordButton.topAnchor, constant: -30.0).isActive = true
         iTunesArtworkView.widthAnchor.constraint(equalTo: iTunesArtworkView.heightAnchor).isActive = true
         iTunesArtworkView.topAnchor.constraint(equalTo: topAnchor, constant: 30.0).isActive = true
     }

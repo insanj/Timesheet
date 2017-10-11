@@ -212,7 +212,7 @@ class TimesheetNavigationBar: UIView {
     
     func hidePulldown(_ animated: Bool, _ velocity: CGFloat) {
         showingPulldown = false
-        heightConstraint?.constant = navigationBarHeight
+        heightConstraint?.constant = showingHandle ? navigationBarHeight : navigationBarHeight - (handleHeight + 10.0)
         
         let reasonableVelocity = min(abs(velocity), 8.0)
         
