@@ -80,6 +80,25 @@ class TimesheetUserManager: NSObject {
         return request
     }
     
+    func buildEditPasswordURLRequest(password: String) -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetUserManager buildEditPasswordURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
+        var url = URLComponents(string: timesheetBaseURLString)
+        url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
+                           URLQueryItem(name: "req", value: "editPassword"),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
+                           URLQueryItem(name: "new_password", value: name)]
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
+    }
+
     typealias UserCompletionBlock = ((TimesheetUser?, Error?) -> Void)
     func remoteUserTask(with urlRequest: URLRequest, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
@@ -152,6 +171,18 @@ class TimesheetUserManager: NSObject {
     func editUserNameInRemoteDatabase(name: String, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
         guard let urlRequest = buildEditUserNameURLRequest(name: name) else {
             debugPrint("editUserNameInRemoteDatabase() unable to build URL; cannot load from remote!")
+            completion(nil, timesheetError(.invalidURL))
+            return nil
+        }
+        
+        let task = remoteUserTask(with: urlRequest, completion)
+        task.resume()
+        return task
+    }
+
+    func editPasswordInRemoteDatabase(password: String, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
+        guard let urlRequest = buildEditPasswordURLRequest(password: password) else {
+            debugPrint("buildEditPasswordURLRequest() unable to build URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }

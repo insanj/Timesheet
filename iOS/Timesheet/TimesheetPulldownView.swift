@@ -10,12 +10,14 @@ import UIKit
 
 class TimesheetPulldownView: UIView {
     let iTunesArtworkView = UIImageView(image: UIImage(named: "iTunesArtwork"))
+    let changePasswordButton: TimesheetButton
     let changeNameButton: TimesheetButton
     let signOutButton: TimesheetButton
-    
+
     init() {
         signOutButton = TimesheetButton(timesheetColor(name: "Aqua"))
         changeNameButton = TimesheetButton(timesheetColor(name: "Orange"))
+        changePasswordButton = TimesheetButton(timesheetColor(name: "Maroon"))
 
         super.init(frame: CGRect.zero)
         
@@ -38,6 +40,16 @@ class TimesheetPulldownView: UIView {
         changeNameButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         changeNameButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         changeNameButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        
+        // setup change password button
+        changePasswordButton.setTitle("Change Password", for: .normal)
+        changePasswordButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(changePasswordButton)
+        
+        changePasswordButton.bottomAnchor.constraint(equalTo: changeNameButton.topAnchor, constant: -5.0).isActive = true
+        changePasswordButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
+        changePasswordButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        changePasswordButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         
         // setup itunesArtworkView
         iTunesArtworkView.layer.cornerRadius = 8.0

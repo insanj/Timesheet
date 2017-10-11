@@ -75,6 +75,7 @@ class TimesheetViewController: UIViewController {
         timesheetNavigationBar.titleLabel.text = "Timesheet"
         timesheetNavigationBar.pulldownView.signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changeNameButton.addTarget(self, action: #selector(changeNameButtonTapped), for: .touchUpInside)
+        timesheetNavigationBar.pulldownView.changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
     
@@ -480,6 +481,46 @@ class TimesheetViewController: UIViewController {
                         
                         if let validUser = user {
                             TimesheetUser.currentName = validUser.name
+                            
+                            self.refreshFromRemoteBackend()
+                        } else if let validError = error {
+                            showError(validError, from: self)
+                        } else {
+                            showError(timesheetError(.noResponse), from: self)
+                        }
+                    }
+                })
+            }
+        }))
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(authenticationPopup, animated: true, completion: nil)
+    }
+
+    func changePasswordButtonTapped() {
+        timesheetNavigationBar.hidePulldown(true, 0.0)
+        
+        let authenticationPopup = UIAlertController(title: "Change Password", message: nil, preferredStyle: .alert)
+        authenticationPopup.addTextField(configurationHandler: { textField in
+            textField.placeholder = "password"
+            textField.returnKeyType = .go
+        })
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Go", style: .default, handler: { _ in
+            let password = authenticationPopup.textFields![0].text!
+            authenticationPopup.dismiss(animated: true, completion: nil)
+            
+            OperationQueue.main.addOperation {
+                self.showLoadingBulletinBoard()
+                
+                let userManager = TimesheetUserManager()
+                let _ = userManager.editPasswordInRemoteDatabase(password: password, { (user, error) in
+                    OperationQueue.main.addOperation {
+                        self.authenticationBulletinManager?.dismissBulletin()
+                        
+                        if let validUser = user {
+                            TimesheetUser.currentPassword = password
                             
                             self.refreshFromRemoteBackend()
                         } else if let validError = error {

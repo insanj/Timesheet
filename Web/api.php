@@ -30,7 +30,6 @@ class TimesheetDatabase extends SQLite3 {
 // --
 // user functions
 // --
-
 function createAccount($user_email, $user_password) {
 	if ($database = new TimesheetDatabase()) { 
 		$escapedEmail = $database->escapeString($user_email);
@@ -157,33 +156,19 @@ function editUserName($user_email, $user_name) {
 	}
 }
 
-function editUserEmail($user_email, $user_password, $user_new_email) {
+function editPassword($user_email, $password) {
 	if ($database = new TimesheetDatabase()) { 
-		$user_id = authenticateForUserID($user_email, $user_password);
-		$success = $database->exec("UPDATE users SET email='$user_new_email' WHERE id=$user_id");
-		$database->close();
-		unset($database);
+		$escapedPassword = $database->escapeString($password);
 
-		return authenticate($user_new_email, $user_password);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function editUserPassword($user_email, $user_password, $user_new_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$user_id = authenticateForUserID($user_email, $user_password);
-
-		$escapedPassword = $database->escapeString($user_new_password);
 		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-		$saltedPassword = $escapedPassword . $salt;
+		$saltedPassword =  $escapedPassword . $salt;
 		$hashedPassword = hash('sha256', $saltedPassword);
 
-		$success = $database->exec("UPDATE users SET password='$hashedPassword',salt='$salt' WHERE id=$user_id");
+		$database->exec("UPDATE users SET password='$hashedPassword' WHERE email='$user_email'");
 		$database->close();
 		unset($database);
 
-		return authenticate($user_email, $user_new_password);
+		return userForEmail($user_email);
 	} else {
 		return "Unable to connect to database";
 	}
@@ -371,6 +356,17 @@ else if (strcmp($request_type, 'editUserName') == 0) {
 	$user_name = $_POST['user_name'];
 
 	echo editUserName($user_email, $user_name);
+}
+
+else if (strcmp($request_type, 'editPassword') == 0) {
+	if (!isset($_POST['password'])) {
+		echo 'Missing required "password" parameter';
+		return;
+	}
+
+	$password = $_POST['new_password'];
+
+	echo editPassword($user_email, $password);
 }
 
 else {
