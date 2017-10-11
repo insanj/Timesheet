@@ -63,7 +63,7 @@ class TimesheetUserManager: NSObject {
     
     func buildEditUserNameURLRequest(name: String) -> URLRequest? {
         guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
-            debugPrint("TimesheetUserManager buildEditAccountURLRequest not authenticated")
+            debugPrint("TimesheetUserManager buildEditUserNameURLRequest not authenticated")
             return nil
         }
         
@@ -79,7 +79,26 @@ class TimesheetUserManager: NSObject {
         request.httpBody = url?.query?.data(using: .utf8)
         return request
     }
-    
+
+    func buildEditEmailURLRequest(email newEmail: String) -> URLRequest? {
+        guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
+            debugPrint("TimesheetUserManager buildEditEmailURLRequest not authenticated")
+            return nil
+        }
+        
+        var request = URLRequest(url: timesheetBaseURL)
+        request.httpMethod = "POST"
+        
+        var url = URLComponents(string: timesheetBaseURLString)
+        url?.queryItems = [URLQueryItem(name: "v", value: "0.1"),
+                           URLQueryItem(name: "req", value: "editEmail"),
+                           URLQueryItem(name: "email", value: email),
+                           URLQueryItem(name: "password", value: password),
+                           URLQueryItem(name: "new_email", value: newEmail)]
+        request.httpBody = url?.query?.data(using: .utf8)
+        return request
+    }
+
     func buildEditPasswordURLRequest(password newPassword: String) -> URLRequest? {
         guard let email = TimesheetUser.currentEmail, let password = TimesheetUser.currentPassword else {
             debugPrint("TimesheetUserManager buildEditPasswordURLRequest not authenticated")
@@ -175,6 +194,18 @@ class TimesheetUserManager: NSObject {
     func editUserNameInRemoteDatabase(name: String, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
         guard let urlRequest = buildEditUserNameURLRequest(name: name) else {
             debugPrint("editUserNameInRemoteDatabase() unable to build URL; cannot load from remote!")
+            completion(nil, timesheetError(.invalidURL))
+            return nil
+        }
+        
+        let task = remoteUserTask(with: urlRequest, completion)
+        task.resume()
+        return task
+    }
+
+    func editEmailInRemoteDatabase(email: String, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask? {
+        guard let urlRequest = buildEditEmailURLRequest(email: email) else {
+            debugPrint("editEmailInRemoteDatabase() unable to build URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }

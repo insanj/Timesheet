@@ -76,6 +76,8 @@ class TimesheetViewController: UIViewController {
         timesheetNavigationBar.pulldownView.signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changeNameButton.addTarget(self, action: #selector(changeNameButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
+        timesheetNavigationBar.pulldownView.changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
+        
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
     
@@ -498,12 +500,54 @@ class TimesheetViewController: UIViewController {
         self.present(authenticationPopup, animated: true, completion: nil)
     }
 
+    func changeEmailButtonTapped() {
+        timesheetNavigationBar.hidePulldown(true, 0.0)
+        
+        let authenticationPopup = UIAlertController(title: "Change Email", message: nil, preferredStyle: .alert)
+        authenticationPopup.addTextField(configurationHandler: { textField in
+            textField.text = TimesheetUser.currentEmail
+            textField.placeholder = "email"
+            textField.returnKeyType = .go
+        })
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Go", style: .default, handler: { _ in
+            let email = authenticationPopup.textFields![0].text!
+            authenticationPopup.dismiss(animated: true, completion: nil)
+            
+            OperationQueue.main.addOperation {
+                self.showLoadingBulletinBoard()
+                
+                let userManager = TimesheetUserManager()
+                let _ = userManager.editEmailInRemoteDatabase(email: email, { (user, error) in
+                    OperationQueue.main.addOperation {
+                        self.authenticationBulletinManager?.dismissBulletin()
+                        
+                        if let validUser = user {
+                            TimesheetUser.currentEmail = validUser.email
+                            
+                            self.refreshFromRemoteBackend()
+                        } else if let validError = error {
+                            showError(validError, from: self)
+                        } else {
+                            showError(timesheetError(.noResponse), from: self)
+                        }
+                    }
+                })
+            }
+        }))
+        
+        authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+        self.present(authenticationPopup, animated: true, completion: nil)
+    }
+
     func changePasswordButtonTapped() {
         timesheetNavigationBar.hidePulldown(true, 0.0)
         
         let authenticationPopup = UIAlertController(title: "Change Password", message: nil, preferredStyle: .alert)
         authenticationPopup.addTextField(configurationHandler: { textField in
             textField.placeholder = "password"
+            textField.isSecureTextEntry = true
             textField.returnKeyType = .go
         })
         

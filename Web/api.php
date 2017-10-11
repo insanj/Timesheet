@@ -177,6 +177,18 @@ function editPassword($user_email, $new_password) {
 	}
 }
 
+function editEmail($user_email, $new_email) {
+	if ($database = new TimesheetDatabase()) { 
+		$database->exec("UPDATE users SET email='$new_email' WHERE email='$user_email'");
+		$database->close();
+		unset($database);
+
+		return userForEmail($new_email);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
 function deleteUser($user_email, $user_password) {
 	if ($database = new TimesheetDatabase()) { 
 		$user_id = authenticateForUserID($user_email, $user_password);
@@ -359,6 +371,17 @@ else if (strcmp($request_type, 'editUserName') == 0) {
 	$user_name = $_POST['user_name'];
 
 	echo editUserName($user_email, $user_name);
+}
+
+else if (strcmp($request_type, 'editEmail') == 0) {
+	if (!isset($_POST['new_email'])) {
+		echo 'Missing required "new_email" parameter';
+		return;
+	}
+
+	$new_email = $_POST['new_email'];
+
+	echo editEmail($user_email, $new_email);
 }
 
 else if (strcmp($request_type, 'editPassword') == 0) {

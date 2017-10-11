@@ -12,6 +12,7 @@ class TimesheetPulldownView: UIView {
     let iTunesArtworkView = UIImageView(image: UIImage(named: "iTunesArtwork"))
     let changePasswordButton: TimesheetButton
     let changeNameButton: TimesheetButton
+    let changeEmailButton: TimesheetButton
     let signOutButton: TimesheetButton
 
     init() {
@@ -31,13 +32,22 @@ class TimesheetPulldownView: UIView {
         signOutButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         signOutButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
 
+        // setup change email button
+        changeEmailButton.setTitle("Change Email", for: .normal)
+        changeEmailButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(changeEmailButton)
+        
+        changeEmailButton.bottomAnchor.constraint(equalTo: signOutButton.topAnchor, constant: -5.0).isActive = true
+        changeEmailButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
+        changeEmailButton.rightAnchor.constraint(equalTo: changeNameButton.leftAnchor, constant: -10.0).isActive = true
+        changeEmailButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+
         // setup change name button
-        changeNameButton.setTitle("Change Name", for: .normal)
+        changeNameButton.setTitle("  Name  ", for: .normal)
         changeNameButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(changeNameButton)
         
         changeNameButton.bottomAnchor.constraint(equalTo: signOutButton.topAnchor, constant: -5.0).isActive = true
-        changeNameButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         changeNameButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         changeNameButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         
