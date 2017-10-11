@@ -119,7 +119,7 @@ class TimesheetLogCellView: UIView {
         
         let contentView = self
         
-        contentBackgroundView.heroModifiers = [.cascade, .duration(0.2)]
+        contentBackgroundView.heroModifiers = [.duration(0.2), .cascade(direction: .bottomToTop, delayMatchedViews: false)]
         contentBackgroundView.backgroundColor = UIColor(white: 1.0, alpha: 0.1)
         contentBackgroundView.layer.masksToBounds = true
         contentBackgroundView.layer.cornerRadius = 8.0

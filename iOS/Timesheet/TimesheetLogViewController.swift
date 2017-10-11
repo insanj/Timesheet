@@ -103,7 +103,7 @@ class TimesheetLogViewController: UIViewController {
         cellButton.bottomAnchor.constraint(equalTo: originalCell.cellBackgroundView.bottomAnchor).isActive = true
         
         // setup delete button
-        deleteButton.heroModifiers = [.useGlobalCoordinateSpace, .fade]
+        deleteButton.heroModifiers = [.useGlobalCoordinateSpace, .fade, .whenAppearing(.duration(0.8))]
         deleteButton.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         deleteButton.setTitleColor(timesheetColor(name: "Red").backgroundColor, for: .normal)
@@ -120,7 +120,7 @@ class TimesheetLogViewController: UIViewController {
         deleteButton.bottomAnchor.constraint(equalTo: originalCell.bottomAnchor, constant: -5.0).isActive = true
         
         // setup controls view, clock
-        controlsView.heroModifiers = [.useGlobalCoordinateSpace, .fade]
+        controlsView.heroModifiers = [.useGlobalCoordinateSpace, .fade, .whenAppearing(.duration(0.8))]
         controlsView.backgroundColor = UIColor(white: 1.0, alpha: 0.4)
         controlsView.layer.masksToBounds = true
         controlsView.layer.cornerRadius = 8.0
