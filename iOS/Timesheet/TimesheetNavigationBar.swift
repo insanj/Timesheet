@@ -97,7 +97,7 @@ class TimesheetNavigationBar: UIView {
         detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         
         // setup right button
-        rightButton.setTitle("Share", for: .normal)
+        rightButton.setTitle("💘", for: .normal)
         rightButton.setTitleColor(UIColor.black, for: .normal)
         rightButton.translatesAutoresizingMaskIntoConstraints = false
         addSubview(rightButton)
