@@ -123,10 +123,6 @@ function authenticateForUserID($user_email, $user_password) {
 		$database->close();
 		unset($database);
 
-		if (!$result_array || count($result_array) <= 0) {
-			return "Unable to change database entry";
-		}
-
 		return $result;
 	} else {
 		return "Unable to connect to database";
