@@ -56,7 +56,6 @@ function createAccount($user_email, $user_password) {
 	}
 }
 
-
 function authenticate($user_email, $user_password) {
 	if ($database = new TimesheetDatabase()) { 
 		$escapedEmail = $database->escapeString($user_email);
@@ -74,19 +73,23 @@ function authenticate($user_email, $user_password) {
 
 		$hashedPassword = hash('sha256', $saltedPassword);
 
-		$result = $database->query("SELECT id,name,email,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
-		if (!$result) {
+		$userResult = $database->query("SELECT id,name,email,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
+		if (!$userResult) {
 			$database->close();
 			return "Incorrect password";
 		}
 
 		$result_array = array();
-		while ($row = $result->fetchArray()) {
+		while ($row = $userResult->fetchArray()) {
 		    $result_array[] = $row;
 		}
 
 		$database->close();
 		unset($database);
+
+		if (!$result_array || count($result_array) <= 0) {
+			return "Incorrect password, please try again";
+		}
 
 		return json_encode($result_array);
 	} else {
@@ -119,6 +122,10 @@ function authenticateForUserID($user_email, $user_password) {
 
 		$database->close();
 		unset($database);
+
+		if (!$result_array || count($result_array) <= 0) {
+			return "Unable to change database entry";
+		}
 
 		return $result;
 	} else {
@@ -156,15 +163,15 @@ function editUserName($user_email, $user_name) {
 	}
 }
 
-function editPassword($user_email, $password) {
+function editPassword($user_email, $new_password) {
 	if ($database = new TimesheetDatabase()) { 
-		$escapedPassword = $database->escapeString($password);
+		$escapedPassword = $database->escapeString($new_password);
 
 		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
 		$saltedPassword =  $escapedPassword . $salt;
 		$hashedPassword = hash('sha256', $saltedPassword);
 
-		$database->exec("UPDATE users SET password='$hashedPassword' WHERE email='$user_email'");
+		$database->exec("UPDATE users SET password='$hashedPassword',salt='$salt' WHERE email='$user_email'");
 		$database->close();
 		unset($database);
 
@@ -359,8 +366,8 @@ else if (strcmp($request_type, 'editUserName') == 0) {
 }
 
 else if (strcmp($request_type, 'editPassword') == 0) {
-	if (!isset($_POST['password'])) {
-		echo 'Missing required "password" parameter';
+	if (!isset($_POST['new_password'])) {
+		echo 'Missing required "new_password" parameter';
 		return;
 	}
 
