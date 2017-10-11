@@ -16,6 +16,7 @@ class TimesheetNavigationBar: UIView {
     let titleLabel = UILabel()
     let detailLabel = UILabel()
     let handleView = TimesheetHandleView()
+    let rightButton = UIButton()
     
     let handleHeight: CGFloat = 8.0
     let navigationBarHeight: CGFloat = 70.0 // 62.0 + 8.0 (handleHeight)
@@ -95,6 +96,17 @@ class TimesheetNavigationBar: UIView {
         detailLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         
+        // setup right button
+        rightButton.setTitle("Share", for: .normal)
+        rightButton.setTitleColor(UIColor.black, for: .normal)
+        rightButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(rightButton)
+        
+        rightButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        rightButton.centerYAnchor.constraint(equalTo: titleLabel.centerYAnchor).isActive = true
+        rightButton.widthAnchor.constraint(equalToConstant: 30.0).isActive = true
+        rightButton.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
+
         // setup handle view
         handleView.backgroundColor = handleView.tintColor
         handleView.layer.masksToBounds = true

@@ -73,11 +73,13 @@ class TimesheetViewController: UIViewController {
         
         // setup navigation bar
         timesheetNavigationBar.titleLabel.text = "Timesheet"
+        timesheetNavigationBar.rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.signOutButton.addTarget(self, action: #selector(signOutButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changeNameButton.addTarget(self, action: #selector(changeNameButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changePasswordButton.addTarget(self, action: #selector(changePasswordButtonTapped), for: .touchUpInside)
         timesheetNavigationBar.pulldownView.changeEmailButton.addTarget(self, action: #selector(changeEmailButtonTapped), for: .touchUpInside)
-        
+        timesheetNavigationBar.pulldownView.deactivateButton.addTarget(self, action: #selector(deactivateButtonTapped), for: .touchUpInside)
+
         timesheetNavigationBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(timesheetNavigationBar)
     
@@ -442,6 +444,10 @@ class TimesheetViewController: UIViewController {
     }
     
     // MARK: - actions
+    func rightButtonTapped() {
+        present(TimesheetSharingViewController(), animated: true, completion: nil)
+    }
+    
     func signOutButtonTapped() {
         timesheetNavigationBar.hidePulldown(true, 0.0)
         
@@ -580,6 +586,10 @@ class TimesheetViewController: UIViewController {
         authenticationPopup.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         
         self.present(authenticationPopup, animated: true, completion: nil)
+    }
+    
+    func deactivateButtonTapped() {
+        
     }
 }
 
