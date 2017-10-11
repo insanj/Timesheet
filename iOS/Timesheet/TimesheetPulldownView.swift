@@ -19,6 +19,7 @@ class TimesheetPulldownView: UIView {
         signOutButton = TimesheetButton(timesheetColor(name: "Aqua"))
         changeNameButton = TimesheetButton(timesheetColor(name: "Orange"))
         changePasswordButton = TimesheetButton(timesheetColor(name: "Maroon"))
+        changeEmailButton = TimesheetButton(timesheetColor(name: "Olive"))
 
         super.init(frame: CGRect.zero)
         
@@ -31,7 +32,18 @@ class TimesheetPulldownView: UIView {
         signOutButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
         signOutButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
         signOutButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-
+        
+        // setup change name button
+        changeNameButton.setTitle("       Name       ", for: .normal) // TODO: insets
+        changeNameButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        changeNameButton.setContentHuggingPriority(.required, for: .horizontal)
+        changeNameButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(changeNameButton)
+        
+        changeNameButton.bottomAnchor.constraint(equalTo: signOutButton.topAnchor, constant: -5.0).isActive = true
+        changeNameButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        changeNameButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
+        
         // setup change email button
         changeEmailButton.setTitle("Change Email", for: .normal)
         changeEmailButton.translatesAutoresizingMaskIntoConstraints = false
@@ -42,15 +54,6 @@ class TimesheetPulldownView: UIView {
         changeEmailButton.rightAnchor.constraint(equalTo: changeNameButton.leftAnchor, constant: -10.0).isActive = true
         changeEmailButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
 
-        // setup change name button
-        changeNameButton.setTitle("  Name  ", for: .normal)
-        changeNameButton.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(changeNameButton)
-        
-        changeNameButton.bottomAnchor.constraint(equalTo: signOutButton.topAnchor, constant: -5.0).isActive = true
-        changeNameButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
-        changeNameButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
-        
         // setup change password button
         changePasswordButton.setTitle("Change Password", for: .normal)
         changePasswordButton.translatesAutoresizingMaskIntoConstraints = false
