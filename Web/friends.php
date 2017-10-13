@@ -25,15 +25,15 @@ function getPendingFriendRequestsForUser($user_id) {
 	}
 }
 
-function createFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_user_id) {
+function createFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) {
-		$result = $database->query("SELECT * FROM friends WHERE (sender_user_id = '$sender_user_id' AND receiver_user_id = '$receiver_user_id') OR (receiver_user_id = '$sender_user_id' AND sender_user_id = '$receiver_user_id')");
+		$result = $database->query("SELECT * FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$friend_user_id' AND sender_user_id = '$user_id')");
 		if ($result) {
 			echo "Friend request already exists";
 			return;
 		}
 
-		$success = $database->exec("INSERT INTO friends (sender_user_id, receiver_user_id) VALUES ('$sender_user_id', '$receiver_user_id')");
+		$success = $database->exec("INSERT INTO friends (sender_user_id, receiver_user_id) VALUES ('$user_id', '$friend_user_id')");
 		$database->close();
 		unset($database);
 
@@ -45,9 +45,9 @@ function createFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_
 	}
 }
 
-function acceptFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_user_id) {
+function acceptFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("UPDATE friends SET accepted=1 WHERE (sender_user_id = '$sender_user_id' AND receiver_user_id = '$receiver_user_id') OR (receiver_user_id = '$sender_user_id' AND sender_user_id = '$receiver_user_id')'");
+		$success = $database->exec("UPDATE friends SET accepted=1 WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')'");
 		$database->close();
 		unset($database);
 
@@ -59,9 +59,9 @@ function acceptFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_
 	}
 }
 
-function deleteFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_user_id) {
+function deleteFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("DELETE FROM friends WHERE (sender_user_id = '$sender_user_id' AND receiver_user_id = '$receiver_user_id') OR (receiver_user_id = '$sender_user_id' AND sender_user_id = '$receiver_user_id')'");
+		$success = $database->exec("DELETE FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')'");
 		$database->close();
 		unset($database);
 
@@ -70,6 +70,28 @@ function deleteFriendRequestFromUserToUser($user_id, $sender_user_id, $receiver_
 
 	else {
 		return "Failed to delete timesheet log in database";
+	}
+}
+
+function getLogsFromFriend($user_id, $friend_user_id) { // TODO: more security
+	if ($database = new TimesheetDatabase()) { 
+		$securityResult = $database->query("SELECT * FROM friends WHERE accepted = 1 AND (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')");
+		if (!$securityResult) {
+			echo "You need to be friends to get the Timesheet for another user";
+			return;
+		}
+
+		$result_array = array();
+		$result = $database->query("SELECT * FROM logs WHERE user_id = '$friend_user_id' ORDER BY time_out DESC");
+		while ($row = $result->fetchArray()) {
+		    $result_array[] = $row;
+		}
+
+		$database->close();
+		unset($database);
+		return json_encode($result_array);
+	} else {
+		return "Failed to get timesheet log entries from database";
 	}
 }
 

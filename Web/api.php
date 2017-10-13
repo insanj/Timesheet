@@ -148,6 +148,54 @@ else if (strcmp($request_type, 'editPassword') == 0) {
 	echo editPassword($user_email, $password);
 }
 
+else if (strcmp($request_type, 'friendRequestsForUser') == 0) {
+	echo getPendingFriendRequestsForUser($user_id);
+}
+
+else if (strcmp($request_type, 'createFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo createFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'acceptFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo acceptFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'deleteFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$receiver_user_id = $_POST['friend_user_id'];
+
+	echo deleteFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'getLogsFromFriend') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo getLogsFromFriend($user_id, $friend_user_id);
+}
+
 else {
 	echo "Unrecognized request type";
 }
