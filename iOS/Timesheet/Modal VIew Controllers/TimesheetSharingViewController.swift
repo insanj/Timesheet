@@ -44,6 +44,7 @@ class TimesheetSharingViewController: UIViewController {
         navigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navigationBar.heightAnchor.constraint(equalToConstant: totalTopInset).isActive = true
         
+        cancelButton.heroModifiers = [.fade, .translate(x: 0, y: -50.0, z: 0.0)]
         cancelButton.setTitleColor(UIColor.black, for: .normal)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)

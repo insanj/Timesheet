@@ -21,6 +21,9 @@ class TimesheetSharingHeaderView: UIView {
     init() {
         super.init(frame: CGRect.zero)
         
+        self.heroModifiers = [.cascade]
+        
+        emojiLabel.heroID = timesheetSharingIconHeroID
         emojiLabel.numberOfLines = 1
         emojiLabel.textAlignment = .center
         emojiLabel.font = UIFont.systemFont(ofSize: 42.0, weight: .medium)
@@ -28,6 +31,7 @@ class TimesheetSharingHeaderView: UIView {
         emojiLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(emojiLabel)
         
+        titleLabel.heroModifiers = [.fade, .translate(x: 0.0, y: 20.0, z: 0.0)]
         titleLabel.textColor = UIColor.darkGray
         titleLabel.numberOfLines = 1
         titleLabel.textAlignment = .center
@@ -36,6 +40,7 @@ class TimesheetSharingHeaderView: UIView {
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(titleLabel)
         
+        descriptionLabel.heroModifiers = [.fade, .translate(x: 0.0, y: 20.0, z: 0.0)]
         descriptionLabel.textColor = UIColor.black
         descriptionLabel.numberOfLines = 0
         descriptionLabel.textAlignment = .center
@@ -44,14 +49,14 @@ class TimesheetSharingHeaderView: UIView {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(descriptionLabel)
         
+        segmentedControl.heroModifiers = [.fade, .translate(x: 0.0, y: 20.0, z: 0.0)]
         segmentedControl.tintColor = timesheetColor(name: "Green").backgroundColor
         segmentedControl.selectedSegmentIndex = 0
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         addSubview(segmentedControl)
         
         emojiLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        emojiLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
-        emojiLabel.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        emojiLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
 
         titleLabel.topAnchor.constraint(equalTo: emojiLabel.bottomAnchor, constant: 5.0).isActive = true
         titleLabel.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
