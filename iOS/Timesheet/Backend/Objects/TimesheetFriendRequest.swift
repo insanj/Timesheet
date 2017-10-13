@@ -11,8 +11,8 @@ import Foundation
 class TimesheetFriendRequest: NSObject {
     var json: [AnyHashable: Any]?
     var requestId: Int?
-    var senderUserId: Int?
-    var receiverUserId: Int?
+    var senderUser: TimesheetUser?
+    var receiverUser: TimesheetUser?
     var accepted: Int?
     var created: Date?
     
@@ -23,12 +23,12 @@ class TimesheetFriendRequest: NSObject {
             requestId = validId
         }
         
-        if let validId = json["sender_user_id"] as? Int {
-            senderUserId = validId
+        if let validJson = json["sender_user"] as? [AnyHashable: Any] {
+            senderUser = TimesheetUser(json: validJson)
         }
         
-        if let validId = json["receiver_user_id"] as? Int {
-            receiverUserId = validId
+        if let validJson = json["receiver_user"] as? [AnyHashable: Any] {
+            receiverUser = TimesheetUser(json: validJson)
         }
         
         if let validAccepted = json["accepted"] as? Int {
