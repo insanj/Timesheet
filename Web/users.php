@@ -125,6 +125,23 @@ function userForEmail($user_email) {
 	}
 }
 
+function userForId($user_for_id) {
+	if ($database = new TimesheetDatabase()) { 
+		$result = $database->query("SELECT id,name,email,created FROM users WHERE id=$user_for_id");
+		$result_array = array();
+		while ($row = $result->fetchArray()) {
+		    $result_array[] = $row;
+		}
+
+		$database->close();
+		unset($database);
+
+		return json_encode($result_array);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
 function editUserName($user_email, $user_name) {
 	if ($database = new TimesheetDatabase()) { 
 		$escapedName = $database->escapeString($user_name);

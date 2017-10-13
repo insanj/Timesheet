@@ -1,6 +1,7 @@
 <?php
 
 include_once 'database.php';
+include_once 'users.php';
 
 // Timesheet PHP API
 // Created 10/1/2017 by @insanj.
@@ -15,6 +16,12 @@ function getPendingFriendRequestsForUser($user_id) {
 		$result = $database->query("SELECT * FROM friends WHERE accepted = 0 AND (sender_user_id = '$user_id' OR receiver_user_id = '$user_id') ORDER BY created DESC");
 		while ($row = $result->fetchArray()) {
 		    $result_array[] = $row;
+
+		    $sender_user_id = $row['sender_user_id'];
+		    $row["sender_user"] = userForId($sender_user_id);
+
+		    $receiver_user_id = $row['receiver_user_id'];
+		    $row["receiver_user"] = userForId($receiver_user_id);
 		}
 
 		$database->close();
