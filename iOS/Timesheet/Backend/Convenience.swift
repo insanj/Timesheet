@@ -14,6 +14,8 @@ let timesheetBaseURL = URL(string: "https://insanj.com/timesheet/api.php")!
 let keychainEmailDefaultsKey = "com.insanj.timesheet.email"
 let keychainNameDefaultsKey = "com.insanj.timesheet.name"
 
+let timesheetSharingIconHeroID = "TimesheetSharingIcon"
+
 func debugPrint(_ message: String) {
     print("[TIMESHEET] <DEBUG> (\(Date().debugDescription): \(message)")
 }

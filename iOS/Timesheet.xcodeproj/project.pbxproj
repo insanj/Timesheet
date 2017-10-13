@@ -7,14 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2306F1721F8CA50A00881A14 /* BulletinBoard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F1701F8CA50000881A14 /* BulletinBoard.framework */; };
-		2306F1731F8CA50A00881A14 /* BulletinBoard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F1701F8CA50000881A14 /* BulletinBoard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2306F1741F8CA50A00881A14 /* DatePickerDialog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F16E1F8CA4FF00881A14 /* DatePickerDialog.framework */; };
-		2306F1751F8CA50A00881A14 /* DatePickerDialog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F16E1F8CA4FF00881A14 /* DatePickerDialog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2306F1761F8CA50A00881A14 /* Hero.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F16F1F8CA50000881A14 /* Hero.framework */; };
-		2306F1771F8CA50A00881A14 /* Hero.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F16F1F8CA50000881A14 /* Hero.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		2306F1781F8CA50A00881A14 /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F1711F8CA50000881A14 /* TenClock.framework */; };
-		2306F1791F8CA50A00881A14 /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2306F1711F8CA50000881A14 /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		231398711F815694009E8E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398701F815694009E8E78 /* AppDelegate.swift */; };
 		231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231398721F815694009E8E78 /* TimesheetViewController.swift */; };
 		231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 231398771F815694009E8E78 /* Timesheet.xcdatamodeld */; };
@@ -30,8 +22,20 @@
 		2356FD331F8C5565000DDEF4 /* TimesheetPulldownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */; };
 		2356FD351F8C5EA7000DDEF4 /* TimesheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */; };
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
+		238A244F1F905B320045178D /* DatePickerDialog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244B1F905B290045178D /* DatePickerDialog.framework */; };
+		238A24501F905B320045178D /* DatePickerDialog.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244B1F905B290045178D /* DatePickerDialog.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		238A24511F905B320045178D /* TenClock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244C1F905B290045178D /* TenClock.framework */; };
+		238A24521F905B320045178D /* TenClock.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244C1F905B290045178D /* TenClock.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		238A24531F905B320045178D /* Hero.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244D1F905B290045178D /* Hero.framework */; };
+		238A24541F905B320045178D /* Hero.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244D1F905B290045178D /* Hero.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		238A24551F905B320045178D /* BulletinBoard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; };
+		238A24561F905B320045178D /* BulletinBoard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */; };
+		238A245B1F905BAB0045178D /* TimesheetSharingFriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */; };
 		238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */; };
 		238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */; };
+		238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */; };
+		238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */; };
 		23D734191F8C1DBD0099A191 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */; };
 		23D7341A1F8C1DBD0099A191 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */; };
 		23D7341D1F8C1E280099A191 /* TimesheetUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */; };
@@ -67,10 +71,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				2306F1751F8CA50A00881A14 /* DatePickerDialog.framework in Embed Frameworks */,
-				2306F1791F8CA50A00881A14 /* TenClock.framework in Embed Frameworks */,
-				2306F1731F8CA50A00881A14 /* BulletinBoard.framework in Embed Frameworks */,
-				2306F1771F8CA50A00881A14 /* Hero.framework in Embed Frameworks */,
+				238A24501F905B320045178D /* DatePickerDialog.framework in Embed Frameworks */,
+				238A24521F905B320045178D /* TenClock.framework in Embed Frameworks */,
+				238A24561F905B320045178D /* BulletinBoard.framework in Embed Frameworks */,
+				238A24541F905B320045178D /* Hero.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -78,10 +82,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2306F16E1F8CA4FF00881A14 /* DatePickerDialog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DatePickerDialog.framework; sourceTree = "<group>"; };
-		2306F16F1F8CA50000881A14 /* Hero.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hero.framework; sourceTree = "<group>"; };
-		2306F1701F8CA50000881A14 /* BulletinBoard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BulletinBoard.framework; sourceTree = "<group>"; };
-		2306F1711F8CA50000881A14 /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
 		2313986D1F815694009E8E78 /* Timesheet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timesheet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		231398701F815694009E8E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		231398721F815694009E8E78 /* TimesheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetViewController.swift; sourceTree = "<group>"; };
@@ -103,8 +103,16 @@
 		2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetPulldownView.swift; sourceTree = "<group>"; };
 		2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetButton.swift; sourceTree = "<group>"; };
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
+		238A244B1F905B290045178D /* DatePickerDialog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DatePickerDialog.framework; sourceTree = "<group>"; };
+		238A244C1F905B290045178D /* TenClock.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TenClock.framework; sourceTree = "<group>"; };
+		238A244D1F905B290045178D /* Hero.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hero.framework; sourceTree = "<group>"; };
+		238A244E1F905B290045178D /* BulletinBoard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BulletinBoard.framework; sourceTree = "<group>"; };
+		238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingFriendRequestCell.swift; sourceTree = "<group>"; };
+		238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingFriendCell.swift; sourceTree = "<group>"; };
 		238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingViewController.swift; sourceTree = "<group>"; };
 		238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingHeaderView.swift; sourceTree = "<group>"; };
+		238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendManager.swift; sourceTree = "<group>"; };
+		238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendRequest.swift; sourceTree = "<group>"; };
 		23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainConfiguration.swift; sourceTree = "<group>"; };
 		23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUserManager.swift; sourceTree = "<group>"; };
@@ -121,10 +129,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2306F1741F8CA50A00881A14 /* DatePickerDialog.framework in Frameworks */,
-				2306F1781F8CA50A00881A14 /* TenClock.framework in Frameworks */,
-				2306F1721F8CA50A00881A14 /* BulletinBoard.framework in Frameworks */,
-				2306F1761F8CA50A00881A14 /* Hero.framework in Frameworks */,
+				238A244F1F905B320045178D /* DatePickerDialog.framework in Frameworks */,
+				238A24511F905B320045178D /* TenClock.framework in Frameworks */,
+				238A24551F905B320045178D /* BulletinBoard.framework in Frameworks */,
+				238A24531F905B320045178D /* Hero.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,12 +179,11 @@
 				231398701F815694009E8E78 /* AppDelegate.swift */,
 				23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
-				23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */,
-				2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */,
-				2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */,
-				23E081531F8EDD2C003BA6DC /* Modal VIew Controllers */,
+				238FE09A1F905AB60058CB04 /* Views */,
+				23E081531F8EDD2C003BA6DC /* Modal View Controllers */,
 				235C86E41F89AA860068EBA9 /* Timesheet Collection View */,
 				231398AC1F815C6E009E8E78 /* Backend */,
+				238A244A1F905B290045178D /* External */,
 				231398A11F815722009E8E78 /* Resources */,
 			);
 			path = Timesheet;
@@ -203,11 +210,6 @@
 		231398A11F815722009E8E78 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2306F1701F8CA50000881A14 /* BulletinBoard.framework */,
-				2306F16E1F8CA4FF00881A14 /* DatePickerDialog.framework */,
-				2306F16F1F8CA50000881A14 /* Hero.framework */,
-				2306F1711F8CA50000881A14 /* TenClock.framework */,
-				23D7341B1F8C1DC10099A191 /* GenericKeychain */,
 				231398771F815694009E8E78 /* Timesheet.xcdatamodeld */,
 				2313987F1F815694009E8E78 /* Info.plist */,
 				2313987C1F815694009E8E78 /* LaunchScreen.storyboard */,
@@ -220,11 +222,9 @@
 			isa = PBXGroup;
 			children = (
 				231398A81F815AAF009E8E78 /* Convenience.swift */,
-				231398A61F815A74009E8E78 /* TimesheetDataManager.swift */,
-				231398AA1F815B21009E8E78 /* TimesheetLog.swift */,
-				23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */,
-				23D7341E1F8C1E7D0099A191 /* TimesheetUser.swift */,
 				23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */,
+				238FE0981F905A880058CB04 /* Managers */,
+				238FE0991F905AA50058CB04 /* Objects */,
 			);
 			path = Backend;
 			sourceTree = "<group>";
@@ -240,6 +240,59 @@
 			path = "Timesheet Collection View";
 			sourceTree = "<group>";
 		};
+		238A244A1F905B290045178D /* External */ = {
+			isa = PBXGroup;
+			children = (
+				23D7341B1F8C1DC10099A191 /* GenericKeychain */,
+				238A244B1F905B290045178D /* DatePickerDialog.framework */,
+				238A244C1F905B290045178D /* TenClock.framework */,
+				238A244D1F905B290045178D /* Hero.framework */,
+				238A244E1F905B290045178D /* BulletinBoard.framework */,
+			);
+			path = External;
+			sourceTree = "<group>";
+		};
+		238A24571F905B600045178D /* Sharing */ = {
+			isa = PBXGroup;
+			children = (
+				238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */,
+				238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */,
+				238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */,
+				238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */,
+			);
+			path = Sharing;
+			sourceTree = "<group>";
+		};
+		238FE0981F905A880058CB04 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				231398A61F815A74009E8E78 /* TimesheetDataManager.swift */,
+				23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */,
+				238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		238FE0991F905AA50058CB04 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				231398AA1F815B21009E8E78 /* TimesheetLog.swift */,
+				23D7341E1F8C1E7D0099A191 /* TimesheetUser.swift */,
+				238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */,
+			);
+			path = Objects;
+			sourceTree = "<group>";
+		};
+		238FE09A1F905AB60058CB04 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */,
+				2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */,
+				2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		23D7341B1F8C1DC10099A191 /* GenericKeychain */ = {
 			isa = PBXGroup;
 			children = (
@@ -249,14 +302,13 @@
 			path = GenericKeychain;
 			sourceTree = "<group>";
 		};
-		23E081531F8EDD2C003BA6DC /* Modal VIew Controllers */ = {
+		23E081531F8EDD2C003BA6DC /* Modal View Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */,
-				238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */,
-				238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */,
+				238A24571F905B600045178D /* Sharing */,
 			);
-			path = "Modal VIew Controllers";
+			path = "Modal View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -401,10 +453,12 @@
 				231398A91F815AAF009E8E78 /* Convenience.swift in Sources */,
 				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
 				231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */,
+				238A245B1F905BAB0045178D /* TimesheetSharingFriendCell.swift in Sources */,
 				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
 				23D7341F1F8C1E7D0099A191 /* TimesheetUser.swift in Sources */,
 				23E3D21C1F89A35E00BB02F4 /* TimesheetAddLogCell.swift in Sources */,
 				232A71921F89A8D000264BAF /* TimesheetLoadingCell.swift in Sources */,
+				238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */,
 				2356FD351F8C5EA7000DDEF4 /* TimesheetButton.swift in Sources */,
 				23D734191F8C1DBD0099A191 /* KeychainConfiguration.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
@@ -415,6 +469,8 @@
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
 				238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */,
 				238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */,
+				238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */,
+				238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -580,6 +636,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Timesheet/Resources",
+					"$(PROJECT_DIR)/Timesheet/External",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10;
@@ -601,6 +658,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Timesheet/Resources",
+					"$(PROJECT_DIR)/Timesheet/External",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Timesheet/Resources/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10;

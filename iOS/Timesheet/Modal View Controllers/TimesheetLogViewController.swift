@@ -61,6 +61,7 @@ class TimesheetLogViewController: UIViewController {
         navigationBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         navigationBar.heightAnchor.constraint(equalToConstant: totalTopInset).isActive = true
 
+        saveButton.heroModifiers = [.fade, .translate(x: 0.0, y: -50.0, z: 0.0)]
         saveButton.setTitleColor(UIColor.black, for: .normal)
         saveButton.setTitle("Save", for: .normal)
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
@@ -71,6 +72,7 @@ class TimesheetLogViewController: UIViewController {
         saveButton.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -5.0).isActive = true
         saveButton.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -15).isActive = true
 
+        cancelButton.heroModifiers = [.fade, .translate(x: 0.0, y: -50.0, z: 0.0)]
         cancelButton.setTitleColor(UIColor.black, for: .normal)
         cancelButton.setTitle("Cancel", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)

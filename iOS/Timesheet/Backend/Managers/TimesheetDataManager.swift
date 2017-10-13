@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 
+typealias LogsCompletionBlock = (([TimesheetLog]?, Error?) -> Void)
 class TimesheetDataManager: NSObject {
     /* MARK: - local
     func logsFromLocalDatabase() -> [TimesheetLog]? {
@@ -119,7 +120,6 @@ class TimesheetDataManager: NSObject {
         return request
     }
     
-    typealias LogsCompletionBlock = (([TimesheetLog]?, Error?) -> Void)
     func remoteTask(with urlRequest: URLRequest, _ completion: @escaping LogsCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
@@ -150,7 +150,7 @@ class TimesheetDataManager: NSObject {
                 completion(parsed, nil)
             } catch {
                 if let string = String(data: validData, encoding: .utf8) {
-                    completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
+                    completion(nil, NSError(domain: "com.insanj.timesheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
                 } else {
                     completion(nil, timesheetError(.unableToParse))
                 }

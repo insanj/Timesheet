@@ -149,14 +149,14 @@ class TimesheetUserManager: NSObject {
                     let dataString = String(data: validData, encoding: .utf8)
                     if dataString != nil {
                         debugPrint("TimesheetUserManager something that isn't a user returned (dataString =\(dataString!)); \(array.debugDescription)")
-                        completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: dataString!]))
+                        completion(nil, NSError(domain: "com.insanj.timesheet", code: -1, userInfo: [NSLocalizedDescriptionKey: dataString!]))
                     } else {
                         completion(nil, timesheetError(.unableToSave))
                     }
                 }
             } catch {
                 if let string = String(data: validData, encoding: .utf8) {
-                    completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
+                    completion(nil, NSError(domain: "com.insanj.timesheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
                 } else {
                     completion(nil, timesheetError(.unableToParse))
                 }
