@@ -30,6 +30,8 @@
 		2356FD331F8C5565000DDEF4 /* TimesheetPulldownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */; };
 		2356FD351F8C5EA7000DDEF4 /* TimesheetButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */; };
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
+		238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */; };
+		238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */; };
 		23D734191F8C1DBD0099A191 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */; };
 		23D7341A1F8C1DBD0099A191 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */; };
 		23D7341D1F8C1E280099A191 /* TimesheetUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */; };
@@ -101,6 +103,8 @@
 		2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetPulldownView.swift; sourceTree = "<group>"; };
 		2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetButton.swift; sourceTree = "<group>"; };
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
+		238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingViewController.swift; sourceTree = "<group>"; };
+		238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingHeaderView.swift; sourceTree = "<group>"; };
 		23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainConfiguration.swift; sourceTree = "<group>"; };
 		23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUserManager.swift; sourceTree = "<group>"; };
@@ -167,10 +171,10 @@
 				231398701F815694009E8E78 /* AppDelegate.swift */,
 				23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
-				235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */,
 				23E3D2161F894EDB00BB02F4 /* TimesheetNavigationBar.swift */,
 				2356FD321F8C5565000DDEF4 /* TimesheetPulldownView.swift */,
 				2356FD341F8C5EA7000DDEF4 /* TimesheetButton.swift */,
+				23E081531F8EDD2C003BA6DC /* Modal VIew Controllers */,
 				235C86E41F89AA860068EBA9 /* Timesheet Collection View */,
 				231398AC1F815C6E009E8E78 /* Backend */,
 				231398A11F815722009E8E78 /* Resources */,
@@ -243,6 +247,16 @@
 				23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */,
 			);
 			path = GenericKeychain;
+			sourceTree = "<group>";
+		};
+		23E081531F8EDD2C003BA6DC /* Modal VIew Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */,
+				238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */,
+				238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */,
+			);
+			path = "Modal VIew Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -399,6 +413,8 @@
 				2356FD331F8C5565000DDEF4 /* TimesheetPulldownView.swift in Sources */,
 				23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */,
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
+				238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */,
+				238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

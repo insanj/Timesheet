@@ -13,6 +13,7 @@ class TimesheetPulldownView: UIView {
     let changePasswordButton: TimesheetButton
     let changeNameButton: TimesheetButton
     let changeEmailButton: TimesheetButton
+    let deactivateButton: TimesheetButton
     let signOutButton: TimesheetButton
 
     init() {
@@ -20,8 +21,20 @@ class TimesheetPulldownView: UIView {
         changeNameButton = TimesheetButton(timesheetColor(name: "Orange"))
         changePasswordButton = TimesheetButton(timesheetColor(name: "Maroon"))
         changeEmailButton = TimesheetButton(timesheetColor(name: "Olive"))
+        deactivateButton = TimesheetButton(timesheetColor(name: "Navy"))
 
         super.init(frame: CGRect.zero)
+        
+        // setup delete account button
+        deactivateButton.setTitle("       Deactivate       ", for: .normal)
+        deactivateButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+        deactivateButton.setContentHuggingPriority(.required, for: .horizontal)
+        deactivateButton.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(deactivateButton)
+        
+        deactivateButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        deactivateButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        deactivateButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         
         // setup sign out button
         signOutButton.setTitle("Sign Out", for: .normal)
@@ -30,7 +43,7 @@ class TimesheetPulldownView: UIView {
         
         signOutButton.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         signOutButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10.0).isActive = true
-        signOutButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -10.0).isActive = true
+        signOutButton.rightAnchor.constraint(equalTo: deactivateButton.leftAnchor, constant: -10.0).isActive = true
         signOutButton.heightAnchor.constraint(equalToConstant: 50.0).isActive = true
         
         // setup change name button
