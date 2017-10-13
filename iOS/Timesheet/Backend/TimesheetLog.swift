@@ -47,7 +47,7 @@ class TimesheetLog: NSObject, NSCopying {
         super.init()
     }
     
-    func copy(with zone: NSZone? = nil) -> Any {
+    public func copy(with zone: NSZone? = nil) -> Any {
         return TimesheetLog(json: self.json)
     }
 }

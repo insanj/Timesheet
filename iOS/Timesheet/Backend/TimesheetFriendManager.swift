@@ -105,7 +105,7 @@ class TimesheetFriendManager: NSObject {
     }
     
     typealias FriendRequestCompletionBlock = (([TimesheetFriendRequest]?, Error?) -> Void)
-    func remoteFriendRequestTask(with urlRequest: URLRequest, _ completion: @escaping UserCompletionBlock) -> URLSessionDataTask {
+    func remoteFriendRequestTask(with urlRequest: URLRequest, _ completion: @escaping FriendRequestCompletionBlock) -> URLSessionDataTask {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in
@@ -133,7 +133,6 @@ class TimesheetFriendManager: NSObject {
                 }
                 
                 completion(parsed, nil)
-
             } catch {
                 if let string = String(data: validData, encoding: .utf8) {
                     completion(nil, NSError(domain: "com.insanj.timesheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
@@ -160,7 +159,7 @@ class TimesheetFriendManager: NSObject {
     }
     
     func ceateFriendRequest(friend: TimesheetUser, _ completion: @escaping FriendRequestCompletionBlock) -> URLSessionDataTask? {
-        guard let urlRequest = buildCreateFriendRequestURLRequest(friend: friend.userId!) else {
+        guard let urlRequest = buildCreateFriendRequestURLRequest(friend: friend) else {
             debugPrint("ceateFriendRequest() unable to build URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
@@ -202,7 +201,7 @@ class TimesheetFriendManager: NSObject {
             return nil
         }
         
-        let task = remoteTask(with: urlRequest, completion)
+        let task = TimesheetDataManager().remoteTask(with: urlRequest, completion)
         task.resume()
         return task
     }
