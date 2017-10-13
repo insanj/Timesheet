@@ -346,12 +346,14 @@ class TimesheetViewController: UIViewController {
         _ = dataManager.logsFromRemoteDatabase { logs, error in
             if let validError = error {
                 showError(validError, from: self)
+                self.timesheetDone()
                 return
             }
             
             guard let validLogs = logs else {
                 debugPrint("refreshFromRemoteBackend() received nil response from dataManager logsFromRemoteDatabase")
-                self.timesheetLoading = false
+                showError(timesheetError(.noResponse), from: self)
+                self.timesheetDone()
                 return
             }
             
@@ -398,7 +400,10 @@ class TimesheetViewController: UIViewController {
         timesheetSections = logDates
         
         timesheetLogColors = [IndexPath: TimesheetColor]()
-        
+        timesheetDone()
+    }
+    
+    func timesheetDone() {
         // finally done!
         DispatchQueue.main.sync {
             self.timesheetNavigationBar.enabled = true // only enable after the first time this works

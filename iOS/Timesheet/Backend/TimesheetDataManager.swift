@@ -150,7 +150,7 @@ class TimesheetDataManager: NSObject {
                 completion(parsed, nil)
             } catch {
                 if let string = String(data: validData, encoding: .utf8) {
-                    completion(nil, NSError(domain: "com.insanj.timsheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
+                    completion(nil, NSError(domain: "com.insanj.timesheet", code: -1, userInfo: [NSLocalizedDescriptionKey: string]))
                 } else {
                     completion(nil, timesheetError(.unableToParse))
                 }
