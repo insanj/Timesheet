@@ -14,255 +14,8 @@
 // 0.1
 //
 
-// ---
-// database setup, function definitions
-// ---
-class TimesheetDatabase extends SQLite3 {
-    function __construct() {
-        $this->open('timesheet.db');
-        $this->busyTimeout(10000);
-
-    	$this->exec('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(250), email varchar(250), password varchar(250), salt TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
-    	$this->exec('CREATE TABLE IF NOT EXISTS logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, time_in TIMESTAMP, time_out TIMESTAMP, notes TEXT, created TIMESTAMP DEFAULT CURRENT_TIMESTAMP)');
-    }
-}
-
-// --
-// user functions
-// --
-function createAccount($user_email, $user_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$escapedEmail = $database->escapeString($user_email);
-
-		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
-		if ($result) {
-			$database->close();
-			return "User already found in database with that email";
-		}
-
-		$escapedPassword = $database->escapeString($user_password);
-
-		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-		$saltedPassword =  $escapedPassword . $salt;
-		$hashedPassword = hash('sha256', $saltedPassword);
-
-		$result = $database->query("INSERT INTO users (email, password, salt) VALUES ('$escapedEmail', '$hashedPassword', '$salt')");
-		$database->close();
-		unset($database);
-
-		return authenticate($user_email, $user_password);
-	} else {
-		return "Failed to get timesheet log entries from database";
-	}
-}
-
-function authenticate($user_email, $user_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$escapedEmail = $database->escapeString($user_email);
-
-		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
-		if (!$result) {
-			$database->close();
-			return "No user found in database with that email";
-		}
-
-		$salt = $result;
-
-		$escapedPassword = $database->escapeString($user_password);
-		$saltedPassword =  $escapedPassword . $salt;
-
-		$hashedPassword = hash('sha256', $saltedPassword);
-
-		$userResult = $database->query("SELECT id,name,email,created FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
-		if (!$userResult) {
-			$database->close();
-			return "Incorrect password";
-		}
-
-		$result_array = array();
-		while ($row = $userResult->fetchArray()) {
-		    $result_array[] = $row;
-		}
-
-		$database->close();
-		unset($database);
-
-		if (!$result_array || count($result_array) <= 0) {
-			return "Incorrect password, please try again";
-		}
-
-		return json_encode($result_array);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function authenticateForUserID($user_email, $user_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$escapedEmail = $database->escapeString($user_email);
-
-		$result = $database->querySingle("SELECT salt FROM users WHERE email = '$escapedEmail'");
-		if (!$result) {
-			$database->close();
-			return "No user found in database with that email";
-		}
-
-		$salt = $result;
-
-		$escapedPassword = $database->escapeString($user_password);
-		$saltedPassword =  $escapedPassword . $salt;
-
-		$hashedPassword = hash('sha256', $saltedPassword);
-
-		$result = $database->querySingle("SELECT id FROM users WHERE email = '$escapedEmail' AND password = '$hashedPassword'");
-		if (!$result) {
-			$database->close();
-			return "Incorrect password";
-		}
-
-		$database->close();
-		unset($database);
-
-		return $result;
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function userForEmail($user_email) {
-	if ($database = new TimesheetDatabase()) { 
-		$result = $database->query("SELECT id,name,email,created FROM users WHERE email='$user_email'");
-		$result_array = array();
-		while ($row = $result->fetchArray()) {
-		    $result_array[] = $row;
-		}
-
-		$database->close();
-		unset($database);
-
-		return json_encode($result_array);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function editUserName($user_email, $user_name) {
-	if ($database = new TimesheetDatabase()) { 
-		$escapedName = $database->escapeString($user_name);
-		$database->exec("UPDATE users SET name='$escapedName' WHERE email='$user_email'");
-		$database->close();
-		unset($database);
-
-		return userForEmail($user_email);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function editPassword($user_email, $new_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$escapedPassword = $database->escapeString($new_password);
-
-		$salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
-		$saltedPassword =  $escapedPassword . $salt;
-		$hashedPassword = hash('sha256', $saltedPassword);
-
-		$database->exec("UPDATE users SET password='$hashedPassword',salt='$salt' WHERE email='$user_email'");
-		$database->close();
-		unset($database);
-
-		return userForEmail($user_email);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function editEmail($user_email, $new_email) {
-	if ($database = new TimesheetDatabase()) { 
-		$database->exec("UPDATE users SET email='$new_email' WHERE email='$user_email'");
-		$database->close();
-		unset($database);
-
-		return userForEmail($new_email);
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-function deleteUser($user_email, $user_password) {
-	if ($database = new TimesheetDatabase()) { 
-		$user_id = authenticateForUserID($user_email, $user_password);
-
-		$success = $database->exec("DELETE FROM users WHERE id=$user_id");
-		$database->close();
-		unset($database);
-
-		return $success;
-	} else {
-		return "Unable to connect to database";
-	}
-}
-
-// --
-// log functions
-// --
-function getLogsFromDatabase($user_id) {
-	if ($database = new TimesheetDatabase()) { 
-		$result_array = array();
-		$result = $database->query("SELECT * FROM logs WHERE user_id = '$user_id' ORDER BY time_out DESC");
-		while ($row = $result->fetchArray()) {
-		    $result_array[] = $row;
-		}
-
-		$database->close();
-		unset($database);
-		return json_encode($result_array);
-	} else {
-		return "Failed to get timesheet log entries from database";
-	}
-}
-
-function addLog($user_id, $time_in, $time_out, $notes) {
-	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("INSERT INTO logs (user_id, time_in, time_out, notes) VALUES ('$user_id', '$time_in', '$time_out', '$notes')");
-		$database->close();
-		unset($database);
-
-		return getLogsFromDatabase($user_id);
-	}
-
-	else {
-		return "Failed to add new timesheet log into database";
-	}
-}
-
-function editLog($user_id, $log_id, $time_in, $time_out, $notes) {
-	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("UPDATE logs SET time_in='$time_in', time_out='$time_out', notes='$notes' WHERE id=$log_id");
-		$database->close();
-		unset($database);
-
-		return getLogsFromDatabase($user_id);
-	}
-
-	else {
-		return "Failed to edit timesheet log in database";
-	}
-}
-
-function deleteLog($user_id, $log_id) {
-	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("DELETE FROM logs WHERE id=$log_id");
-		$database->close();
-		unset($database);
-
-		return getLogsFromDatabase($user_id);
-	}
-
-	else {
-		return "Failed to delete timesheet log in database";
-	}
-}
+include 'users.php';
+include 'logs.php';
 
 // ---
 // api
@@ -393,6 +146,54 @@ else if (strcmp($request_type, 'editPassword') == 0) {
 	$password = $_POST['new_password'];
 
 	echo editPassword($user_email, $password);
+}
+
+else if (strcmp($request_type, 'friendRequestsForUser') == 0) {
+	echo getPendingFriendRequestsForUser($user_id);
+}
+
+else if (strcmp($request_type, 'createFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo createFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'acceptFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo acceptFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'deleteFriendRequest') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$receiver_user_id = $_POST['friend_user_id'];
+
+	echo deleteFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'getLogsFromFriend') == 0) {
+	if (!isset($_POST['friend_user_id'])) {
+		echo 'Missing required "friend_user_id" parameter';
+		return;
+	}
+
+	$friend_user_id = $_POST['friend_user_id'];
+
+	echo getLogsFromFriend($user_id, $friend_user_id);
 }
 
 else {
