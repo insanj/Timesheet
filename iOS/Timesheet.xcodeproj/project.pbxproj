@@ -32,6 +32,8 @@
 		235C86E61F89AF350068EBA9 /* TimesheetLogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */; };
 		238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */; };
 		238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */; };
+		238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */; };
+		238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */; };
 		23D734191F8C1DBD0099A191 /* KeychainConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */; };
 		23D7341A1F8C1DBD0099A191 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */; };
 		23D7341D1F8C1E280099A191 /* TimesheetUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */; };
@@ -105,6 +107,8 @@
 		235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetLogViewController.swift; sourceTree = "<group>"; };
 		238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingViewController.swift; sourceTree = "<group>"; };
 		238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingHeaderView.swift; sourceTree = "<group>"; };
+		238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendManager.swift; sourceTree = "<group>"; };
+		238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendRequest.swift; sourceTree = "<group>"; };
 		23D734171F8C1DBC0099A191 /* KeychainConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainConfiguration.swift; sourceTree = "<group>"; };
 		23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUserManager.swift; sourceTree = "<group>"; };
@@ -223,7 +227,9 @@
 				231398A61F815A74009E8E78 /* TimesheetDataManager.swift */,
 				231398AA1F815B21009E8E78 /* TimesheetLog.swift */,
 				23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */,
+				238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */,
 				23D7341E1F8C1E7D0099A191 /* TimesheetUser.swift */,
+				238FE0961F9051CF0058CB04 /* TimesheetFriendRequest.swift */,
 				23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */,
 			);
 			path = Backend;
@@ -405,6 +411,7 @@
 				23D7341F1F8C1E7D0099A191 /* TimesheetUser.swift in Sources */,
 				23E3D21C1F89A35E00BB02F4 /* TimesheetAddLogCell.swift in Sources */,
 				232A71921F89A8D000264BAF /* TimesheetLoadingCell.swift in Sources */,
+				238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */,
 				2356FD351F8C5EA7000DDEF4 /* TimesheetButton.swift in Sources */,
 				23D734191F8C1DBD0099A191 /* KeychainConfiguration.swift in Sources */,
 				231398731F815694009E8E78 /* TimesheetViewController.swift in Sources */,
@@ -415,6 +422,7 @@
 				231398711F815694009E8E78 /* AppDelegate.swift in Sources */,
 				238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */,
 				238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */,
+				238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
