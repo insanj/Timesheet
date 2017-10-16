@@ -16,11 +16,13 @@ class TimesheetSharingFriendRequestCell: UICollectionViewCell {
     internal let toTitleLabel = UILabel()
     internal let fromLabel = UILabel()
     internal let toLabel = UILabel()
+    let friendAddLabel = UILabel()
     
     var friendRequest: TimesheetFriendRequest? {
         didSet {
             fromLabel.text = friendRequest?.senderUser?.name
             toLabel.text = friendRequest?.receiverUser?.name
+            friendAddLabel.text = friendRequest?.accepted == 1 ? "VIEW" : "ACCEPT"
         }
     }
     
@@ -39,18 +41,22 @@ class TimesheetSharingFriendRequestCell: UICollectionViewCell {
         contentBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         
         fromTitleLabel.textColor = UIColor(white: 0.2, alpha: 1.0)
-        fromTitleLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
+        fromTitleLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
         fromTitleLabel.text = "FROM"
         fromTitleLabel.numberOfLines = 1
         fromTitleLabel.textAlignment = .left
+        fromTitleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        fromTitleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         fromTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentBackgroundView.addSubview(fromTitleLabel)
         
         toTitleLabel.textColor = UIColor(white: 0.2, alpha: 1.0)
-        toTitleLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
+        toTitleLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
         toTitleLabel.text = "TO"
         toTitleLabel.numberOfLines = 1
-        toTitleLabel.textAlignment = .right
+        toTitleLabel.textAlignment = .left
+        toTitleLabel.setContentHuggingPriority(.required, for: .horizontal)
+        toTitleLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         toTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         contentBackgroundView.addSubview(toTitleLabel)
         
@@ -64,24 +70,35 @@ class TimesheetSharingFriendRequestCell: UICollectionViewCell {
         toLabel.textColor = UIColor(white: 0.05, alpha: 1.0)
         toLabel.font = UIFont.systemFont(ofSize: 20.0, weight: .regular)
         toLabel.numberOfLines = 1
-        toLabel.textAlignment = .right
+        toLabel.textAlignment = .left
         toLabel.translatesAutoresizingMaskIntoConstraints = false
         contentBackgroundView.addSubview(toLabel)
+        
+        friendAddLabel.textColor = timesheetColor(name: "Blue").backgroundColor
+        friendAddLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
+        friendAddLabel.numberOfLines = 1
+        friendAddLabel.textAlignment = .right
+        friendAddLabel.text = "ACCEPT"
+        friendAddLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentBackgroundView.addSubview(friendAddLabel)
         
         let view = contentBackgroundView
         fromTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
         fromTitleLabel.bottomAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
 
-        toTitleLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
+        toTitleLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
         toTitleLabel.topAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
 
-        fromLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5.0).isActive = true
-        fromLabel.leftAnchor.constraint(equalTo: fromTitleLabel.rightAnchor, constant: 5.0).isActive = true
+        fromLabel.leftAnchor.constraint(equalTo: fromTitleLabel.rightAnchor, constant: 10.0).isActive = true
+        fromLabel.rightAnchor.constraint(equalTo: friendAddLabel.leftAnchor, constant: -5.0).isActive = true
         fromLabel.bottomAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
 
-        toLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
-        toLabel.rightAnchor.constraint(equalTo: toTitleLabel.rightAnchor, constant: -10.0).isActive = true
+        toLabel.leftAnchor.constraint(equalTo: fromTitleLabel.rightAnchor, constant: 10.0).isActive = true
+        toLabel.rightAnchor.constraint(equalTo: friendAddLabel.leftAnchor, constant: -5.0).isActive = true
         toLabel.topAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        
+        friendAddLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        friendAddLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

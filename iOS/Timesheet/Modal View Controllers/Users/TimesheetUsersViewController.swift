@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BulletinBoard
 
 @objcMembers
 class TimesheetUsersViewController: UIViewController {
@@ -158,7 +159,28 @@ extension TimesheetUsersViewController: UICollectionViewDataSource {
 
 extension TimesheetUsersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let validUsers = availableUsers else {
+            return
+        }
+
+        let user = validUsers[indexPath.row]
         
+        let bulletin = BulletinManager(rootItem: PageBulletinItem(title: ""))
+        bulletin.prepare()
+        bulletin.presentBulletin(above: self)
+        bulletin.displayActivityIndicator()
+        
+        _ = friendManager.ceateFriendRequest(friend: user) { (request, error) in
+            OperationQueue.main.addOperation {
+                bulletin.dismissBulletin()
+            }
+            
+            if let validError = error {
+                showError(validError, from: self)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
 }
 

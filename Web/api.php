@@ -150,7 +150,7 @@ else if (strcmp($request_type, 'editPassword') == 0) {
 }
 
 else if (strcmp($request_type, 'friendRequestsForUser') == 0) {
-	echo getPendingFriendRequestsForUser($user_id);
+	echo getFriendRequestsForUser($user_id);
 }
 
 else if (strcmp($request_type, 'createFriendRequest') == 0) {

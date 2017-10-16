@@ -15,7 +15,8 @@ class TimesheetUserCell: UICollectionViewCell {
     internal let friendEmailLabel = UILabel()
     internal let friendNameLabel = UILabel()
     internal let friendDateLabel = UILabel()
-
+    let friendAddLabel = UILabel()
+    
     var user: TimesheetUser? {
         didSet {
             if let validUser = user {
@@ -65,18 +66,29 @@ class TimesheetUserCell: UICollectionViewCell {
         friendDateLabel.translatesAutoresizingMaskIntoConstraints = false
         contentBackgroundView.addSubview(friendDateLabel)
         
+        friendAddLabel.textColor = timesheetColor(name: "Blue").backgroundColor
+        friendAddLabel.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
+        friendAddLabel.numberOfLines = 1
+        friendAddLabel.textAlignment = .right
+        friendAddLabel.text = "REQUEST"
+        friendAddLabel.translatesAutoresizingMaskIntoConstraints = false
+        contentBackgroundView.addSubview(friendAddLabel)
+        
         let view = contentBackgroundView
         friendNameLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 10.0).isActive = true
         friendNameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
-        friendNameLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
+        friendNameLabel.rightAnchor.constraint(equalTo: friendAddLabel.leftAnchor, constant: -5.0).isActive = true
         
         friendEmailLabel.topAnchor.constraint(equalTo: friendNameLabel.bottomAnchor, constant: 5.0).isActive = true
         friendEmailLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
-        friendEmailLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
+        friendEmailLabel.rightAnchor.constraint(equalTo: friendAddLabel.leftAnchor, constant: -5.0).isActive = true
         
         friendDateLabel.topAnchor.constraint(equalTo: friendEmailLabel.bottomAnchor, constant: 5.0).isActive = true
         friendDateLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10.0).isActive = true
-        friendDateLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
+        friendDateLabel.rightAnchor.constraint(equalTo: friendAddLabel.leftAnchor, constant: -5.0).isActive = true
+        
+        friendAddLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        friendAddLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

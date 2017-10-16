@@ -10,18 +10,18 @@ include_once 'users.php';
 // --
 // friend functions
 // --
-function getPendingFriendRequestsForUser($user_id) {
+function getFriendRequestsForUser($user_id) {
 	if ($database = new TimesheetDatabase()) { 
 		$result_array = array();
-		$result = $database->query("SELECT * FROM friends WHERE accepted = 0 AND (sender_user_id = '$user_id' OR receiver_user_id = '$user_id') ORDER BY created DESC");
+		$result = $database->query("SELECT * FROM friends WHERE sender_user_id = '$user_id' OR receiver_user_id = '$user_id' ORDER BY created DESC");
 		while ($row = $result->fetchArray()) {
-		    $result_array[] = $row;
-
 		    $sender_user_id = $row['sender_user_id'];
 		    $row["sender_user"] = userForId($sender_user_id);
 
 		    $receiver_user_id = $row['receiver_user_id'];
 		    $row["receiver_user"] = userForId($receiver_user_id);
+
+		    $result_array[] = $row;
 		}
 
 		$database->close();
@@ -34,7 +34,7 @@ function getPendingFriendRequestsForUser($user_id) {
 
 function createFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) {
-		$result = $database->query("SELECT * FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$friend_user_id' AND sender_user_id = '$user_id')");
+		$result = $database->querySingle("SELECT * FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$friend_user_id' AND sender_user_id = '$user_id')");
 		if ($result) {
 			echo "Friend request already exists";
 			return;
@@ -44,7 +44,7 @@ function createFriendRequestFromUserToUser($user_id, $friend_user_id) {
 		$database->close();
 		unset($database);
 
-		return getPendingFriendRequestsForUser($user_id);
+		return getFriendRequestsForUser($user_id);
 	}
 
 	else {
@@ -58,7 +58,7 @@ function acceptFriendRequestFromUserToUser($user_id, $friend_user_id) {
 		$database->close();
 		unset($database);
 
-		return getPendingFriendRequestsForUser($user_id);
+		return getFriendRequestsForUser($user_id);
 	}
 
 	else {
@@ -72,7 +72,7 @@ function deleteFriendRequestFromUserToUser($user_id, $friend_user_id) {
 		$database->close();
 		unset($database);
 
-		return getPendingFriendRequestsForUser($user_id);
+		return getFriendRequestsForUser($user_id);
 	}
 
 	else {

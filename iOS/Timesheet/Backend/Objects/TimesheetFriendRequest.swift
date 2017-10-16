@@ -23,12 +23,28 @@ class TimesheetFriendRequest: NSObject {
             requestId = validId
         }
         
-        if let validJson = json["sender_user"] as? [AnyHashable: Any] {
-            senderUser = TimesheetUser(json: validJson)
+        if let validJson = json["sender_user"] as? String, let data = validJson.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                if let array = json as? [[AnyHashable: Any]], let user = array.first {
+                    senderUser = TimesheetUser(json: user)
+                }
+            }
+            catch {
+                debugPrint("TimesheetFriendRequest unable to JSONSerialization sender_user")
+            }
         }
         
-        if let validJson = json["receiver_user"] as? [AnyHashable: Any] {
-            receiverUser = TimesheetUser(json: validJson)
+        if let validJson = json["receiver_user"] as? String, let data = validJson.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+                if let array = json as? [[AnyHashable: Any]], let user = array.first {
+                    receiverUser = TimesheetUser(json: user)
+                }
+            }
+            catch {
+                debugPrint("TimesheetFriendRequest unable to JSONSerialization receiver_user")
+            }
         }
         
         if let validAccepted = json["accepted"] as? Int {
