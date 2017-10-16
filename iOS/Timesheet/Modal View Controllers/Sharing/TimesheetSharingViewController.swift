@@ -17,10 +17,6 @@ class TimesheetSharingViewController: UIViewController {
     var sharingAcceptedFriends: [TimesheetFriendRequest]?
     var sharingPendingRequests: [TimesheetFriendRequest]?
     
-    var sharingCurrentDataSource: [TimesheetFriendRequest]? {
-        return headerView.segmentedControl.selectedSegmentIndex == 0 ? sharingAcceptedFriends : sharingPendingRequests
-    }
-    
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -71,7 +67,7 @@ class TimesheetSharingViewController: UIViewController {
 
         // setup collection view
         // collectionView.heroModifiers = [.fade, .translate(x: 0, y: view.frame.size.height / 2.0, z: 0)]
-        collectionView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        collectionView.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
         
         collectionView.register(TimesheetLoadingCell.self, forCellWithReuseIdentifier: TimesheetLoadingCell.reuseIdentifier)
         collectionView.register(TimesheetAddLogCell.self, forCellWithReuseIdentifier: TimesheetAddLogCell.reuseIdentifier)
@@ -89,8 +85,49 @@ class TimesheetSharingViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        refreshFromBackend()
+    }
+    
     func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+    
+     // networking
+    let friendManager = TimesheetFriendManager()
+}
+
+extension TimesheetSharingViewController {
+    func refreshFromBackend() {
+        _ = friendManager.friendRequestsForUser { (requests, error) in
+            if let validError = error {
+                showError(validError, from: self)
+                self.sharingPendingRequests = [TimesheetFriendRequest]()
+                self.sharingAcceptedFriends = [TimesheetFriendRequest]()
+            } else if requests == nil {
+                self.sharingPendingRequests = [TimesheetFriendRequest]()
+                self.sharingAcceptedFriends = [TimesheetFriendRequest]()
+            } else {
+                var pending = [TimesheetFriendRequest]()
+                var accepted = [TimesheetFriendRequest]()
+                for request in requests! {
+                    if let isAccepted = request.accepted, isAccepted == 1 {
+                        accepted.append(request)
+                    } else {
+                        pending.append(request)
+                    }
+                }
+                 
+                self.sharingPendingRequests = pending
+                self.sharingAcceptedFriends = accepted
+            }
+            
+            OperationQueue.main.addOperation {
+                self.collectionView.reloadData()
+            }
+        }
     }
 }
 
@@ -101,7 +138,7 @@ extension TimesheetSharingViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: view.frame.size.width, height: 30.0)
+        return CGSize.zero
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -119,23 +156,26 @@ extension TimesheetSharingViewController: UICollectionViewDelegateFlowLayout {
 
 extension TimesheetSharingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }
-        
-        if let requests = sharingCurrentDataSource {
-            return requests.count
-        } else {
-            return 1 // loading cell
+        switch section {
+        case 0:
+            return 1 // add
+        case 1:
+            return sharingPendingRequests != nil ? sharingPendingRequests!.count : 1 // loading or requests
+        case 2:
+            return sharingAcceptedFriends != nil ? sharingAcceptedFriends!.count : 1 // loading or friends (accepted requests)
+        default:
+            return 0
         }
     }
  
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.section == 0 {
+        switch indexPath.section {
+
+        case 0:
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetAddLogCell.reuseIdentifier, for: indexPath) as? TimesheetAddLogCell else {
                 fatalError()
             }
@@ -143,9 +183,20 @@ extension TimesheetSharingViewController: UICollectionViewDataSource {
             cell.addDetailLabel.text = "Tap to add a new friend"
             
             return cell
-        }
         
-        if let requests = sharingCurrentDataSource {
+        case 1, 2:
+            guard let requests = (indexPath.section == 1 ? sharingPendingRequests : sharingAcceptedFriends) else {
+                guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLoadingCell.reuseIdentifier, for: indexPath) as? TimesheetLoadingCell else {
+                    fatalError()
+                }
+                
+                let requestNameString = indexPath.section == 1 ? "Friend Requests" : "Accepted Friends"
+                cell.detailLabel.text = "Loading \(requestNameString)..."
+                cell.indicatorView.startAnimating()
+                
+                return cell
+            }
+            
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetSharingFriendRequestCell.reuseIdentifier, for: indexPath) as? TimesheetSharingFriendRequestCell else {
                 fatalError()
             }
@@ -153,9 +204,9 @@ extension TimesheetSharingViewController: UICollectionViewDataSource {
             cell.friendRequest = requests[indexPath.row]
             
             return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLoadingCell.reuseIdentifier, for: indexPath)
-            return cell
+        
+        default:
+            fatalError()
         }
     }
 }

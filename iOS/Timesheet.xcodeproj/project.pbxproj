@@ -31,6 +31,8 @@
 		238A24551F905B320045178D /* BulletinBoard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; };
 		238A24561F905B320045178D /* BulletinBoard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */; };
+		238A245D1F944D650045178D /* TimesheetUsersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A245C1F944D650045178D /* TimesheetUsersViewController.swift */; };
+		238A24601F9450ED0045178D /* TimesheetUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A245F1F9450ED0045178D /* TimesheetUserCell.swift */; };
 		238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */; };
 		238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */; };
 		238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */; };
@@ -107,6 +109,8 @@
 		238A244D1F905B290045178D /* Hero.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hero.framework; sourceTree = "<group>"; };
 		238A244E1F905B290045178D /* BulletinBoard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BulletinBoard.framework; sourceTree = "<group>"; };
 		238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingFriendRequestCell.swift; sourceTree = "<group>"; };
+		238A245C1F944D650045178D /* TimesheetUsersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUsersViewController.swift; sourceTree = "<group>"; };
+		238A245F1F9450ED0045178D /* TimesheetUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUserCell.swift; sourceTree = "<group>"; };
 		238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingViewController.swift; sourceTree = "<group>"; };
 		238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingHeaderView.swift; sourceTree = "<group>"; };
 		238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendManager.swift; sourceTree = "<group>"; };
@@ -260,6 +264,15 @@
 			path = Sharing;
 			sourceTree = "<group>";
 		};
+		238A245E1F9450D90045178D /* Users */ = {
+			isa = PBXGroup;
+			children = (
+				238A245C1F944D650045178D /* TimesheetUsersViewController.swift */,
+				238A245F1F9450ED0045178D /* TimesheetUserCell.swift */,
+			);
+			path = Users;
+			sourceTree = "<group>";
+		};
 		238FE0981F905A880058CB04 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -304,6 +317,7 @@
 			children = (
 				235C86E51F89AF350068EBA9 /* TimesheetLogViewController.swift */,
 				238A24571F905B600045178D /* Sharing */,
+				238A245E1F9450D90045178D /* Users */,
 			);
 			path = "Modal View Controllers";
 			sourceTree = "<group>";
@@ -443,6 +457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23E3D2171F894EDB00BB02F4 /* TimesheetNavigationBar.swift in Sources */,
+				238A24601F9450ED0045178D /* TimesheetUserCell.swift in Sources */,
 				23D7341D1F8C1E280099A191 /* TimesheetUserManager.swift in Sources */,
 				23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */,
 				231398791F815694009E8E78 /* Timesheet.xcdatamodeld in Sources */,
@@ -466,6 +481,7 @@
 				238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */,
 				238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */,
 				238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */,
+				238A245D1F944D650045178D /* TimesheetUsersViewController.swift in Sources */,
 				238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

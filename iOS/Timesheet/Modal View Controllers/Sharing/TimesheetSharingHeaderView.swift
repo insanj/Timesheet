@@ -12,10 +12,9 @@ class TimesheetSharingHeaderView: UIView {
     let emojiLabel = UILabel()
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
-    let segmentedControl = UISegmentedControl(items: ["Friends", "Requests"])
     
     var lastViewBottomAnchor: NSLayoutYAxisAnchor {
-        return segmentedControl.bottomAnchor
+        return descriptionLabel.bottomAnchor
     }
     
     init() {
@@ -48,13 +47,7 @@ class TimesheetSharingHeaderView: UIView {
         descriptionLabel.text = "Sharing is a unique, collaborative Timesheet feature. Grant access to & accept invites from friends below."
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(descriptionLabel)
-        
-        segmentedControl.heroModifiers = [.fade, .translate(x: 0.0, y: 20.0, z: 0.0)]
-        segmentedControl.tintColor = timesheetColor(name: "Green").backgroundColor
-        segmentedControl.selectedSegmentIndex = 0
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(segmentedControl)
-        
+
         emojiLabel.topAnchor.constraint(equalTo: topAnchor).isActive = true
         emojiLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
 
@@ -66,12 +59,6 @@ class TimesheetSharingHeaderView: UIView {
         descriptionLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 25).isActive = true
         descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -25.0).isActive = true
         descriptionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        segmentedControl.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15.0).isActive = true
-        segmentedControl.leftAnchor.constraint(equalTo: leftAnchor, constant: 25.0).isActive = true
-        segmentedControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -25.0).isActive = true
-        segmentedControl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        segmentedControl.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
