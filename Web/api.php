@@ -16,6 +16,7 @@
 
 include 'users.php';
 include 'logs.php';
+include 'friends.php';
 
 // ---
 // api
@@ -183,6 +184,10 @@ else if (strcmp($request_type, 'deleteFriendRequest') == 0) {
 	$receiver_user_id = $_POST['friend_user_id'];
 
 	echo deleteFriendRequestFromUserToUser($user_id, $friend_user_id);
+}
+
+else if (strcmp($request_type, 'getAvailableUsers') == 0) {
+	echo getAvailableUsersForFriendRequests($user_id);
 }
 
 else if (strcmp($request_type, 'getLogsFromFriend') == 0) {

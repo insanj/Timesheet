@@ -80,6 +80,23 @@ function deleteFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	}
 }
 
+function getAvailableUsersForFriendRequests($user_id) {
+	if ($database = new TimesheetDatabase()) { 
+		$result = $database->query("SELECT id,name,email,created FROM users");
+		$result_array = array();
+		while ($row = $result->fetchArray()) {
+		    $result_array[] = $row;
+		}
+
+		$database->close();
+		unset($database);
+
+		return json_encode($result_array);
+	} else {
+		return "Unable to connect to database";
+	}
+}
+
 function getLogsFromFriend($user_id, $friend_user_id) { // TODO: more security
 	if ($database = new TimesheetDatabase()) { 
 		$securityResult = $database->query("SELECT * FROM friends WHERE accepted = 1 AND (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')");
