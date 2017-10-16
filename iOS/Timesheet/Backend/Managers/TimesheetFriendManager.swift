@@ -231,7 +231,6 @@ class TimesheetFriendManager: NSObject {
             return nil
         }
         
-
         let session = URLSession(configuration: URLSessionConfiguration.default)
         
         let task = session.dataTask(with: urlRequest) { (data, response, error) in

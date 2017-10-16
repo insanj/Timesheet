@@ -34,6 +34,19 @@ func dateFromFormattedString(_ string: String) -> Date? {
     return dateFormatter().date(from: string)
 }
 
+func simpleFormattedDate(_ date: Date) -> String {
+    let formatter = DateComponentsFormatter()
+    formatter.unitsStyle = .full
+    formatter.maximumUnitCount = 1
+    formatter.allowedUnits = [.year, .month, .day, .hour, .minute, .second]
+    
+    guard let timeString = formatter.string(from: self, to: Date()) else {
+        return nil
+    }
+    
+    return "\(timeString) ago"
+}
+
 enum TimesheetErrorType: Int {
     case unableToConnect = 1, unexpectedResponse, unableToParse, invalidURL, unableToSave, noResponse
 }

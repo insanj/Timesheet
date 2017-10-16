@@ -213,6 +213,8 @@ extension TimesheetSharingViewController: UICollectionViewDataSource {
 
 extension TimesheetSharingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        if indexPath.section == 0 {
+            present(TimesheetUsersViewController(), animated: true, completion: nil)
+        }
     }
 }
