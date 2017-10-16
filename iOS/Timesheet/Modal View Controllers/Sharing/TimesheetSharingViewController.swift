@@ -18,6 +18,8 @@ class TimesheetSharingViewController: UIViewController {
     var sharingAcceptedFriends: [TimesheetFriendRequest]?
     var sharingPendingRequests: [TimesheetFriendRequest]?
     
+    var sharingSelectedUserCallback: ((TimesheetUser) -> Void)?
+    
     init() {
         super.init(nibName: nil, bundle: nil)
         
@@ -246,7 +248,13 @@ extension TimesheetSharingViewController: UICollectionViewDelegate {
             }
             
             let request = requests[indexPath.row]  // show friend's timesheet
-            present(TimesheetViewController(request.receiverUser!), animated: true, completion: nil)
+            if request.receiverUser?.email == TimesheetUser.currentEmail {
+                sharingSelectedUserCallback?(request.senderUser!)
+            } else {
+                sharingSelectedUserCallback?(request.receiverUser!)
+            }
+            
+            dismiss(animated: true, completion: nil)
         }
     }
 }

@@ -41,6 +41,7 @@
 		23D7341A1F8C1DBD0099A191 /* KeychainPasswordItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */; };
 		23D7341D1F8C1E280099A191 /* TimesheetUserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */; };
 		23D7341F1F8C1E7D0099A191 /* TimesheetUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D7341E1F8C1E7D0099A191 /* TimesheetUser.swift */; };
+		23E34BF41F946BFD00AC5586 /* TimesheetBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E34BF31F946BFD00AC5586 /* TimesheetBaseViewController.swift */; };
 		23E3D2111F89414200BB02F4 /* TimesheetHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */; };
 		23E3D2131F8944B400BB02F4 /* TimesheetStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */; };
 		23E3D2151F894E9A00BB02F4 /* TimesheetNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */; };
@@ -119,6 +120,7 @@
 		23D734181F8C1DBD0099A191 /* KeychainPasswordItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainPasswordItem.swift; sourceTree = "<group>"; };
 		23D7341C1F8C1E280099A191 /* TimesheetUserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUserManager.swift; sourceTree = "<group>"; };
 		23D7341E1F8C1E7D0099A191 /* TimesheetUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetUser.swift; sourceTree = "<group>"; };
+		23E34BF31F946BFD00AC5586 /* TimesheetBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetBaseViewController.swift; sourceTree = "<group>"; };
 		23E3D2101F89414200BB02F4 /* TimesheetHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetHeaderView.swift; sourceTree = "<group>"; };
 		23E3D2121F8944B400BB02F4 /* TimesheetStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetStyle.swift; sourceTree = "<group>"; };
 		23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetNavigationController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			children = (
 				231398701F815694009E8E78 /* AppDelegate.swift */,
 				23E3D2141F894E9A00BB02F4 /* TimesheetNavigationController.swift */,
+				23E34BF31F946BFD00AC5586 /* TimesheetBaseViewController.swift */,
 				231398721F815694009E8E78 /* TimesheetViewController.swift */,
 				238FE09A1F905AB60058CB04 /* Views */,
 				23E081531F8EDD2C003BA6DC /* Modal View Controllers */,
@@ -483,6 +486,7 @@
 				238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */,
 				238A245D1F944D650045178D /* TimesheetUsersViewController.swift in Sources */,
 				238FE0971F9051CF0058CB04 /* TimesheetFriendRequest.swift in Sources */,
+				23E34BF41F946BFD00AC5586 /* TimesheetBaseViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
