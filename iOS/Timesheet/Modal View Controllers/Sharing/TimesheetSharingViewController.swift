@@ -14,8 +14,12 @@ class TimesheetSharingViewController: UIViewController {
     let headerView = TimesheetSharingHeaderView()
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
     
-    var sharingPendingRequests: [TimesheetFriendRequest]?
     var sharingAcceptedFriends: [TimesheetFriendRequest]?
+    var sharingPendingRequests: [TimesheetFriendRequest]?
+    
+    var sharingCurrentDataSource: [TimesheetFriendRequest]? {
+        return headerView.segmentedControl.selectedSegmentIndex == 0 ? sharingAcceptedFriends : sharingPendingRequests
+    }
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -68,11 +72,17 @@ class TimesheetSharingViewController: UIViewController {
         // setup collection view
         // collectionView.heroModifiers = [.fade, .translate(x: 0, y: view.frame.size.height / 2.0, z: 0)]
         collectionView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
+        
+        collectionView.register(TimesheetLoadingCell.self, forCellWithReuseIdentifier: TimesheetLoadingCell.reuseIdentifier)
+        collectionView.register(TimesheetAddLogCell.self, forCellWithReuseIdentifier: TimesheetAddLogCell.reuseIdentifier)
+        collectionView.register(TimesheetSharingFriendRequestCell.self, forCellWithReuseIdentifier: TimesheetSharingFriendRequestCell.reuseIdentifier)
+
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
-        
+
         collectionView.topAnchor.constraint(equalTo: headerView.lastViewBottomAnchor, constant: 10.0).isActive = true
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
@@ -109,15 +119,44 @@ extension TimesheetSharingViewController: UICollectionViewDelegateFlowLayout {
 
 extension TimesheetSharingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 0
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        if section == 0 {
+            return 1
+        }
+        
+        if let requests = sharingCurrentDataSource {
+            return requests.count
+        } else {
+            return 1 // loading cell
+        }
     }
  
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+        if indexPath.section == 0 {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetAddLogCell.reuseIdentifier, for: indexPath) as? TimesheetAddLogCell else {
+                fatalError()
+            }
+            
+            cell.addDetailLabel.text = "Tap to add a new friend"
+            
+            return cell
+        }
+        
+        if let requests = sharingCurrentDataSource {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetSharingFriendRequestCell.reuseIdentifier, for: indexPath) as? TimesheetSharingFriendRequestCell else {
+                fatalError()
+            }
+            
+            cell.friendRequest = requests[indexPath.row]
+            
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TimesheetLoadingCell.reuseIdentifier, for: indexPath)
+            return cell
+        }
     }
 }
 

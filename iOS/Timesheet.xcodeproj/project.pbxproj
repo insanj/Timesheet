@@ -31,7 +31,6 @@
 		238A24551F905B320045178D /* BulletinBoard.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; };
 		238A24561F905B320045178D /* BulletinBoard.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 238A244E1F905B290045178D /* BulletinBoard.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		238A24591F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */; };
-		238A245B1F905BAB0045178D /* TimesheetSharingFriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */; };
 		238FE0911F8EDDF20058CB04 /* TimesheetSharingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */; };
 		238FE0931F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */; };
 		238FE0951F9050CF0058CB04 /* TimesheetFriendManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */; };
@@ -108,7 +107,6 @@
 		238A244D1F905B290045178D /* Hero.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Hero.framework; sourceTree = "<group>"; };
 		238A244E1F905B290045178D /* BulletinBoard.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BulletinBoard.framework; sourceTree = "<group>"; };
 		238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingFriendRequestCell.swift; sourceTree = "<group>"; };
-		238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingFriendCell.swift; sourceTree = "<group>"; };
 		238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingViewController.swift; sourceTree = "<group>"; };
 		238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetSharingHeaderView.swift; sourceTree = "<group>"; };
 		238FE0941F9050CF0058CB04 /* TimesheetFriendManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetFriendManager.swift; sourceTree = "<group>"; };
@@ -257,7 +255,6 @@
 			children = (
 				238FE0901F8EDDF20058CB04 /* TimesheetSharingViewController.swift */,
 				238FE0921F8EDECE0058CB04 /* TimesheetSharingHeaderView.swift */,
-				238A245A1F905BAB0045178D /* TimesheetSharingFriendCell.swift */,
 				238A24581F905B8E0045178D /* TimesheetSharingFriendRequestCell.swift */,
 			);
 			path = Sharing;
@@ -453,7 +450,6 @@
 				231398A91F815AAF009E8E78 /* Convenience.swift in Sources */,
 				231398A71F815A74009E8E78 /* TimesheetDataManager.swift in Sources */,
 				231398AE1F815DD3009E8E78 /* TimesheetLogCell.swift in Sources */,
-				238A245B1F905BAB0045178D /* TimesheetSharingFriendCell.swift in Sources */,
 				231398AB1F815B21009E8E78 /* TimesheetLog.swift in Sources */,
 				23D7341F1F8C1E7D0099A191 /* TimesheetUser.swift in Sources */,
 				23E3D21C1F89A35E00BB02F4 /* TimesheetAddLogCell.swift in Sources */,
