@@ -170,7 +170,7 @@ extension TimesheetUsersViewController: UICollectionViewDelegate {
         bulletin.presentBulletin(above: self)
         bulletin.displayActivityIndicator()
         
-        _ = friendManager.ceateFriendRequest(friend: user) { (request, error) in
+        _ = friendManager.createFriendRequest(friend: user) { (request, error) in
             OperationQueue.main.addOperation {
                 bulletin.dismissBulletin()
             }

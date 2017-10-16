@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BulletinBoard
 
 @objcMembers
 class TimesheetSharingViewController: UIViewController {
@@ -215,6 +216,37 @@ extension TimesheetSharingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             present(TimesheetUsersViewController(), animated: true, completion: nil)
+        } else if indexPath.section == 1 {
+            guard let requests = sharingPendingRequests else {
+                return
+            }
+            
+            let request = requests[indexPath.row]
+            // accept friend request
+            
+            let bulletin = BulletinManager(rootItem: PageBulletinItem(title: ""))
+            bulletin.prepare()
+            bulletin.presentBulletin(above: self)
+            bulletin.displayActivityIndicator()
+            
+            _ = friendManager.acceptFriendRequest(friend: request.senderUser!) { (request, error) in
+                OperationQueue.main.addOperation {
+                    bulletin.dismissBulletin()
+                }
+                
+                if let validError = error {
+                    showError(validError, from: self)
+                } else {
+                    self.refreshFromBackend()
+                }
+            }
+        } else {
+            guard let requests = sharingAcceptedFriends else {
+                return
+            }
+            
+            let request = requests[indexPath.row]  // show friend's timesheet
+            present(TimesheetViewController(request.receiverUser!), animated: true, completion: nil)
         }
     }
 }

@@ -47,8 +47,14 @@ class TimesheetViewController: UIViewController {
     var timesheetSections: [Date]?
     var timesheetLogs: [[TimesheetLog]]?
     var timesheetLogColors = [IndexPath: TimesheetColor]()
+    var timesheetCustomUser: TimesheetUser? // only used in non-main areas (ex: sharing)
     
     init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(_ user: TimesheetUser) {
+        timesheetCustomUser = user
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -130,6 +136,12 @@ class TimesheetViewController: UIViewController {
     }
     
     func authenticateFromRemoteBackend() {
+        if timesheetCustomUser != nil {
+            debugPrint("TimesheetViewController no need to authenticateFromRemoteBackend, timesheetCustomUser")
+            self.refreshFromRemoteBackend()
+            return
+        }
+        
         let userManager = TimesheetUserManager()
         userManager.keychainAuthenticate(self) { (user) in
             if user != nil {
@@ -330,6 +342,30 @@ class TimesheetViewController: UIViewController {
     }
     
     func refreshFromRemoteBackend() {
+        guard timesheetCustomUser == nil else {
+            timesheetLoading = true
+            
+            let friendManager = TimesheetFriendManager()
+            _ = friendManager.getLogsFromFriend(friend: timesheetCustomUser!, { logs, error in
+                if let validError = error {
+                    showError(validError, from: self)
+                    self.timesheetDone()
+                    return
+                }
+                
+                guard let validLogs = logs else {
+                    debugPrint("refreshFromRemoteBackend() received nil response from dataManager logsFromRemoteDatabase")
+                    showError(timesheetError(.noResponse), from: self)
+                    self.timesheetDone()
+                    return
+                }
+                
+                self.sortLogs(validLogs)
+            })
+            
+            return
+        }
+        
         guard let _ = TimesheetUser.currentEmail, let _ = TimesheetUser.currentPassword else {
             authenticateFromRemoteBackend()
             return

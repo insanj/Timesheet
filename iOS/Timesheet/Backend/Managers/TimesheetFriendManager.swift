@@ -175,9 +175,9 @@ class TimesheetFriendManager: NSObject {
         return task
     }
     
-    func ceateFriendRequest(friend: TimesheetUser, _ completion: @escaping FriendRequestCompletionBlock) -> URLSessionDataTask? {
+    func createFriendRequest(friend: TimesheetUser, _ completion: @escaping FriendRequestCompletionBlock) -> URLSessionDataTask? {
         guard let urlRequest = buildCreateFriendRequestURLRequest(friend: friend) else {
-            debugPrint("ceateFriendRequest() unable to build URL; cannot load from remote!")
+            debugPrint("createFriendRequest() unable to build URL; cannot load from remote!")
             completion(nil, timesheetError(.invalidURL))
             return nil
         }

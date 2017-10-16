@@ -54,7 +54,7 @@ function createFriendRequestFromUserToUser($user_id, $friend_user_id) {
 
 function acceptFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("UPDATE friends SET accepted=1 WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')'");
+		$success = $database->exec("UPDATE friends SET accepted=1 WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')");
 		$database->close();
 		unset($database);
 
@@ -68,7 +68,7 @@ function acceptFriendRequestFromUserToUser($user_id, $friend_user_id) {
 
 function deleteFriendRequestFromUserToUser($user_id, $friend_user_id) {
 	if ($database = new TimesheetDatabase()) { 
-		$success = $database->exec("DELETE FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')'");
+		$success = $database->exec("DELETE FROM friends WHERE (sender_user_id = '$user_id' AND receiver_user_id = '$friend_user_id') OR (receiver_user_id = '$user_id' AND sender_user_id = '$friend_user_id')");
 		$database->close();
 		unset($database);
 
