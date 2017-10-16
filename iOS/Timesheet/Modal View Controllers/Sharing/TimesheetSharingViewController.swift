@@ -10,9 +10,12 @@ import UIKit
 
 @objcMembers
 class TimesheetSharingViewController: UIViewController {
-    let cancelButton = UIButton()
+    let cancelButton = TimesheetButton(timesheetColor(name: "Olive"))
     let headerView = TimesheetSharingHeaderView()
     let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewFlowLayout())
+    
+    var sharingPendingRequests: [TimesheetFriendRequest]?
+    var sharingAcceptedFriends: [TimesheetFriendRequest]?
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -45,8 +48,7 @@ class TimesheetSharingViewController: UIViewController {
         navigationBar.heightAnchor.constraint(equalToConstant: totalTopInset).isActive = true
         
         cancelButton.heroModifiers = [.fade, .translate(x: 0, y: -50.0, z: 0.0)]
-        cancelButton.setTitleColor(UIColor.black, for: .normal)
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle("    Cancel    ", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
@@ -64,15 +66,16 @@ class TimesheetSharingViewController: UIViewController {
         headerView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: 15).isActive = true
 
         // setup collection view
-        collectionView.backgroundColor = UIColor.clear
+        // collectionView.heroModifiers = [.fade, .translate(x: 0, y: view.frame.size.height / 2.0, z: 0)]
+        collectionView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(collectionView)
         
         collectionView.topAnchor.constraint(equalTo: headerView.lastViewBottomAnchor, constant: 10.0).isActive = true
-        collectionView.leftAnchor.constraint(equalTo: headerView.leftAnchor).isActive = true
-        collectionView.rightAnchor.constraint(equalTo: headerView.rightAnchor).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     

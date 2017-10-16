@@ -12,7 +12,7 @@ class TimesheetSharingHeaderView: UIView {
     let emojiLabel = UILabel()
     let titleLabel = UILabel()
     let descriptionLabel = UILabel()
-    let segmentedControl = UISegmentedControl(items: ["Timesheets", "Requests"])
+    let segmentedControl = UISegmentedControl(items: ["Friends", "Requests"])
     
     var lastViewBottomAnchor: NSLayoutYAxisAnchor {
         return segmentedControl.bottomAnchor
@@ -67,10 +67,11 @@ class TimesheetSharingHeaderView: UIView {
         descriptionLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -25.0).isActive = true
         descriptionLabel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        segmentedControl.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 10.0).isActive = true
+        segmentedControl.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 15.0).isActive = true
         segmentedControl.leftAnchor.constraint(equalTo: leftAnchor, constant: 25.0).isActive = true
         segmentedControl.rightAnchor.constraint(equalTo: rightAnchor, constant: -25.0).isActive = true
         segmentedControl.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        segmentedControl.heightAnchor.constraint(equalToConstant: 30.0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

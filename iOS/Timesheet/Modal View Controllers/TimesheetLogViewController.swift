@@ -15,8 +15,8 @@ class TimesheetLogViewController: UIViewController {
     var log: TimesheetLog
     var color: TimesheetColor
     
-    let cancelButton = UIButton()
-    let saveButton = UIButton()
+    let cancelButton = TimesheetButton(timesheetColor(name: "Olive"))
+    let saveButton = TimesheetButton(timesheetColor(name: "Blue"))
     let cellButton = UIButton()
     let originalCell = TimesheetLogCellView(frame: CGRect.zero)
     
@@ -63,7 +63,7 @@ class TimesheetLogViewController: UIViewController {
 
         saveButton.heroModifiers = [.fade, .translate(x: 0.0, y: -50.0, z: 0.0)]
         saveButton.setTitleColor(UIColor.black, for: .normal)
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle("    Save    ", for: .normal)
         saveButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .medium)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         saveButton.translatesAutoresizingMaskIntoConstraints = false
@@ -74,7 +74,7 @@ class TimesheetLogViewController: UIViewController {
 
         cancelButton.heroModifiers = [.fade, .translate(x: 0.0, y: -50.0, z: 0.0)]
         cancelButton.setTitleColor(UIColor.black, for: .normal)
-        cancelButton.setTitle("Cancel", for: .normal)
+        cancelButton.setTitle("    Cancel    ", for: .normal)
         cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 18.0, weight: .regular)
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
